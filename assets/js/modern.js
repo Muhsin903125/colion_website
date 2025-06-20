@@ -311,6 +311,36 @@ document.addEventListener('DOMContentLoaded', function() {
     scrollTopBtn.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+
+    // Scroll indicator visibility
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    const heroSection = document.querySelector('.hero-video-section');
+    
+    if (scrollIndicator && heroSection) {
+        window.addEventListener('scroll', function() {
+            const heroHeight = heroSection.offsetHeight;
+            const scrollPosition = window.pageYOffset;
+            
+            if (scrollPosition > heroHeight - 100) {
+                scrollIndicator.style.opacity = '0';
+                scrollIndicator.style.pointerEvents = 'none';
+            } else {
+                scrollIndicator.style.opacity = '0.8';
+                scrollIndicator.style.pointerEvents = 'auto';
+            }
+        });
+        
+        // Smooth scroll when clicking scroll indicator
+        scrollIndicator.addEventListener('click', function() {
+            const nextSection = document.querySelector('#featured-services');
+            if (nextSection) {
+                nextSection.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    }
 });
 
 // Add CSS for ripple effect
