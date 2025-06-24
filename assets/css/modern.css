@@ -1090,7 +1090,7 @@ a:hover {
 
 /* Footer */
 .modern-footer {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  background: linear-gradient(135deg,var(--primary-dark), var(--primary-color) );
   color: var(--gray-300);
   padding: 3rem 0 1rem;
 }
