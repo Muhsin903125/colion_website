@@ -886,9 +886,9 @@ a:hover {
 }
 
 .partner-item img {
-  max-width: 100px;
-  max-height: auto;
-  min-height: 50px;
+  width: 100px;
+  /* max-height: auto; */
+ height: 75px;
   object-fit: contain;
 }
 
