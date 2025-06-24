@@ -504,7 +504,7 @@ a:hover {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
-  max-width: 1000px;
+  max-width: 1105px;
   margin: 0 auto;
 }
 
