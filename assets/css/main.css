@@ -773,6 +773,7 @@ h6 {
 # Scroll Top Button
 --------------------------------------------------------------*/
 .scroll-top {
+  display: none;
   position: fixed;
   visibility: hidden;
   opacity: 0;

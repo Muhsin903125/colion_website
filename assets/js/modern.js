@@ -275,42 +275,42 @@ document.addEventListener('DOMContentLoaded', function() {
     images.forEach(img => imageObserver.observe(img));
 
     // Add scroll-to-top functionality
-    const scrollTopBtn = document.createElement('button');
-    scrollTopBtn.innerHTML = '<i class="bi bi-arrow-up"></i>';
-    scrollTopBtn.className = 'scroll-to-top';
-    scrollTopBtn.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background: var(--primary-color);
-        color: white;
-        border: none;
-        cursor: pointer;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-        z-index: 1000;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    `;
+    // const scrollTopBtn = document.createElement('button');
+    // scrollTopBtn.innerHTML = '<i class="bi bi-arrow-up"></i>';
+    // scrollTopBtn.className = 'scroll-to-top';
+    // scrollTopBtn.style.cssText = `
+    //     position: fixed;
+    //     bottom: 60px;
+    //     right: 20px;
+    //     width: 50px;
+    //     height: 50px;
+    //     border-radius: 50%;
+    //     background: var(--primary-color);
+    //     color: white;
+    //     border: none;
+    //     cursor: pointer;
+    //     opacity: 0;
+    //     visibility: hidden;
+    //     transition: all 0.3s ease;
+    //     z-index: 1000;
+    //     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    // `;
     
-    document.body.appendChild(scrollTopBtn);
+    // document.body.appendChild(scrollTopBtn);
     
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) {
-            scrollTopBtn.style.opacity = '1';
-            scrollTopBtn.style.visibility = 'visible';
-        } else {
-            scrollTopBtn.style.opacity = '0';
-            scrollTopBtn.style.visibility = 'hidden';
-        }
-    });
+    // window.addEventListener('scroll', () => {
+    //     if (window.scrollY > 300) {
+    //         scrollTopBtn.style.opacity = '1';
+    //         scrollTopBtn.style.visibility = 'visible';
+    //     } else {
+    //         scrollTopBtn.style.opacity = '0';
+    //         scrollTopBtn.style.visibility = 'hidden';
+    //     }
+    // });
     
-    scrollTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    // scrollTopBtn.addEventListener('click', () => {
+    //     window.scrollTo({ top: 0, behavior: 'smooth' });
+    // });
 
     // Scroll indicator visibility
     const scrollIndicator = document.querySelector('.scroll-indicator');
@@ -339,6 +339,28 @@ document.addEventListener('DOMContentLoaded', function() {
                     block: 'start'
                 });
             }
+        });
+    }
+
+    // Scroll to Top Button
+    const scrollTop = document.querySelector('.scroll-top');
+    if (scrollTop) {
+        // Show/hide scroll to top button
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 100) {
+                scrollTop.classList.add('active');
+            } else {
+                scrollTop.classList.remove('active');
+            }
+        });
+
+        // Scroll to top functionality
+        scrollTop.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
     }
 });
