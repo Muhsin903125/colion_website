@@ -401,7 +401,7 @@ a:hover {
 
 .title-products {
   display: block;
-  font-size: 0.6em;
+  font-size: 0.55em;
   font-weight: 500;
   opacity: 0.9;
   letter-spacing: 2px;
@@ -497,7 +497,7 @@ a:hover {
 }
 
 .hero-features {
-  margin-top: 4rem;
+  margin-top: 1rem;
 }
 
 .feature-grid {
@@ -906,7 +906,7 @@ a:hover {
 
 .stat-item {
   text-align: center;
-  padding: 2rem 1rem;
+  padding: 1.5rem 1rem;
 }
 
 .stat-number {
