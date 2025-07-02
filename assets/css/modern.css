@@ -1100,7 +1100,7 @@ a:hover {
   display: grid;
   grid-template-columns: 2fr 1fr 2fr;
   gap: 3rem;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
 }
 
 .footer-brand {
