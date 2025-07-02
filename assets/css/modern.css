@@ -1464,6 +1464,128 @@ a:hover {
   }
 }
 
+/* Coming Soon Section */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(213, 165, 64, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 20px rgba(213, 165, 64, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(213, 165, 64, 0);
+  }
+}
+
+.coming-soon-content .feature-highlight:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.coming-soon-content a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.coming-soon-content a[href*="whatsapp"]:hover {
+  background: var(--accent-dark) !important;
+  box-shadow: 0 8px 25px rgba(213, 165, 64, 0.4) !important;
+}
+
+.coming-soon-content a[href*="mailto"]:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Responsive Design for Coming Soon Section */
+@media (max-width: 768px) {
+  #coming-soon {
+    padding: 3rem 0 !important;
+  }
+  
+  .coming-soon-content {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+  
+  .features-showcase {
+    order: 2;
+  }
+  
+  .cta-section {
+    order: 1;
+  }
+  
+  .coming-soon-content .feature-highlight {
+    padding: 1.25rem !important;
+  }
+  
+  .coming-soon-content .feature-highlight h4 {
+    font-size: 1rem !important;
+  }
+  
+  .coming-soon-content .feature-highlight p {
+    font-size: 0.85rem !important;
+  }
+  
+  .cta-section > div {
+    padding: 2rem 1.5rem !important;
+  }
+  
+  .cta-section h3 {
+    font-size: 1.3rem !important;
+  }
+  
+  .cta-section a {
+    padding: 0.875rem 1.5rem !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #coming-soon {
+    padding: 2rem 0 !important;
+  }
+  
+  .coming-soon-content .feature-highlight {
+    flex-direction: column !important;
+    text-align: center !important;
+    padding: 1rem !important;
+  }
+  
+  .coming-soon-content .feature-highlight > div:first-child {
+    margin-bottom: 1rem !important;
+  }
+  
+  .cta-section > div {
+    padding: 1.5rem 1rem !important;
+  }
+  
+  .cta-section > div > div:first-child {
+    width: 80px !important;
+    height: 80px !important;
+    margin-bottom: 1.5rem !important;
+  }
+  
+  .cta-section > div > div:first-child i {
+    font-size: 2rem !important;
+  }
+  
+  .cta-section h3 {
+    font-size: 1.2rem !important;
+  }
+  
+  .cta-section p {
+    font-size: 0.9rem !important;
+  }
+  
+  .cta-section a {
+    padding: 0.75rem 1.25rem !important;
+    font-size: 0.85rem !important;
+  }
+}
+
 /* Animations */
 @keyframes fadeInUp {
   from {
