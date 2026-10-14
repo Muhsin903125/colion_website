@@ -81,15 +81,17 @@ const robots = noindex
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
     <!--
-      GA4, loaded late: on the first interaction, a little after `load`, or at a
-      3.5s ceiling, whichever comes first. The queue is set up synchronously, so
-      events fired before the library arrives are still sent.
+      GA4 and Microsoft Clarity (project yxlucx57jk, linked to Bing Webmaster
+      Tools), loaded late: on the first interaction, a little after `load`, or
+      at a 3.5s ceiling, whichever comes first. Both queues are set up
+      synchronously, so events fired before the libraries arrive are still sent.
     -->
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-NGMLGFSZ5B');
+      window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments); };
       (function () {
         var loaded = false;
         var events = ['pointerdown', 'keydown', 'touchstart', 'scroll'];
@@ -101,6 +103,10 @@ const robots = noindex
           s.async = true;
           s.src = 'https://www.googletagmanager.com/gtag/js?id=G-NGMLGFSZ5B';
           document.head.appendChild(s);
+          var c = document.createElement('script');
+          c.async = true;
+          c.src = 'https://www.clarity.ms/tag/yxlucx57jk?ref=bwt';
+          document.head.appendChild(c);
         }
         events.forEach(function (e) { window.addEventListener(e, boot, { once: true, passive: true }); });
         if (document.readyState === 'complete') setTimeout(boot, 1200);
