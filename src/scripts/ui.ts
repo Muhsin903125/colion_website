@@ -133,21 +133,37 @@ function composeBrief(data: FormData) {
  * `[data-filter-item]` elements carrying a space-separated `data-tags`.
  */
 function initFilter() {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.querySelectorAll<HTMLElement>('[data-filter-root]').forEach((root) => {
     const chips = [...root.querySelectorAll<HTMLButtonElement>('[data-filter]')];
     const items = [...root.querySelectorAll<HTMLElement>('[data-filter-item]')];
     const count = root.querySelector<HTMLElement>('[data-filter-count]');
-    const apply = (value: string) => {
+    const search = root.querySelector<HTMLInputElement>('[data-filter-search]');
+    const empty = root.querySelector<HTMLElement>('[data-filter-empty]');
+    let value = 'all';
+    const apply = () => {
+      const q = (search?.value ?? '').trim().toLowerCase();
       let shown = 0;
       items.forEach((item) => {
-        const show = value === 'all' || (item.dataset.tags ?? '').split(' ').includes(value);
+        const inCat = value === 'all' || (item.dataset.tags ?? '').split(' ').includes(value);
+        const show = inCat && (!q || (item.dataset.name ?? item.textContent ?? '').toLowerCase().includes(q));
         item.hidden = !show;
-        if (show) shown++;
+        if (show) {
+          // Shown items pop in, staggered, so the change reads as movement.
+          item.classList.add('is-in');
+          if (!reduce) item.animate([{ opacity: 0, transform: 'translateY(14px) scale(.96)' }, { opacity: 1, transform: 'none' }], { duration: 420, delay: Math.min(shown, 20) * 22, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'backwards' });
+          shown++;
+        }
       });
       chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.filter === value)));
       if (count) count.textContent = String(shown);
+      empty?.classList.toggle('hidden', shown > 0);
       root.dispatchEvent(new CustomEvent('filter:change', { detail: { value } }));
     };
-    chips.forEach((chip) => chip.addEventListener('click', () => apply(chip.dataset.filter!)));
+    chips.forEach((chip) => chip.addEventListener('click', () => {
+      value = chip.dataset.filter!;
+      apply();
+    }));
+    search?.addEventListener('input', apply);
   });
 }

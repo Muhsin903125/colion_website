@@ -117,6 +117,8 @@ export const sectionSchema = z.discriminatedUnion('type', [
     video: videoSchema,
     chips: z.array(statSchema).default([]),
     trust: strs(),
+    /** Photos or short clips cycling in a card beside the headline (desktop). */
+    slides: z.array(z.object({ image: imageSchema, video: str(), caption: str() })).default([]),
   }),
 
   /** The opening band of an interior page. */
@@ -295,6 +297,26 @@ export const sectionSchema = z.discriminatedUnion('type', [
     intro: introSchema,
     rows: z.number().int().min(1).max(2).default(2),
     source: z.enum(['core', 'all']).default('all'),
+  }),
+
+  /**
+   * The brands page opener: a dark hero with brand logos floating around the
+   * heading, which scatter outward as you scroll away.
+   */
+  z.object({
+    ...sectionBase,
+    type: z.literal('brandHero'),
+    intro: introSchema,
+    secondary: linkSchema,
+  }),
+
+  /** The core brands as large highlighted cards on a dark band. */
+  z.object({
+    ...sectionBase,
+    type: z.literal('brandSpotlight'),
+    intro: introSchema,
+    /** Words that slide across the band as it scrolls, e.g. brand names. */
+    ribbon: strs(),
   }),
 
   /** Every brand, filterable by category, each linking to its page. */

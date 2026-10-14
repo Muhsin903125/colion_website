@@ -1,0 +1,87 @@
+---
+/**
+ * The core brands, highlighted. Two crossing ribbons of brand names slide in
+ * opposite directions with the scroll (`data-scroll-x`), then the core brands
+ * rise in as large cards (`data-rise`) with a glow that follows the pointer
+ * (`data-glow`) and a navy fill that sweeps up on hover.
+ */
+import BrandLogo from '../BrandLogo.astro';
+import Icon from '../Icon.astro';
+import SectionHead from '../SectionHead.astro';
+import { load } from '../../data/load';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'brandSpotlight' }>;
+const s = Astro.props;
+const d = await load();
+const core = d.coreBrands;
+const words = s.ribbon.filter(Boolean).length ? s.ribbon.filter(Boolean) : core.map((b) => b.name);
+const ribbon = [...words, ...words, ...words];
+const RELATION: Record<string, string> = { 'authorized-partner': 'Authorized partner', stockist: 'Stockist', supplier: 'Supplier' };
+---
+<section id="core-brands" class="relative overflow-clip bg-surface pb-20 lg:pb-28">
+  <!-- Crossing ribbons -->
+  <div class="relative -mx-8 h-[150px] sm:h-[190px]" aria-hidden="true">
+    <div class="absolute inset-x-0 top-8 -rotate-[3deg] bg-gold py-3 shadow-[0_20px_40px_-20px_rgba(138,101,22,.6)] sm:py-4">
+      <div class="flex w-max gap-8 whitespace-nowrap font-display text-2xl font-semibold uppercase tracking-tight text-ink sm:text-4xl" data-scroll-x="-25">
+        {ribbon.map((w) => <span class="flex items-center gap-8">{w}<span class="h-2.5 w-2.5 rotate-45 bg-ink"></span></span>)}
+      </div>
+    </div>
+    <div class="absolute inset-x-0 top-16 rotate-[2deg] bg-[#0b1a3f] py-3 sm:top-20 sm:py-4">
+      <div class="flex w-max gap-8 whitespace-nowrap font-display text-2xl font-semibold uppercase tracking-tight text-white sm:text-4xl" data-scroll-x="25">
+        {ribbon.map((w) => <span class="flex items-center gap-8">{w}<span class="h-2.5 w-2.5 rotate-45 bg-gold"></span></span>)}
+      </div>
+    </div>
+  </div>
+
+  <div class="container-x pt-10 sm:pt-14">
+    <SectionHead intro={s.intro} aside class="mb-12" />
+    <ul class="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3" data-rise>
+      {core.map((b, i) => {
+        const cats = d.categoriesOf(b).map((c) => c.name);
+        return (
+          <li class="w-[82%] shrink-0 snap-start sm:w-auto">
+            <a href={`/brands/${b.slug}/`} class="spot group relative flex h-full flex-col overflow-hidden rounded-[26px] border border-line bg-white p-6 sm:p-7" data-glow>
+              <span class="spot-fill absolute inset-0 -z-0 bg-[#0b1a3f]" aria-hidden="true"></span>
+              <span class="spot-glow pointer-events-none absolute inset-0" aria-hidden="true"></span>
+              <div class="relative flex items-center justify-between text-xs font-semibold">
+                <span class="font-display text-gold-deep transition-colors group-hover:text-gold">{String(i + 1).padStart(2, '0')}</span>
+                <span class="text-slate transition-colors group-hover:text-white/60">{RELATION[b.relationship]}</span>
+              </div>
+              <div class="relative mt-5 flex h-28 items-center justify-center rounded-2xl bg-surface px-8 transition-all duration-500 group-hover:bg-white group-hover:shadow-[0_20px_50px_-20px_rgba(213,165,64,.55)]">
+                <BrandLogo brand={b} link={false} mono={false} class="h-16 w-full transition-transform duration-700 group-hover:scale-110" tabindex="-1" />
+              </div>
+              <h3 class="relative mt-6 font-display text-2xl font-semibold text-ink transition-colors group-hover:text-white">{b.name}</h3>
+              {cats.length > 0 && <p class="relative mt-1 text-sm text-slate transition-colors group-hover:text-white/70">{cats.slice(0, 3).join(' · ')}</p>}
+              {b.productLines.length > 0 && (
+                <ul class="relative mt-4 space-y-1.5 text-[0.88rem] text-ink-soft transition-colors group-hover:text-white/80">
+                  {b.productLines.slice(0, 3).map((l) => (
+                    <li class="flex items-start gap-2"><span class="mt-[0.55em] h-1.5 w-1.5 shrink-0 rounded-full bg-gold"></span><span class="line-clamp-1">{l}</span></li>
+                  ))}
+                </ul>
+              )}
+              <span class="relative mt-auto flex items-center justify-between pt-6 font-display text-sm font-semibold text-brand transition-colors group-hover:text-gold">
+                View {b.name}
+                <span class="flex h-10 w-10 items-center justify-center rounded-full border border-line transition-all duration-500 group-hover:rotate-[-45deg] group-hover:border-gold group-hover:bg-gold group-hover:text-ink"><Icon name="arrow" size={18} /></span>
+              </span>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .spot { isolation: isolate; transition: transform .6s cubic-bezier(.2,.7,.2,1), box-shadow .6s, border-color .4s; }
+  .spot:hover { transform: translateY(-6px); border-color: transparent; box-shadow: 0 30px 70px -30px rgba(11,26,63,.55); }
+  .spot-fill { transform: translateY(101%); transition: transform .65s cubic-bezier(.7,0,.2,1); }
+  .spot:hover .spot-fill, .spot:focus-visible .spot-fill { transform: none; }
+  .spot:focus-visible h3, .spot:focus-visible p { color: #fff; }
+  .spot-glow {
+    opacity: 0;
+    transition: opacity .4s;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(213,165,64,.22), transparent 45%);
+  }
+  .spot:hover .spot-glow { opacity: 1; }
+</style>

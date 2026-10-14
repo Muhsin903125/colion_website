@@ -12,7 +12,9 @@ import Img from './Img.astro';
 
 import AboutBlock from './sections/AboutBlock.astro';
 import AnswerSection from './sections/AnswerSection.astro';
+import BrandHero from './sections/BrandHero.astro';
 import BrandMarquee from './sections/BrandMarquee.astro';
+import BrandSpotlight from './sections/BrandSpotlight.astro';
 import CardGrid from './sections/CardGrid.astro';
 import CategoryGrid from './sections/CategoryGrid.astro';
 import ComparisonTable from './sections/ComparisonTable.astro';
@@ -64,6 +66,8 @@ const REGISTRY: Record<Section['type'], any> = {
   serviceGrid: ServiceGrid,
   categoryGrid: CategoryGrid,
   brandMarquee: BrandMarquee,
+  brandHero: BrandHero,
+  brandSpotlight: BrandSpotlight,
   logoWall: LogoWall,
   teamGrid: TeamGrid,
   testimonialSlider: TestimonialSlider,

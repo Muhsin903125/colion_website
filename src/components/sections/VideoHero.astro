@@ -7,14 +7,21 @@
  * screen gets footage composed for its shape. The poster is the LCP element
  * and is preloaded by the page. The header sits transparent over this band
  * until the page scrolls (see Header.astro, `data-dark-top`).
+ *
+ * `slides` (desktop only) cycle in a stacked card beside the headline: the
+ * owner's own photos and reels, with story-style progress bars. `main.ts`
+ * drives them (`data-slides`), playing only the clip that is showing.
  */
 import BgVideo from '../BgVideo.astro';
 import Cta from '../Cta.astro';
+import Img from '../Img.astro';
+import { videoUrl } from '../../lib/cloudinary';
 import type { Section } from '../../data/schema';
 
 type Props = Extract<Section, { type: 'videoHero' }>;
 const s = Astro.props;
 const lines = s.lines.filter(Boolean);
+const slides = s.slides.filter((x) => x.image?.publicId || x.video);
 ---
 <section data-hero class="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-brand-deep text-white">
   <div class="absolute inset-0 -z-20 will-change-transform" data-hero-bg>
@@ -23,8 +30,8 @@ const lines = s.lines.filter(Boolean);
   <div class="absolute inset-0 -z-10 bg-gradient-to-r from-[#081634]/90 via-[#0d2152]/65 to-[#0d2152]/15" aria-hidden="true"></div>
   <div class="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-[#081634]/70 to-transparent" aria-hidden="true"></div>
 
-  <div class="container-x w-full pb-24 pt-36 lg:pb-28 lg:pt-44" data-hero-copy>
-    <div class="max-w-3xl">
+  <div class:list={['container-x w-full pb-24 pt-36 lg:pb-28 lg:pt-44', slides.length > 0 && 'lg:grid lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:gap-12']}>
+    <div class="max-w-3xl" data-hero-copy>
       <h1 class="h-display !text-white" data-lines>
         {lines.map((line, i) => (
           <span class="line">
@@ -49,6 +56,30 @@ const lines = s.lines.filter(Boolean);
         <Cta link={s.secondary} variant="ghost-light" />
       </div>
     </div>
+
+    {slides.length > 0 && (
+      <div class="relative mx-auto hidden w-full max-w-[400px] lg:block" data-hero-in="3" data-slides>
+        <div class="absolute inset-0 -translate-x-5 translate-y-3 -rotate-[7deg] rounded-[30px] bg-gold/25 ring-1 ring-gold/30" aria-hidden="true"></div>
+        <div class="absolute inset-0 translate-x-3 rotate-[4deg] rounded-[30px] bg-white/10 ring-1 ring-white/20 backdrop-blur-sm" aria-hidden="true"></div>
+        <div class="relative aspect-[4/5] overflow-hidden rounded-[30px] bg-brand-deep shadow-[0_40px_90px_-30px_rgba(0,0,0,.7)] ring-1 ring-white/25">
+          {slides.map((sl, i) => (
+            <figure class:list={['hero-slide absolute inset-0', i === 0 && 'is-on']} data-slide aria-hidden={i === 0 ? undefined : 'true'}>
+              {sl.image?.publicId && <Img image={sl.image} sizes="400px" loading={i === 0 ? 'eager' : 'lazy'} class="absolute inset-0 h-full w-full object-cover" />}
+              {sl.video && <video class="absolute inset-0 h-full w-full object-cover" data-slide-video data-src={videoUrl(sl.video)} muted loop playsinline preload="none" aria-hidden="true"></video>}
+              {sl.caption && (
+                <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#081634]/90 via-[#081634]/40 to-transparent p-6 pt-16 text-[0.95rem] font-medium text-white">{sl.caption}</figcaption>
+              )}
+            </figure>
+          ))}
+          <div class="pointer-events-none absolute inset-x-0 top-0 z-[5] h-20 bg-gradient-to-b from-[#081634]/60 to-transparent" aria-hidden="true"></div>
+          <div class="absolute inset-x-4 top-4 z-10 flex gap-1.5">
+            {slides.map((_, i) => (
+              <button type="button" class="slide-bar h-1 flex-1 overflow-hidden rounded-full bg-white/30" data-slide-go={i} aria-label={`Show slide ${i + 1}`}><span class="block h-full w-full origin-left bg-white"></span></button>
+            ))}
+          </div>
+        </div>
+      </div>
+    )}
   </div>
 
   <a href="#main-content" class="absolute bottom-8 left-1/2 hidden -translate-x-1/2 md:block" aria-label="Scroll to content">
@@ -58,6 +89,17 @@ const lines = s.lines.filter(Boolean);
 <span id="main-content"></span>
 
 <style>
+  .hero-slide { opacity: 0; transition: opacity 1s ease; }
+  .hero-slide.is-on { opacity: 1; z-index: 1; }
+  .hero-slide :global(img), .hero-slide video { transform: scale(1.12); transition: transform 6.5s linear; }
+  .hero-slide.is-on :global(img), .hero-slide.is-on video { transform: scale(1); }
+  .slide-bar span { transform: scaleX(0); }
+  .slide-bar.is-done span { transform: scaleX(1); }
+  .slide-bar.is-on span { animation: slide-fill var(--slide-ms, 5000ms) linear forwards; }
+  @keyframes slide-fill { to { transform: scaleX(1); } }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-slide :global(img), .hero-slide video { transform: none; transition: none; }
+  }
   .cue { animation: cue 1.8s ease-in-out infinite; }
   @keyframes cue { 0% { transform: translateY(-100%); } 100% { transform: translateY(250%); } }
 </style>

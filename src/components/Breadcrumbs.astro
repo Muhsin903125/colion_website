@@ -4,15 +4,16 @@ import Icon from './Icon.astro';
 
 interface Props {
   trail: { name: string; path: string }[];
+  dark?: boolean;
 }
-const { trail } = Astro.props;
+const { trail, dark = false } = Astro.props;
 ---
 <nav aria-label="Breadcrumb" class="mb-6 reveal">
-  <ol class="flex flex-wrap items-center gap-1.5 text-[0.82rem] text-slate">
+  <ol class:list={['flex flex-wrap items-center gap-1.5 text-[0.82rem]', dark ? 'justify-center text-white/60' : 'text-slate']}>
     {trail.map((t, i) => (
       <li class="flex items-center gap-1.5">
-        {i > 0 && <Icon name="chevron-right" size={14} class="text-line" />}
-        {i < trail.length - 1 ? <a href={t.path} class="hover:text-brand">{t.name}</a> : <span aria-current="page" class="font-medium text-ink">{t.name}</span>}
+        {i > 0 && <Icon name="chevron-right" size={14} class={dark ? 'text-white/30' : 'text-line'} />}
+        {i < trail.length - 1 ? <a href={t.path} class={dark ? 'hover:text-white' : 'hover:text-brand'}>{t.name}</a> : <span aria-current="page" class:list={['font-medium', dark ? 'text-white' : 'text-ink']}>{t.name}</span>}
       </li>
     ))}
   </ol>

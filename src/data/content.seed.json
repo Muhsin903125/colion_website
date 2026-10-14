@@ -7054,11 +7054,11 @@
             "href": "/products/"
           },
           "video": {
-            "src": "/videos/dubai-skyline.mp4",
+            "src": "/videos/hero-datacenter.mp4",
             "srcMobile": "/videos/reels/reel-03-loop.mp4",
             "poster": {
-              "publicId": "/images/stills/dubai-skyline.webp",
-              "alt": "Aerial view of Dubai, home of Colion International",
+              "publicId": "/images/stills/hero-datacenter.webp",
+              "alt": "IT engineers walking through a server room",
               "version": null,
               "width": 1280,
               "height": 720
@@ -7080,6 +7080,74 @@
             "Genuine products",
             "UAE warranty",
             "VAT invoice"
+          ],
+          "slides": [
+            {
+              "image": {
+                "publicId": "/images/gallery/reel-03.webp",
+                "alt": "Customer orders loaded at the Colion International branch in Deira",
+                "version": null,
+                "width": 576,
+                "height": 1024
+              },
+              "video": "/videos/reels/reel-03-loop.mp4",
+              "caption": "Orders leaving our Deira branch"
+            },
+            {
+              "image": {
+                "publicId": "/images/gallery/photo-25.webp",
+                "alt": "Shelves of printers and accessories inside the Colion International showroom",
+                "version": null,
+                "width": 1280,
+                "height": 720
+              },
+              "video": "",
+              "caption": "Inside the Colion showroom"
+            },
+            {
+              "image": {
+                "publicId": "/images/gallery/reel-02.webp",
+                "alt": "Epson printer cartons loaded onto a delivery truck",
+                "version": null,
+                "width": 576,
+                "height": 1024
+              },
+              "video": "/videos/reels/reel-02-loop.mp4",
+              "caption": "Epson stock out for delivery"
+            },
+            {
+              "image": {
+                "publicId": "/images/gallery/photo-09.webp",
+                "alt": "HP all-in-one PCs in stock",
+                "version": null,
+                "width": 966,
+                "height": 1280
+              },
+              "video": "",
+              "caption": "HP all-in-ones, ready to ship"
+            },
+            {
+              "image": {
+                "publicId": "/images/gallery/reel-05.webp",
+                "alt": "A pallet of Canon printers unloaded into the showroom",
+                "version": null,
+                "width": 576,
+                "height": 1024
+              },
+              "video": "/videos/reels/reel-05-loop.mp4",
+              "caption": "Canon stock arriving"
+            },
+            {
+              "image": {
+                "publicId": "/images/gallery/photo-19.webp",
+                "alt": "Epson printers stacked high in the showroom",
+                "version": null,
+                "width": 960,
+                "height": 1280
+              },
+              "video": "",
+              "caption": "Wholesale stock, on the shelf"
+            }
           ]
         },
         {
@@ -8480,57 +8548,58 @@
       "description": "Colion International supplies genuine products from 50+ IT brands in Dubai and the UAE, including HP, Dell, Lenovo, Epson, Canon, Brother, Ricoh, Cisco, TP-Link, D-Link and APC.",
       "sections": [
         {
-          "id": "pageHero-42",
+          "id": "brandHero-42",
           "anchor": "",
           "hidden": false,
-          "type": "pageHero",
-          "background": {
-            "publicId": "/images/gallery/photo-01.webp",
-            "alt": "HP printers in stock",
-            "version": null,
-            "width": 960,
-            "height": 1280
-          },
-          "video": {
-            "src": "",
-            "srcMobile": "",
-            "poster": {
-              "publicId": "",
-              "alt": "",
-              "version": null,
-              "width": null,
-              "height": null
-            }
-          },
+          "type": "brandHero",
           "intro": {
             "label": "Brands",
             "lines": [
-              "50+ brands,",
-              "one supplier"
+              "50+ brands.",
+              "One supplier."
             ],
-            "body": "Genuine products from the brands businesses rely on, sourced through regional channels with the manufacturer warranty.",
+            "body": "Genuine products from the brands businesses rely on — sourced through regional channels, in stock in Dubai, with the manufacturer warranty.",
             "cta": {
-              "label": "",
-              "href": ""
+              "label": "Get a brand quote",
+              "href": "wa:Hello Colion International, I need a quotation for brand:"
             }
           },
           "secondary": {
-            "label": "",
-            "href": ""
-          },
-          "align": "left",
-          "size": "medium",
-          "focus": ""
+            "label": "Browse all brands",
+            "href": "#all-brands"
+          }
         },
         {
-          "id": "logoWall-43",
+          "id": "brandSpotlight-43",
           "anchor": "",
+          "hidden": false,
+          "type": "brandSpotlight",
+          "intro": {
+            "label": "Core brands",
+            "lines": [
+              "The brands we",
+              "stock in depth"
+            ],
+            "body": "Held in volume in our Deira stock rooms, with the full product range and original supplies.",
+            "cta": {
+              "label": "Talk to sales",
+              "href": "/contact/"
+            }
+          },
+          "ribbon": []
+        },
+        {
+          "id": "logoWall-44",
+          "anchor": "all-brands",
           "hidden": false,
           "type": "logoWall",
           "intro": {
-            "label": "",
-            "lines": [],
-            "body": "",
+            "label": "A–Z",
+            "lines": [
+              "Every brand",
+              "we supply"
+            ],
+            "body": "Filter by category or search by name. Not listed? We source on request.",
             "cta": {
               "label": "",
               "href": ""
@@ -8555,11 +8624,11 @@
                 "height": null
               }
             },
-            "wash": 94
+            "wash": 95
           }
         },
         {
-          "id": "answerSection-44",
+          "id": "answerSection-45",
           "anchor": "",
           "hidden": false,
           "type": "answerSection",
@@ -8580,7 +8649,7 @@
           }
         },
         {
-          "id": "faqBlock-45",
+          "id": "faqBlock-46",
           "anchor": "",
           "hidden": false,
           "type": "faqBlock",
@@ -8600,6 +8669,46 @@
           "groupIds": [
             "warranty"
           ]
+        },
+        {
+          "id": "ctaBand-47",
+          "anchor": "",
+          "hidden": false,
+          "type": "ctaBand",
+          "background": {
+            "publicId": "/images/stills/server-corridor.webp",
+            "alt": "Server corridor",
+            "version": null,
+            "width": 1280,
+            "height": 720
+          },
+          "video": {
+            "src": "/videos/server-corridor.mp4",
+            "srcMobile": "/videos/server-corridor-m.mp4",
+            "poster": {
+              "publicId": "/images/stills/server-corridor.webp",
+              "alt": "Server racks in a data centre",
+              "version": null,
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "intro": {
+            "label": "Any brand, any model",
+            "lines": [
+              "Looking for a",
+              "specific model?"
+            ],
+            "body": "Send the brand and model number on WhatsApp — we reply with price, stock and delivery date.",
+            "cta": {
+              "label": "Get a quote on WhatsApp",
+              "href": "wa:Hello Colion International, I would like a quotation for:"
+            }
+          },
+          "secondary": {
+            "label": "All products",
+            "href": "/products/"
+          }
         }
       ]
     },
@@ -8608,7 +8717,7 @@
       "description": "Colion International delivers IT hardware from Dubai to Abu Dhabi, Sharjah, Ajman, Ras Al Khaimah, Fujairah and Umm Al Quwain, with on-site installation.",
       "sections": [
         {
-          "id": "pageHero-46",
+          "id": "pageHero-48",
           "anchor": "",
           "hidden": false,
           "type": "pageHero",
@@ -8651,7 +8760,7 @@
           "focus": ""
         },
         {
-          "id": "locationGrid-47",
+          "id": "locationGrid-49",
           "anchor": "",
           "hidden": false,
           "type": "locationGrid",
@@ -8666,7 +8775,7 @@
           }
         },
         {
-          "id": "comparisonTable-48",
+          "id": "comparisonTable-50",
           "anchor": "",
           "hidden": false,
           "type": "comparisonTable",
@@ -8692,7 +8801,7 @@
           "note": "Times are for in-stock items confirmed before midday on a working day. Bulk and custom orders are given a delivery date with the quotation."
         },
         {
-          "id": "faqBlock-49",
+          "id": "faqBlock-51",
           "anchor": "",
           "hidden": false,
           "type": "faqBlock",
@@ -8720,7 +8829,7 @@
       "description": "Photos and reels from Colion International: our Deira showroom, stock rooms of HP, Canon and Epson hardware, and deliveries across Dubai and the UAE.",
       "sections": [
         {
-          "id": "pageHero-50",
+          "id": "pageHero-52",
           "anchor": "",
           "hidden": false,
           "type": "pageHero",
@@ -8769,7 +8878,7 @@
       "description": "Contact Colion International, Deira, Dubai: +971 50 766 8536 or info@colioninternational.com. Branches in Al Sabkha and Al Dhagaya, Mon–Sat 9–7.",
       "sections": [
         {
-          "id": "pageHero-51",
+          "id": "pageHero-53",
           "anchor": "",
           "hidden": false,
           "type": "pageHero",
@@ -8812,7 +8921,7 @@
           "focus": ""
         },
         {
-          "id": "contactPanel-52",
+          "id": "contactPanel-54",
           "anchor": "",
           "hidden": false,
           "type": "contactPanel",
@@ -8828,7 +8937,7 @@
           "showMap": true
         },
         {
-          "id": "formBlock-53",
+          "id": "formBlock-55",
           "anchor": "",
           "hidden": false,
           "type": "formBlock",
@@ -8890,7 +8999,7 @@
           ]
         },
         {
-          "id": "faqBlock-54",
+          "id": "faqBlock-56",
           "anchor": "",
           "hidden": false,
           "type": "faqBlock",
@@ -8924,7 +9033,7 @@
       "description": "How Colion International handles the personal information you share when you contact us or place an order.",
       "sections": [
         {
-          "id": "richText-55",
+          "id": "richText-57",
           "anchor": "",
           "hidden": false,
           "type": "richText",
@@ -8956,7 +9065,7 @@
       "description": "Terms of sale for IT hardware supplied by Colion International Trading LLC, Dubai.",
       "sections": [
         {
-          "id": "richText-56",
+          "id": "richText-58",
           "anchor": "",
           "hidden": false,
           "type": "richText",

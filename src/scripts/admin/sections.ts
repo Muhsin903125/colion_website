@@ -67,7 +67,7 @@ export const SECTION_TYPES: Record<string, SectionType> = {
   videoHero: {
     name: 'Home hero (full-bleed video)',
     hint: 'Headline over a full-screen background video, with a rotating last word.',
-    defaults: () => ({ eyebrow: '', lines: [], rotating: [], body: '', cta: link(), secondary: link(), video: video(), chips: [], trust: [] }),
+    defaults: () => ({ eyebrow: '', lines: [], rotating: [], body: '', cta: link(), secondary: link(), video: video(), chips: [], trust: [], slides: [] }),
     fields: (p) => [
       linesField('Heading lines', [...p, 'lines']),
       listField('Rotating words', [...p, 'rotating'], 'One per line. They cycle at the end of the last heading line.'),
@@ -75,6 +75,13 @@ export const SECTION_TYPES: Record<string, SectionType> = {
       linkField('Main button', [...p, 'cta']),
       linkField('Second button', [...p, 'secondary']),
       videoFields([...p, 'video']),
+      repeater({
+        title: 'Slides beside the headline (photos or short vertical clips)',
+        path: [...p, 'slides'],
+        label: (x, i) => x.caption || `Slide ${i + 1}`,
+        defaults: { image: image(), video: '', caption: '' },
+        render: (q) => grid([mediaField('Photo / poster', [...q, 'image'], { size: SIZE.frame }), field('Video file (optional)', [...q, 'video'], { help: 'e.g. /videos/reels/reel-03-loop.mp4 or a Cloudinary video id' }), field('Caption', [...q, 'caption'])]),
+      }),
     ],
   },
   pageHero: {
@@ -236,6 +243,18 @@ export const SECTION_TYPES: Record<string, SectionType> = {
     hint: 'Scrolling rows of brand logos.',
     defaults: () => ({ intro: intro(), rows: 2, source: 'all' }),
     fields: (p) => [...introFields([...p, 'intro'], { cta: false }), numberField('Rows (1 or 2)', [...p, 'rows']), select('Brands', [...p, 'source'], ['core', 'all'])],
+  },
+  brandHero: {
+    name: 'Brand hero (floating logos)',
+    hint: 'Dark opener for the brands page. The core brand logos float around the heading.',
+    defaults: () => ({ intro: intro(), secondary: link() }),
+    fields: (p) => [...introFields([...p, 'intro']), linkField('Second button', [...p, 'secondary'])],
+  },
+  brandSpotlight: {
+    name: 'Core brands spotlight',
+    hint: 'The core-tier brands as large cards on a dark band.',
+    defaults: () => ({ intro: intro(), ribbon: [] }),
+    fields: (p) => [...introFields([...p, 'intro']), listField('Sliding words', [...p, 'ribbon'], 'One per line. Leave empty to use the core brand names.')],
   },
   logoWall: {
     name: 'Brand wall',

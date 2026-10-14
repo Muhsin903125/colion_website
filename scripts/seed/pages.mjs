@@ -23,15 +23,23 @@ export const pages = {
         cta: quote,
         secondary: link('Browse products', '/products/'),
         video: {
-          src: '/videos/dubai-skyline.mp4',
+          src: '/videos/hero-datacenter.mp4',
           srcMobile: '/videos/reels/reel-03-loop.mp4',
-          poster: STILL('dubai-skyline', 'Aerial view of Dubai, home of Colion International'),
+          poster: STILL('hero-datacenter', 'IT engineers walking through a server room'),
         },
         chips: [
           { value: '6000', unit: '+', label: 'Business clients' },
           { value: '50', unit: '+', label: 'Brands' },
         ],
         trust: ['Genuine products', 'UAE warranty', 'VAT invoice'],
+        slides: [
+          { image: img('/images/gallery/reel-03.webp', 'Customer orders loaded at the Colion International branch in Deira'), video: '/videos/reels/reel-03-loop.mp4', caption: 'Orders leaving our Deira branch' },
+          { image: G('photo-25', 'Shelves of printers and accessories inside the Colion International showroom'), video: '', caption: 'Inside the Colion showroom' },
+          { image: img('/images/gallery/reel-02.webp', 'Epson printer cartons loaded onto a delivery truck'), video: '/videos/reels/reel-02-loop.mp4', caption: 'Epson stock out for delivery' },
+          { image: G('photo-09', 'HP all-in-one PCs in stock'), video: '', caption: 'HP all-in-ones, ready to ship' },
+          { image: img('/images/gallery/reel-05.webp', 'A pallet of Canon printers unloaded into the showroom'), video: '/videos/reels/reel-05-loop.mp4', caption: 'Canon stock arriving' },
+          { image: G('photo-19', 'Epson printers stacked high in the showroom'), video: '', caption: 'Wholesale stock, on the shelf' },
+        ],
       }),
       section('brandMarquee', { intro: intro(), rows: 1, source: 'core' }),
       section('answerSection', {
@@ -314,16 +322,15 @@ export const pages = {
     title: 'IT Brands We Supply in Dubai — HP, Dell, Lenovo, Epson & More',
     description: 'Colion International supplies genuine products from 50+ IT brands in Dubai and the UAE, including HP, Dell, Lenovo, Epson, Canon, Brother, Ricoh, Cisco, TP-Link, D-Link and APC.',
     sections: [
-      section('pageHero', {
-        background: G('photo-01', 'HP printers in stock'),
-        video: noVideo(),
-        intro: intro('Brands', ['50+ brands,', 'one supplier'], 'Genuine products from the brands businesses rely on, sourced through regional channels with the manufacturer warranty.'),
-        secondary: link(),
-        align: 'left',
-        size: 'medium',
-        focus: '',
+      section('brandHero', {
+        intro: intro('Brands', ['50+ brands.', 'One supplier.'], 'Genuine products from the brands businesses rely on — sourced through regional channels, in stock in Dubai, with the manufacturer warranty.', link('Get a brand quote', 'wa:Hello Colion International, I need a quotation for brand:')),
+        secondary: link('Browse all brands', '#all-brands'),
       }),
-      section('logoWall', { intro: intro(), backdrop: { image: STILL('server-racks', 'Server racks'), video: noVideo(), wash: 94 } }),
+      section('brandSpotlight', {
+        intro: intro('Core brands', ['The brands we', 'stock in depth'], 'Held in volume in our Deira stock rooms, with the full product range and original supplies.', link('Talk to sales', '/contact/')),
+        ribbon: [],
+      }),
+      { ...section('logoWall', { intro: intro('A–Z', ['Every brand', 'we supply'], 'Filter by category or search by name. Not listed? We source on request.'), backdrop: { image: STILL('server-racks', 'Server racks'), video: noVideo(), wash: 95 } }), anchor: 'all-brands' },
       section('answerSection', {
         label: 'Authenticity',
         question: 'Does Colion International sell genuine branded products?',
@@ -333,6 +340,12 @@ export const pages = {
         cta: link(),
       }),
       section('faqBlock', { intro: intro('FAQ', ['Warranty &', 'authenticity']), source: 'groups', groupIds: ['warranty'] }),
+      section('ctaBand', {
+        background: STILL('server-corridor', 'Server corridor'),
+        video: vid('server-corridor', 'Server racks in a data centre'),
+        intro: intro('Any brand, any model', ['Looking for a', 'specific model?'], 'Send the brand and model number on WhatsApp — we reply with price, stock and delivery date.', quote),
+        secondary: link('All products', '/products/'),
+      }),
     ],
   },
 

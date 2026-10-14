@@ -7,6 +7,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from './Breadcrumbs.astro';
 import SectionRenderer from './SectionRenderer.astro';
+import BrandHero from './sections/BrandHero.astro';
 import PageHero from './sections/PageHero.astro';
 import { load } from '../data/load';
 import { breadcrumb, faqEntity, webPage } from '../data/seo';
@@ -46,11 +47,15 @@ const graph = [
   ...schema,
 ];
 ---
-<BaseLayout title={page.title || name} description={page.description} schema={graph} noindex={noindex} preloadImage={heroImage || undefined}>
+<BaseLayout title={page.title || name} description={page.description} schema={graph} noindex={noindex} preloadImage={heroImage || undefined} darkTop={first?.type === 'brandHero'}>
   {first?.type === 'pageHero' ? (
     <PageHero {...first}>
       <Breadcrumbs slot="before" trail={trail} />
     </PageHero>
+  ) : first?.type === 'brandHero' ? (
+    <BrandHero {...first}>
+      <Breadcrumbs slot="before" trail={trail} dark />
+    </BrandHero>
   ) : (
     first && <SectionRenderer section={first} />
   )}

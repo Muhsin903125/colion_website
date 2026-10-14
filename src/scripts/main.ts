@@ -109,6 +109,59 @@ function initRotator() {
 }
 
 /**
+ * The hero's slide card: advance every few seconds, play only the clip that is
+ * showing, pause while the card is off-screen or the tab is hidden.
+ */
+function initSlides() {
+  document.querySelectorAll<HTMLElement>('[data-slides]').forEach((root) => {
+    const slides = [...root.querySelectorAll<HTMLElement>('[data-slide]')];
+    const bars = [...root.querySelectorAll<HTMLElement>('[data-slide-go]')];
+    if (!slides.length || getComputedStyle(root).display === 'none') return;
+    const MS = 5000;
+    root.style.setProperty('--slide-ms', `${MS}ms`);
+    let i = 0;
+    let timer = 0;
+    let visible = true;
+    const show = (n: number) => {
+      i = (n + slides.length) % slides.length;
+      slides.forEach((s, k) => {
+        const on = k === i;
+        s.classList.toggle('is-on', on);
+        s.toggleAttribute('aria-hidden', !on);
+        const v = s.querySelector<HTMLVideoElement>('video[data-slide-video]');
+        if (!v) return;
+        if (on && !reduce) {
+          if (!v.src) v.src = v.dataset.src || '';
+          v.currentTime = 0;
+          v.play().catch(() => {});
+        } else v.pause();
+      });
+      bars.forEach((b, k) => {
+        b.classList.remove('is-on');
+        b.classList.toggle('is-done', k < i);
+      });
+      // Restart the fill animation on the active bar.
+      void bars[i]?.offsetWidth;
+      bars[i]?.classList.add('is-on');
+      window.clearTimeout(timer);
+      if (slides.length > 1 && visible && !reduce) timer = window.setTimeout(() => show(i + 1), MS);
+    };
+    bars.forEach((b, k) => b.addEventListener('click', () => show(k)));
+    const io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting && !document.hidden;
+      if (visible) show(i);
+      else {
+        window.clearTimeout(timer);
+        slides.forEach((s) => s.querySelector<HTMLVideoElement>('video')?.pause());
+      }
+    });
+    io.observe(root);
+    observers.push(io);
+    cleanups.push(() => window.clearTimeout(timer));
+  });
+}
+
+/**
  * Background and preview videos: attach the source only when the clip nears
  * the viewport, play while visible, pause when not. Skipped entirely on
  * Save-Data, slow connections and reduced motion — the poster stays.
@@ -233,6 +286,7 @@ function setup() {
   initCounts();
   initRotator();
   initVideos();
+  initSlides();
   initProgress();
   initDock();
   initUI();

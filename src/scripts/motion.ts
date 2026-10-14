@@ -195,6 +195,81 @@ function initTimeline() {
   });
 }
 
+/**
+ * Floating tiles scatter away from the centre of their root as it scrolls
+ * out (`data-scatter`), and drift with the pointer by `data-depth`.
+ */
+function initScatter() {
+  if (reduce || !isDesktop()) return;
+  gsap.utils.toArray<HTMLElement>('[data-scatter-root]').forEach((root) => {
+    const tiles = [...root.querySelectorAll<HTMLElement>('[data-scatter]')];
+    const box = root.getBoundingClientRect();
+    tiles.forEach((tile) => {
+      const r = tile.getBoundingClientRect();
+      const dx = (r.left + r.width / 2 - (box.left + box.width / 2)) / (box.width / 2);
+      const dy = (r.top + r.height / 2 - (box.top + box.height / 2)) / (box.height / 2);
+      gsap.fromTo(tile, { opacity: 0, scale: 0.6, x: -dx * 120, y: -dy * 80 }, { opacity: 1, scale: 1, x: 0, y: 0, duration: 1.4, delay: 0.2 + Math.random() * 0.5, ease: 'expo.out' });
+      gsap.to(tile, {
+        x: dx * 260, y: dy * 180 - 60, rotate: dx * 14, scale: 0.85, opacity: 0.2, ease: 'none',
+        scrollTrigger: { trigger: root, start: 'top top', end: 'bottom top', scrub: true },
+      });
+    });
+    const layers = [...root.querySelectorAll<HTMLElement>('[data-depth]')].map((el) => ({
+      x: gsap.quickTo(el, 'x', { duration: 1.2, ease: 'power3.out' }),
+      y: gsap.quickTo(el, 'y', { duration: 1.2, ease: 'power3.out' }),
+      depth: parseFloat(el.dataset.depth || '0.5'),
+    }));
+    const move = (e: MouseEvent) => {
+      const px = e.clientX / window.innerWidth - 0.5;
+      const py = e.clientY / window.innerHeight - 0.5;
+      layers.forEach((l) => { l.x(-px * 50 * l.depth); l.y(-py * 36 * l.depth); });
+    };
+    root.addEventListener('mousemove', move);
+    tickers.push(() => root.removeEventListener('mousemove', move));
+  });
+}
+
+/** `data-scroll-x="-25"` slides a row sideways by that % of its width while it crosses the viewport. */
+function initScrollX() {
+  if (reduce) return;
+  gsap.utils.toArray<HTMLElement>('[data-scroll-x]').forEach((el) => {
+    const amount = parseFloat(el.dataset.scrollX || '-20');
+    gsap.fromTo(el, { xPercent: amount < 0 ? 0 : -amount }, {
+      xPercent: amount < 0 ? amount : 0,
+      ease: 'none',
+      scrollTrigger: { trigger: el.parentElement || el, start: 'top bottom', end: 'bottom top', scrub: 0.6 },
+    });
+  });
+}
+
+/** Children of `[data-rise]` rise and un-tilt into place in staggered batches. */
+function initRise() {
+  if (reduce) return;
+  gsap.utils.toArray<HTMLElement>('[data-rise]').forEach((list) => {
+    const items = [...list.children] as HTMLElement[];
+    gsap.set(items, { opacity: 0, y: 70, rotateX: -14, transformPerspective: 900, transformOrigin: '50% 100%' });
+    ScrollTrigger.batch(items, {
+      start: 'top 90%',
+      once: true,
+      onEnter: (batch) => gsap.to(batch, { opacity: 1, y: 0, rotateX: 0, duration: 1, ease: 'expo.out', stagger: 0.09, overwrite: true }),
+    });
+  });
+}
+
+/** A soft glow follows the pointer across `[data-glow]` cards via --mx/--my. */
+function initGlow() {
+  if (isCoarse()) return;
+  gsap.utils.toArray<HTMLElement>('[data-glow]').forEach((el) => {
+    const move = (e: MouseEvent) => {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', `${e.clientX - r.left}px`);
+      el.style.setProperty('--my', `${e.clientY - r.top}px`);
+    };
+    el.addEventListener('mousemove', move);
+    tickers.push(() => el.removeEventListener('mousemove', move));
+  });
+}
+
 /** Cards tilt slightly toward the pointer. */
 function initTilt() {
   if (reduce || isCoarse()) return;
@@ -238,6 +313,10 @@ export function setupMotion() {
   initMagnetic();
   initStack();
   initTimeline();
+  initScatter();
+  initScrollX();
+  initRise();
+  initGlow();
   initTilt();
   ScrollTrigger.refresh();
 }
