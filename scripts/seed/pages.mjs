@@ -11,9 +11,8 @@ const quote = link('Get a quote on WhatsApp', 'wa:Hello Colion International, I 
 
 export const pages = {
   home: {
-    title: 'IT Hardware Supplier & Wholesaler in Dubai, UAE',
-    description:
-      'Colion International: IT hardware stockist, wholesaler and exporter in Dubai. Genuine HP, Dell, Lenovo, Epson, Canon, Cisco and APC — printers, computers, servers, networking and UPS, delivered across the UAE.',
+    title: 'IT Hardware Supplier in Dubai, UAE | Colion International',
+    description: 'IT hardware stockist and wholesaler in Dubai since 2022. Genuine HP, Dell, Lenovo, Epson, Cisco and APC, delivered across the UAE and installed free.',
     sections: [
       section('videoHero', {
         eyebrow: 'IT hardware stockist · Wholesale · Export',
@@ -140,9 +139,8 @@ export const pages = {
   },
 
   about: {
-    title: 'About Colion International — IT Hardware Wholesaler in Dubai',
-    description:
-      'Colion International Trading LLC is an IT hardware stockist, wholesaler and exporter in Deira, Dubai, supplying genuine printers, computers, servers, networking and UPS across the UAE, the Middle East and Africa.',
+    title: 'About Colion International | IT Wholesaler in Dubai',
+    description: 'Colion International Trading LLC: IT hardware stockist, wholesaler and exporter in Deira, Dubai since 2022, serving the UAE, Middle East and Africa.',
     sections: [
       section('pageHero', {
         background: G('photo-25', 'Inside the Colion International showroom'),
@@ -242,8 +240,8 @@ export const pages = {
   },
 
   services: {
-    title: 'IT Hardware Services in Dubai & UAE',
-    description: 'Printing, desktop computing, presentation, server and storage, network infrastructure and power protection — supplied, delivered and installed by Colion International across the UAE.',
+    title: 'IT Hardware Services in Dubai | Colion International',
+    description: 'Printing, computing, display, server, network and power solutions, supplied, delivered and installed by Colion International across the UAE.',
     sections: [
       section('pageHero', {
         background: STILL('control-room', 'An engineer at a monitoring station'),
@@ -287,8 +285,8 @@ export const pages = {
   },
 
   products: {
-    title: 'IT Hardware Products — Printers, PCs, Servers, Networking, UPS',
-    description: 'Browse IT hardware in stock at Colion International, Dubai: printers and copiers, desktops, all-in-one PCs, projectors, servers, routers and switches, UPS and networking accessories.',
+    title: 'IT Hardware Products in Dubai | Colion International',
+    description: 'Printers, desktops, all-in-one PCs, projectors, servers, switches, UPS and cabling in stock at Colion International, Dubai. Delivered across the UAE.',
     sections: [
       section('pageHero', {
         background: G('photo-19', 'Epson printers in stock'),
@@ -320,8 +318,8 @@ export const pages = {
   },
 
   brands: {
-    title: 'IT Brands We Supply in Dubai — HP, Dell, Lenovo, Epson & More',
-    description: 'Colion International supplies genuine products from 50+ IT brands in Dubai and the UAE, including HP, Dell, Lenovo, Epson, Canon, Brother, Ricoh, Cisco, TP-Link, D-Link and APC.',
+    title: 'IT Brands: HP, Dell, Lenovo, Epson | Colion International',
+    description: 'Genuine products from 50+ IT brands in Dubai, including HP, Dell, Lenovo, Epson, Canon, Cisco and APC, supplied by Colion International across the UAE.',
     sections: [
       section('brandHero', {
         intro: intro('Brands', ['50+ brands.', 'One supplier.'], 'Genuine products from the brands businesses rely on — sourced through regional channels, in stock in Dubai, with the manufacturer warranty.', link('Get a brand quote', 'wa:Hello Colion International, I need a quotation for brand:')),
@@ -351,7 +349,7 @@ export const pages = {
   },
 
   locations: {
-    title: 'IT Hardware Delivery Across the UAE — All 7 Emirates',
+    title: 'UAE Delivery to All 7 Emirates | Colion International',
     description: 'Colion International delivers IT hardware from Dubai to Abu Dhabi, Sharjah, Ajman, Ras Al Khaimah, Fujairah and Umm Al Quwain, with on-site installation.',
     sections: [
       section('pageHero', {
@@ -376,7 +374,7 @@ export const pages = {
   },
 
   gallery: {
-    title: 'Gallery — Showroom, Stock & Deliveries',
+    title: 'Gallery: Showroom, Stock & Deliveries | Colion',
     description: 'Photos and reels from Colion International: our Deira showroom, stock rooms of HP, Canon and Epson hardware, and deliveries across Dubai and the UAE.',
     sections: [
       section('pageHero', {
@@ -422,7 +420,7 @@ export const pages = {
   },
 
   faq: {
-    title: 'FAQ — Ordering, Delivery, Warranty & Support',
+    title: 'FAQ: Ordering, Delivery & Warranty | Colion International',
     description: 'Answers about buying IT hardware from Colion International: quotations, minimums, UAE delivery times, export, warranty, installation and AMC.',
     sections: [],
   },
