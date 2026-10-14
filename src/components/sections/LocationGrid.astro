@@ -12,7 +12,7 @@ const d = await load();
 <section class="section-y-sm">
   <div class="container-x">
     <SectionHead intro={s.intro} aside class="mb-8" />
-    <ul class="grid auto-rows-[130px] grid-cols-2 gap-3 sm:auto-rows-[150px] sm:gap-4 lg:auto-rows-[165px] lg:grid-cols-5">
+    <ul class="grid auto-rows-[112px] grid-cols-2 gap-3 sm:auto-rows-[150px] sm:gap-4 lg:auto-rows-[165px] lg:grid-cols-5">
       {d.emirates.map((e, i) => (
         <li class:list={['reveal', i === 0 && 'col-span-2 row-span-2', `d${(i % 4) + 1}`]}>
           <a href={`/locations/${e.slug}/`} class="group relative block h-full overflow-hidden rounded-[20px] bg-brand-deep">

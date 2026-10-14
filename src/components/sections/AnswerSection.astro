@@ -33,7 +33,7 @@ const hasImage = Boolean(s.image?.publicId);
         {s.cta?.href && <div class="mt-8 reveal"><Cta link={s.cta} variant="outline" /></div>}
       </div>
       {hasImage && (
-        <div class="media zoom aspect-[4/3] shadow-soft" data-clip data-tilt>
+        <div class="media zoom aspect-[16/10] shadow-soft sm:aspect-[4/3]" data-clip data-tilt>
           <Img image={s.image} sizes="(min-width:1024px) 40vw, 100vw" class="h-full w-full object-cover" data-parallax="0.08" />
         </div>
       )}

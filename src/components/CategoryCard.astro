@@ -11,7 +11,7 @@ interface Props {
 const { category: c, index = 0, brandCount } = Astro.props;
 ---
 <a href={`/products/${c.slug}/`} class:list={['group relative block overflow-hidden rounded-[22px] border border-line bg-white reveal', `d${(index % 4) + 1}`]}>
-  <div class="zoom relative aspect-[4/3] overflow-hidden bg-surface">
+  <div class="zoom relative aspect-[16/10] overflow-hidden bg-surface sm:aspect-[4/3]">
     <Img image={c.image} sizes="(min-width:1024px) 24vw, (min-width:640px) 45vw, 92vw" class="h-full w-full object-cover" />
     <div class="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent" aria-hidden="true"></div>
     <div class="absolute inset-x-0 bottom-0 p-5 text-white">

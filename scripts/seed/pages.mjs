@@ -73,7 +73,7 @@ export const pages = {
         slugs: [],
         layout: 'rail',
       }),
-      section('featureSplit', {
+      { ...section('featureSplit', {
         images: [STILL('rack-install', 'An engineer installing equipment in a server rack'), STILL('tech-cabling', 'Engineers cabling a server room')],
         intro: intro('Installation', ['Supplied, installed', 'and supported'], 'We do not drop boxes at the door. Our technicians install and configure what we sell, and stay on call afterwards.', link('Our services', '/services/')),
         items: [
@@ -83,12 +83,12 @@ export const pages = {
           { title: 'AMC & support', body: 'Annual maintenance contracts and a line for urgent faults.' },
         ],
         reverse: false,
-      }),
+      }), hidden: true },
       section('reelRail', {
         intro: intro('From the floor', ['Real stock.', 'Real deliveries.'], 'Straight from our showroom and loading bay — follow us on Instagram for new arrivals.', link('Open the gallery', '/gallery/')),
         limit: 8,
       }),
-      section('aboutBlock', {
+      { ...section('aboutBlock', {
         intro: intro('Why Colion', ['Stock you can see,', 'prices you can trust'], '', link('Visit our branches', '/contact/')),
         paragraphs: [
           'We hold our stock in Dubai, not on a distributor\'s lead time — walls of HP, Canon and Epson printers, laptops, all-in-ones and networking ready to dispatch the day you order.',
@@ -99,7 +99,7 @@ export const pages = {
         badge: { value: '50+', label: 'brands in stock' },
         highlights: ['Genuine regional stock', 'Manufacturer warranty in the UAE', 'Free installation in Dubai', 'AMC and 24/7 support'],
         secondary: link('Our story', '/about/'),
-      }),
+      }), hidden: true },
       section('processSteps', {
         intro: intro('How it works', ['How to order IT hardware', 'from Colion International']),
         steps: [
@@ -117,11 +117,11 @@ export const pages = {
         intro: intro('Coverage', ['Delivering to', 'all seven emirates'], 'Supplied from our Deira branches, with delivery and installation across the UAE.', link('Delivery areas', '/locations/')),
         backdrop: { image: img(''), video: vid('dubai-street', 'Dubai street'), wash: 91 },
       }),
-      section('galleryStrip', {
+      { ...section('galleryStrip', {
         intro: intro('Gallery', ['Inside our', 'stock rooms'], '', link('View the gallery', '/gallery/')),
         tag: '',
         limit: 8,
-      }),
+      }), hidden: true },
       section('testimonialSlider', { intro: intro('Reviews', ['What our', 'customers say']), backdrop: { image: STILL('team-laptop', 'A team at a laptop'), video: noVideo(), wash: 84 } }),
       section('faqBlock', {
         intro: intro('FAQ', ['Questions buyers', 'ask us most'], '', link('All questions', '/faq/')),

@@ -26,7 +26,7 @@ const ig = d.socialLinks.find((x) => x.icon === 'instagram');
       </div>
       <div class="no-scrollbar rail -mx-4 flex snap-x gap-4 overflow-x-auto scroll-px-4 px-4 pb-2" data-lb-root data-carousel-track>
         {reels.map((g, i) => (
-          <GalleryTile item={g} class:list={['w-[62vw] shrink-0 snap-start !rounded-[22px] ring-1 ring-white/10 sm:w-[260px] reveal', `d${(i % 4) + 1}`]} aspect="aspect-[9/16]" sizes="260px" />
+          <GalleryTile item={g} class:list={['w-[44vw] shrink-0 snap-start !rounded-[22px] ring-1 ring-white/10 sm:w-[260px] reveal', `d${(i % 4) + 1}`]} aspect="aspect-[9/16]" sizes="260px" />
         ))}
       </div>
     </div>

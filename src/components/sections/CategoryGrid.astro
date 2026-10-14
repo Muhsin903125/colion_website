@@ -25,9 +25,9 @@ const cats = (s.source === 'slugs' ? s.slugs.map(d.category).filter(Boolean) : d
       </div>
       <div class="no-scrollbar rail flex gap-5 overflow-x-auto px-4 sm:px-6 lg:pl-[max(2rem,calc((100vw-1280px)/2+2rem))] lg:pr-16" data-horizontal-track>
         {cats.map((c, i) => (
-          <a href={`/products/${c.slug}/`} class="group relative block w-[78vw] shrink-0 overflow-hidden rounded-[26px] bg-white/5 ring-1 ring-white/10 sm:w-[380px]">
+          <a href={`/products/${c.slug}/`} class="group relative block w-[64vw] shrink-0 overflow-hidden rounded-[24px] bg-white/5 ring-1 ring-white/10 sm:w-[300px]">
             <div class="relative aspect-[4/5] overflow-hidden">
-              <Img image={c.image} sizes="380px" class="h-full w-full object-cover transition duration-1000 group-hover:scale-105" />
+              <Img image={c.image} sizes="300px" class="h-full w-full object-cover transition duration-1000 group-hover:scale-105" />
               <div class="absolute inset-0 bg-gradient-to-t from-[#0b1a3f] via-[#0b1a3f]/40 to-transparent" aria-hidden="true"></div>
               <span class="absolute left-6 top-5 font-display text-sm font-semibold text-white/50">{String(i + 1).padStart(2, '0')} / {String(cats.length).padStart(2, '0')}</span>
               <div class="absolute inset-x-0 bottom-0 p-6">
@@ -39,7 +39,7 @@ const cats = (s.source === 'slugs' ? s.slugs.map(d.category).filter(Boolean) : d
             </div>
           </a>
         ))}
-        <a href="/products/" class="flex w-[60vw] shrink-0 flex-col items-start justify-end rounded-[26px] border border-white/15 p-8 transition hover:bg-white/5 sm:w-[300px]">
+        <a href="/products/" class="flex w-[52vw] shrink-0 flex-col items-start justify-end rounded-[24px] border border-white/15 p-7 transition hover:bg-white/5 sm:w-[260px]">
           <span class="font-display text-2xl font-semibold">All products</span>
           <span class="mt-2 text-sm text-white/60">{d.brands.length} brands, genuine UAE stock</span>
           <span class="mt-6 flex h-12 w-12 items-center justify-center rounded-full bg-gold text-ink"><Icon name="arrow-up-right" size={20} /></span>

@@ -105,7 +105,7 @@ const graph = [
         )}
       </div>
       {(p.video?.src || heroSrc) && (
-        <div class="media relative aspect-[4/3] shadow-lift" data-clip>
+        <div class="media relative aspect-[16/10] shadow-lift sm:aspect-[4/3]" data-clip>
           {p.video?.src ? <BgVideo video={p.video as any} priority /> : <Img image={p.image} priority sizes="(min-width:1024px) 42vw, 100vw" class="h-full w-full object-cover" />}
           {p.credit && <p class="absolute bottom-0 right-0 rounded-tl-lg bg-ink/55 px-2.5 py-1 text-[0.68rem] text-white/85">{p.credit}</p>}
         </div>

@@ -37,7 +37,7 @@ const spotlight = team.length === 1;
           return (
             <div class="grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20" id={m.id}>
               <div class="relative mx-auto w-full max-w-[460px]">
-                <div class="media aspect-[4/5] shadow-lift" data-clip>
+                <div class="media aspect-square shadow-lift sm:aspect-[4/5]" data-clip>
                   {m.photo?.publicId ? (
                     <Img image={m.photo} sizes="(min-width:1024px) 460px, 90vw" class="h-full w-full object-cover" />
                   ) : (

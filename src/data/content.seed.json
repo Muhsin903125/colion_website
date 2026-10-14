@@ -7329,7 +7329,7 @@
         {
           "id": "featureSplit-8",
           "anchor": "",
-          "hidden": false,
+          "hidden": true,
           "type": "featureSplit",
           "images": [
             {
@@ -7401,7 +7401,7 @@
         {
           "id": "aboutBlock-10",
           "anchor": "",
-          "hidden": false,
+          "hidden": true,
           "type": "aboutBlock",
           "intro": {
             "label": "Why Colion",
@@ -7559,7 +7559,7 @@
         {
           "id": "galleryStrip-13",
           "anchor": "",
-          "hidden": false,
+          "hidden": true,
           "type": "galleryStrip",
           "intro": {
             "label": "Gallery",

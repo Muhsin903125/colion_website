@@ -20,9 +20,9 @@ const hasIntro = s.intro.lines.some((t) => t.trim());
   <section class="section-y-sm relative">
     <div class="container-x">
       {hasIntro && <SectionHead intro={s.intro} aside class="mb-10" />}
-      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2">
-        <li class="reveal sm:col-span-2 lg:row-span-2">
-          <div class="relative flex h-full min-h-[300px] flex-col justify-end overflow-hidden rounded-[26px] bg-brand-deep p-7 text-white sm:min-h-[340px] sm:p-9">
+      <ul class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:grid-rows-2">
+        <li class="reveal col-span-2 lg:row-span-2">
+          <div class="relative flex h-full min-h-[230px] flex-col justify-end overflow-hidden rounded-[26px] bg-brand-deep p-6 text-white sm:min-h-[340px] sm:p-9">
             {hasImage && (
               <>
                 <Img image={s.image} sizes="(min-width:1024px) 50vw, 100vw" class="absolute inset-0 h-full w-full scale-110 object-cover" data-parallax="0.08" />
@@ -37,14 +37,14 @@ const hasIntro = s.intro.lines.some((t) => t.trim());
           </div>
         </li>
         {rest.map((f, i) => (
-          <li class:list={['feat group reveal flex gap-4 sm:block', `d${(i % 4) + 1}`]}>
-            <div class="flex shrink-0 items-start justify-between">
+          <li class:list={['feat group reveal', `d${(i % 4) + 1}`]}>
+            <div class="flex items-start justify-between">
               <Icon name={f.icon} size={26} class="text-brand transition-colors group-hover:text-gold-deep" />
               <span class="hidden font-display text-sm font-semibold text-gold sm:inline">{String(i + 2).padStart(2, '0')}</span>
             </div>
             <div>
-              <h3 class="h-card sm:mt-6">{f.title}</h3>
-              <p class="mt-1.5 text-[0.9rem] leading-relaxed text-slate sm:mt-2">{f.body}</p>
+              <h3 class="h-card mt-4 !text-[0.95rem] leading-snug sm:mt-6 sm:!text-[1.1rem]">{f.title}</h3>
+              <p class="mt-2 hidden text-[0.9rem] leading-relaxed text-slate sm:block">{f.body}</p>
             </div>
           </li>
         ))}

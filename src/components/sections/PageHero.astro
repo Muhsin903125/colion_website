@@ -29,7 +29,7 @@ const hasMedia = s.size !== 'short' && (hasVideo || s.background?.publicId);
       <slot />
     </div>
     {hasMedia && (
-      <div class:list={['media relative shadow-lift', s.size === 'tall' ? 'aspect-[4/3] lg:aspect-[5/5]' : 'aspect-[16/11]']} data-clip>
+      <div class:list={['media relative shadow-lift', s.size === 'tall' ? 'aspect-[16/10] sm:aspect-[4/3] lg:aspect-[5/5]' : 'aspect-[16/10] sm:aspect-[16/11]']} data-clip>
         {hasVideo ? (
           <BgVideo video={s.video} priority alt={s.video.poster.alt || s.background.alt} />
         ) : (
