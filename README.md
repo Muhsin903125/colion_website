@@ -102,8 +102,8 @@ These are needed. None of them have been invented.
 1. **Cloudinary API secret.** Saving in the admin fails with "api_secret mismatch". Copy the secret from Cloudinary → Settings → API Keys and paste it into `.env` and Vercel.
 2. **Trade licence number, TRN and founding year.** Add them under Admin → SEO and Admin → Site.
 3. **Exact Google Business Profile details.**
-   - Branch 1 is linked (CID 7714097723583174697).
-   - Branch 2 (also the corporate office, Al Dhagaya) needs its own profile URL and pin.
+   - The Al Sabkha branch is linked (CID 7714097723583174697).
+   - The corporate office & store in Al Dhagaya needs its own profile URL and pin.
 4. **Founder's social profiles.** Add them under Admin → Team & reviews → Social links.
 5. **Real Google reviews.** Add them under Admin → Team & reviews.
 6. **Brand partner certificates**, if any. Only then set a brand's relationship to "authorized partner".

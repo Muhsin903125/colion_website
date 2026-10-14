@@ -1,0 +1,22 @@
+---
+/**
+ * Previous / next buttons for a horizontal rail. Put them anywhere inside a
+ * `[data-carousel]` root whose rail carries `data-carousel-track`; `ui.ts`
+ * scrolls the rail by about one screenful and disables a button at its end.
+ */
+import Icon from './Icon.astro';
+
+interface Props {
+  dark?: boolean;
+  class?: string;
+}
+const { dark = false, class: className = '' } = Astro.props;
+const btn = [
+  'flex h-11 w-11 items-center justify-center rounded-full border transition disabled:cursor-default disabled:opacity-35',
+  dark ? 'border-white/25 text-white enabled:hover:border-gold enabled:hover:bg-gold enabled:hover:text-ink' : 'border-line bg-white text-ink enabled:hover:border-ink enabled:hover:bg-ink enabled:hover:text-white',
+];
+---
+<div class:list={['flex gap-2', className]}>
+  <button type="button" class:list={btn} data-carousel-prev aria-label="Previous"><Icon name="arrow" size={18} class="rotate-180" /></button>
+  <button type="button" class:list={btn} data-carousel-next aria-label="Next"><Icon name="arrow" size={18} /></button>
+</div>

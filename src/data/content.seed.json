@@ -51,8 +51,39 @@
     ],
     "locations": [
       {
+        "id": "corporate",
+        "label": "Corporate Office & Store — Al Dhagaya",
+        "kind": "store",
+        "name": "Colion International Trading LLC — Corporate Office & Store, Al Dhagaya",
+        "streetAddress": "Shop 4, Khalifya Building",
+        "area": "Al Dhagaya, Deira",
+        "locality": "Dubai",
+        "region": "Dubai",
+        "postalCode": "",
+        "country": "AE",
+        "geo": {
+          "lat": 25.2735367,
+          "lng": 55.3020782
+        },
+        "mapUrl": "https://maps.app.goo.gl/3MH6Gfy4HggJdf5J6",
+        "hours": "Mon–Sat 9:00–19:00",
+        "phone": "+971 50 766 8536",
+        "image": {
+          "publicId": "/images/places/deira.webp",
+          "alt": "Deira, Dubai — home of the Colion International corporate office and store in Al Dhagaya",
+          "version": null,
+          "width": 1600,
+          "height": 1200
+        },
+        "gbp": {
+          "cid": "",
+          "placeId": "",
+          "url": ""
+        }
+      },
+      {
         "id": "showroom",
-        "label": "Branch 1 — Al Sabkha",
+        "label": "Branch — Al Sabkha",
         "kind": "store",
         "name": "Colion International Trading LLC — Al Sabkha Branch",
         "streetAddress": "Shop 1, Al Jaziri Building",
@@ -79,37 +110,6 @@
           "cid": "7714097723583174697",
           "placeId": "",
           "url": "https://www.google.com/maps?cid=7714097723583174697"
-        }
-      },
-      {
-        "id": "corporate",
-        "label": "Corporate Office & Branch 2 — Al Dhagaya",
-        "kind": "store",
-        "name": "Colion International Trading LLC — Corporate Office & Al Dhagaya Branch",
-        "streetAddress": "Shop 4, Khalifya Building",
-        "area": "Al Dhagaya, Deira",
-        "locality": "Dubai",
-        "region": "Dubai",
-        "postalCode": "",
-        "country": "AE",
-        "geo": {
-          "lat": 25.2735367,
-          "lng": 55.3020782
-        },
-        "mapUrl": "https://maps.app.goo.gl/3MH6Gfy4HggJdf5J6",
-        "hours": "Mon–Sat 9:00–19:00",
-        "phone": "+971 50 766 8536",
-        "image": {
-          "publicId": "/images/places/deira.webp",
-          "alt": "Deira, Dubai — home of the Colion International corporate office and Al Dhagaya branch",
-          "version": null,
-          "width": 1600,
-          "height": 1200
-        },
-        "gbp": {
-          "cid": "",
-          "placeId": "",
-          "url": ""
         }
       }
     ]

@@ -6,6 +6,7 @@
  * schema), but only the first batch is shown; "Load more" reveals the rest
  * without a round trip. Filtering considers every item.
  */
+import CarouselButtons from '../components/CarouselButtons.astro';
 import CmsPage from '../components/CmsPage.astro';
 import GalleryTile from '../components/GalleryTile.astro';
 import Icon from '../components/Icon.astro';
@@ -35,14 +36,17 @@ const schema = [
 ---
 <CmsPage page="gallery" path="/gallery/" name="Gallery" type="CollectionPage" schema={schema}>
   {reels.length > 0 && (
-    <section class="section-y-sm">
+    <section class="section-y-sm" data-carousel>
       <div class="container-x">
         <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
           <h2 class="h-section">Reels from <span class="accent">the floor</span></h2>
-          {ig && <a href={ig.href} target="_blank" rel="noopener" class="btn btn-outline btn-sm"><Icon name="instagram" size={16} /> @{d.site.instagramHandle}</a>}
+          <div class="flex items-center gap-3">
+            {ig && <a href={ig.href} target="_blank" rel="noopener" class="btn btn-outline btn-sm"><Icon name="instagram" size={16} /> @{d.site.instagramHandle}</a>}
+            <CarouselButtons />
+          </div>
         </div>
-        <div class="no-scrollbar rail -mx-4 flex gap-4 overflow-x-auto px-4 pb-2" data-lb-root>
-          {reels.map((g) => <GalleryTile item={g} class="w-[62vw] shrink-0 sm:w-[250px]" aspect="aspect-[9/16]" sizes="250px" />)}
+        <div class="no-scrollbar rail -mx-4 flex snap-x gap-4 overflow-x-auto scroll-px-4 px-4 pb-2" data-lb-root data-carousel-track>
+          {reels.map((g) => <GalleryTile item={g} class="w-[62vw] shrink-0 snap-start sm:w-[250px]" aspect="aspect-[9/16]" sizes="250px" />)}
         </div>
       </div>
     </section>

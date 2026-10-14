@@ -5,6 +5,7 @@ export function initUI() {
   initMenu();
   initEnquiryForm();
   initFilter();
+  initCarousels();
 }
 
 const FOCUSABLE =
@@ -165,5 +166,36 @@ function initFilter() {
       apply();
     }));
     search?.addEventListener('input', apply);
+  });
+}
+
+/**
+ * Prev / next buttons for horizontal rails: `[data-carousel]` holds a
+ * `[data-carousel-track]` and `[data-carousel-prev]` / `[data-carousel-next]`.
+ * Each press scrolls about one screenful; a button disables at its end.
+ */
+function initCarousels() {
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
+    const track = root.querySelector<HTMLElement>('[data-carousel-track]');
+    const prev = root.querySelector<HTMLButtonElement>('[data-carousel-prev]');
+    const next = root.querySelector<HTMLButtonElement>('[data-carousel-next]');
+    if (!track || !prev || !next) return;
+    const step = () => {
+      const first = track.firstElementChild as HTMLElement | null;
+      const gap = parseFloat(getComputedStyle(track).columnGap) || 16;
+      const card = first ? first.offsetWidth + gap : 280;
+      return Math.max(card, Math.floor(track.clientWidth / card) * card);
+    };
+    const sync = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      prev.disabled = track.scrollLeft <= 4;
+      next.disabled = track.scrollLeft >= max - 4;
+      root.toggleAttribute('data-carousel-static', max <= 4);
+    };
+    prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+    track.addEventListener('scroll', sync, { passive: true });
+    new ResizeObserver(sync).observe(track);
+    sync();
   });
 }

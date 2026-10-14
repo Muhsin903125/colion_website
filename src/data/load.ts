@@ -140,7 +140,7 @@ export function build(content: Content): SiteData {
 
     logo,
     corporate: site.locations.find((l) => l.id === 'corporate') ?? site.locations[0],
-    showroom: site.locations.find((l) => l.kind === 'store') ?? site.locations[1],
+    showroom: site.locations.find((l) => l.id === 'showroom') ?? site.locations.find((l) => l.kind === 'store') ?? site.locations[1],
     stores: site.locations.filter((l) => l.kind === 'store'),
 
     services,

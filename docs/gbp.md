@@ -10,7 +10,7 @@
 Colion International Trading LLC is a leading IT hardware supplier, stockist, and wholesale dealer based in Dubai, UAE. We specialize in providing genuine IT products including printers, desktops, servers, networking equipment, and accessories from top brands like HP, Dell, Lenovo, Canon, Epson, Cisco, and more.
 
 ## Address Information
-**Corporate Office & Branch 2:**
+**Corporate Office & Store:**
 Shop 4, Khalifya Building, Al Dhagaya, Deira
 Dubai, United Arab Emirates
 
