@@ -7197,7 +7197,7 @@
             "width": 1280,
             "height": 960
           },
-          "video": "/videos/reels/reel-01-loop.mp4",
+          "video": "/videos/showroom-canon.mp4",
           "cta": {
             "label": "More about us",
             "href": "/about/"
@@ -9106,6 +9106,6 @@
   "media": {
     "folder": "colion"
   },
-  "updatedAt": "2026-10-14T13:00:58.530Z",
+  "updatedAt": "2026-10-14T13:22:29.333Z",
   "sections": {}
 }
