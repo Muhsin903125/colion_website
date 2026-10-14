@@ -145,7 +145,7 @@ export const team = [
     name: 'Mohamed Anas',
     role: 'Founder',
     bio: 'Mohamed Anas founded Colion International Trading LLC and leads it from Deira, Dubai — building the brand relationships, the stock and the delivery network that resellers, businesses and export buyers across the UAE, the Middle East and Africa rely on.',
-    photo: img('/images/team/mohamed-anas.webp', 'Mohamed Anas, founder of Colion International'),
+    photo: img('/images/team/mohamed-anas-office.webp', 'Mohamed Anas, founder of Colion International'),
     expertise: ['IT hardware wholesale', 'Brand and distributor relationships', 'Export to the Middle East and Africa'],
     yearsExperience: 0,
     languages: [],

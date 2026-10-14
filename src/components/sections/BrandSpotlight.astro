@@ -1,8 +1,7 @@
 ---
 /**
  * The core brands, highlighted: large cards that rise in (`data-rise`) with
- * a glow that follows the pointer (`data-glow`) and a navy fill that sweeps
- * up on hover.
+ * a soft gold glow that follows the pointer (`data-glow`).
  */
 import BrandLogo from '../BrandLogo.astro';
 import Icon from '../Icon.astro';
@@ -25,25 +24,24 @@ const RELATION: Record<string, string> = { 'authorized-partner': 'Authorized par
         return (
           <li class="w-[82%] shrink-0 snap-start sm:w-auto">
             <a href={`/brands/${b.slug}/`} class="spot group relative flex h-full flex-col overflow-hidden rounded-[26px] border border-line bg-white p-6 sm:p-7" data-glow>
-              <span class="spot-fill absolute inset-0 -z-0 bg-[#0b1a3f]" aria-hidden="true"></span>
               <span class="spot-glow pointer-events-none absolute inset-0" aria-hidden="true"></span>
               <div class="relative flex items-center justify-between text-xs font-semibold">
-                <span class="font-display text-gold-deep transition-colors group-hover:text-gold">{String(i + 1).padStart(2, '0')}</span>
-                <span class="text-slate transition-colors group-hover:text-white/60">{RELATION[b.relationship]}</span>
+                <span class="font-display text-gold-deep">{String(i + 1).padStart(2, '0')}</span>
+                <span class="text-slate">{RELATION[b.relationship]}</span>
               </div>
-              <div class="relative mt-5 flex h-28 items-center justify-center rounded-2xl bg-surface px-8 transition-all duration-500 group-hover:bg-white group-hover:shadow-[0_20px_50px_-20px_rgba(213,165,64,.55)]">
+              <div class="relative mt-5 flex h-28 items-center justify-center rounded-2xl bg-surface px-8 transition-all duration-500 group-hover:shadow-[0_20px_50px_-24px_rgba(213,165,64,.5)]">
                 <BrandLogo brand={b} link={false} mono={false} class="h-16 w-full transition-transform duration-700 group-hover:scale-110" tabindex="-1" />
               </div>
-              <h3 class="relative mt-6 font-display text-2xl font-semibold text-ink transition-colors group-hover:text-white">{b.name}</h3>
-              {cats.length > 0 && <p class="relative mt-1 text-sm text-slate transition-colors group-hover:text-white/70">{cats.slice(0, 3).join(' · ')}</p>}
+              <h3 class="relative mt-6 font-display text-2xl font-semibold text-ink">{b.name}</h3>
+              {cats.length > 0 && <p class="relative mt-1 text-sm text-slate">{cats.slice(0, 3).join(' · ')}</p>}
               {b.productLines.length > 0 && (
-                <ul class="relative mt-4 space-y-1.5 text-[0.88rem] text-ink-soft transition-colors group-hover:text-white/80">
+                <ul class="relative mt-4 space-y-1.5 text-[0.88rem] text-ink-soft">
                   {b.productLines.slice(0, 3).map((l) => (
                     <li class="flex items-start gap-2"><span class="mt-[0.55em] h-1.5 w-1.5 shrink-0 rounded-full bg-gold"></span><span class="line-clamp-1">{l}</span></li>
                   ))}
                 </ul>
               )}
-              <span class="relative mt-auto flex items-center justify-between pt-6 font-display text-sm font-semibold text-brand transition-colors group-hover:text-gold">
+              <span class="relative mt-auto flex items-center justify-between pt-6 font-display text-sm font-semibold text-brand ">
                 View {b.name}
                 <span class="flex h-10 w-10 items-center justify-center rounded-full border border-line transition-all duration-500 group-hover:rotate-[-45deg] group-hover:border-gold group-hover:bg-gold group-hover:text-ink"><Icon name="arrow" size={18} /></span>
               </span>
@@ -57,14 +55,11 @@ const RELATION: Record<string, string> = { 'authorized-partner': 'Authorized par
 
 <style>
   .spot { isolation: isolate; transition: transform .6s cubic-bezier(.2,.7,.2,1), box-shadow .6s, border-color .4s; }
-  .spot:hover { transform: translateY(-6px); border-color: transparent; box-shadow: 0 30px 70px -30px rgba(11,26,63,.55); }
-  .spot-fill { transform: translateY(101%); transition: transform .65s cubic-bezier(.7,0,.2,1); }
-  .spot:hover .spot-fill, .spot:focus-visible .spot-fill { transform: none; }
-  .spot:focus-visible h3, .spot:focus-visible p { color: #fff; }
+  .spot:hover { transform: translateY(-6px); border-color: theme('colors.gold.DEFAULT'); box-shadow: 0 26px 60px -30px rgba(11,26,63,.35); }
   .spot-glow {
     opacity: 0;
     transition: opacity .4s;
-    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(213,165,64,.22), transparent 45%);
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(213,165,64,.12), transparent 45%);
   }
   .spot:hover .spot-glow { opacity: 1; }
 </style>
