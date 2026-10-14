@@ -64,7 +64,7 @@ export const POST: APIRoute = async (context) => {
   } else {
     paths = [...statics, ...items.map((i) => i.path)];
   }
-  paths = [...new Set([...paths, '/sitemap.xml', '/llms.txt'])];
+  paths = [...new Set([...paths, '/sitemap.xml', '/llms.txt', '/llms-full.txt'])];
 
   const failed: string[] = [];
   for (let i = 0; i < paths.length; i += BATCH) {

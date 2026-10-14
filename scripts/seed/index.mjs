@@ -39,7 +39,9 @@ const content = {
   faqGroups,
   pages,
   media: { folder: 'colion' },
-  updatedAt: null,
+  // Stamped when the seed is rebuilt, so sitemap lastmod and dateModified
+  // reflect the latest content rather than a fixed date.
+  updatedAt: new Date().toISOString(),
   sections: {},
 };
 

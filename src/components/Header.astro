@@ -105,9 +105,8 @@ const quote = d.waLink('Hello Colion International, I would like a quotation for
       </nav>
 
       <div class="flex items-center gap-2">
-        <a href={d.telLink} class="header-call hidden items-center gap-2 rounded-full px-3 py-2 font-display text-sm font-semibold text-ink hover:text-brand xl:flex" data-track="click_call">
+        <a href={d.telLink} class="header-call hidden items-center rounded-full p-1 text-ink hover:text-brand xl:flex" data-track="click_call" aria-label={`Call ${site.phone}`} title={site.phone}>
           <span class="flex h-9 w-9 items-center justify-center rounded-full bg-sky text-brand"><Icon name="phone" size={17} /></span>
-          {site.phone}
         </a>
         <a href={quote} target="_blank" rel="noopener" class="btn btn-gold btn-sm hidden sm:inline-flex" data-track="click_whatsapp" data-magnetic>
           Get a quote <Icon name="arrow" size={16} class="arrow" />

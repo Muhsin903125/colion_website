@@ -28,10 +28,11 @@ export const GET: APIRoute = async () => {
 
 - **Legal name:** ${site.legalName}${seo.tradeLicense ? ` (trade licence ${seo.tradeLicense})` : ''}${seo.vatId ? `, TRN ${seo.vatId}` : ''}.
 - **What it is:** ${site.positioning}
-${d.realTeam.length ? `- **Leadership:** ${d.realTeam.map((m) => `${m.name} (${m.role})`).join(', ')}.\n` : ''}- **Locations:**
+${site.founded ? `- **In business since:** ${site.founded}, in the Dubai market.\n` : ''}${d.realTeam.length ? `- **Leadership:** ${d.realTeam.map((m) => `${m.name} (${m.role}${m.yearsExperience ? `, ${m.yearsExperience}+ years in the IT hardware trade` : ''})`).join(', ')}.\n` : ''}${seo.languages.length ? `- **Languages spoken:** ${seo.languages.join(', ')}.\n` : ''}- **Locations:**
 ${site.locations.map((l) => `  - ${l.label}: ${l.streetAddress}, ${l.area}, ${l.locality}, UAE${l.mapUrl ? ` — ${l.mapUrl}` : ''}`).join('\n')}
 - **Hours:** ${site.hours}.
 - **Contact:** ${site.phone} (call and WhatsApp) · ${site.email} · ${url('/contact/')}
+- **Official profiles:** ${[...d.socialLinks.map((s) => s.href), ...site.locations.map((l) => l.gbp.url).filter(Boolean)].join(' · ')}
 - **Coverage:** delivers to all seven emirates from Dubai; exports to the GCC, the Middle East and Africa.
 ${d.features.map((f) => `- **${f.title}:** ${f.body}`).join('\n')}
 ${d.stats.map((s) => `- ${s.label}: ${s.value}${s.unit}`).join('\n')}
@@ -63,6 +64,7 @@ ${d.allFaqs
 
 ## More
 
+- [Full text for language models: every page, answer and FAQ](${url('/llms-full.txt')})
 - [All frequently asked questions](${url('/faq/')})
 - [About ${site.name}](${url('/about/')})
 - [Gallery: showroom, stock and deliveries](${url('/gallery/')})
