@@ -7261,11 +7261,11 @@
             }
           },
           "image": {
-            "publicId": "/images/gallery/photo-30.webp",
-            "alt": "A large order packed and labelled for a Colion International customer",
+            "publicId": "/images/gallery/photo-15.webp",
+            "alt": "Cartons of HP desktop computers stacked in the Colion International stock room",
             "version": null,
             "width": 960,
-            "height": 1125
+            "height": 1280
           }
         },
         {
@@ -9105,6 +9105,6 @@
   "media": {
     "folder": "colion"
   },
-  "updatedAt": "2026-10-14T12:42:52.396Z",
+  "updatedAt": "2026-10-14T12:47:52.777Z",
   "sections": {}
 }

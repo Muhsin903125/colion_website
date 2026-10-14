@@ -59,7 +59,7 @@ export const pages = {
       }),
       section('featureStrip', {
         intro: intro('Why Colion', ['Why businesses', 'buy from us'], 'Stock in Dubai, wholesale prices, and a team that delivers, installs and supports what it sells.'),
-        image: G('photo-30', 'A large order packed and labelled for a Colion International customer'),
+        image: G('photo-15', 'Cartons of HP desktop computers stacked in the Colion International stock room'),
       }),
       section('statBand', {
         background: STILL('fibre-network', 'Fibre-optic network cables'),
