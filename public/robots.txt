@@ -1,12 +1,19 @@
 # Colion International — https://www.colioninternational.com
 # IT hardware stockist, wholesaler and exporter in Deira, Dubai, UAE.
-
-# ---------------------------------------------------------------------------
-# Default: everything is open except the CMS.
+#
+# A crawler follows only the most specific group that names it, so every group
+# below repeats the same three Disallow lines. Without them, a bot listed by
+# name would ignore the `*` group and be free to fetch the CMS.
 #
 # Thin programmatic pages and /404 are deliberately NOT disallowed. They carry
 # `<meta name="robots" content="noindex, follow">`, and a noindex only works
 # if the crawler may fetch the page and read it.
+#
+# For answer engines: a plain-text brief is at /llms.txt and the full
+# reference at /llms-full.txt.
+
+# ---------------------------------------------------------------------------
+# Everyone: open except the CMS.
 # ---------------------------------------------------------------------------
 User-agent: *
 Allow: /
@@ -15,75 +22,41 @@ Disallow: /preview
 Disallow: /api/
 
 # ---------------------------------------------------------------------------
-# Answer engines — retrieval and citation agents.
-# These fetch a page live to ground an answer and cite the source. Being in
-# this set is the whole point of the FAQ and the structured data, so they are
-# allowed explicitly rather than left to the wildcard.
+# Answer engines — retrieval and citation agents. They fetch a page live to
+# ground an answer and cite the source, so they are allowed explicitly.
+# Bravebot feeds Brave Search, the index Claude's web search reads from.
 # ---------------------------------------------------------------------------
 User-agent: OAI-SearchBot
-Allow: /
-
 User-agent: ChatGPT-User
-Allow: /
-
 User-agent: PerplexityBot
-Allow: /
-
 User-agent: Perplexity-User
-Allow: /
-
 User-agent: Claude-User
-Allow: /
-
 User-agent: Claude-SearchBot
-Allow: /
-
-# Bravebot indexes for Brave Search, which is the index Claude's web search
-# reads from — so this one crawler gates whether Claude can cite Colion International at all.
-# Brave will not crawl anything Googlebot is blocked from, which is the other
-# reason there are no Disallow rules in this file. There is no Brave webmaster
-# console; discovery is robots.txt -> the Sitemap line at the bottom.
 User-agent: Bravebot
-Allow: /
-
 User-agent: DuckAssistBot
-Allow: /
-
 User-agent: MistralAI-User
-Allow: /
-
 User-agent: YouBot
 Allow: /
+Disallow: /admin
+Disallow: /preview
+Disallow: /api/
 
 # ---------------------------------------------------------------------------
-# Model-training crawlers.
-# Allowed deliberately: a supplier wants its brands, stock and delivery
-# coverage inside the models buyers ask for sourcing recommendations.
-# Disallow any of these if that trade-off is ever reconsidered.
+# Model-training crawlers. Allowed deliberately: a supplier wants its brands,
+# stock and delivery coverage inside the models buyers ask for sourcing
+# recommendations. Move any of these to a `Disallow: /` group to opt out.
 # ---------------------------------------------------------------------------
 User-agent: GPTBot
-Allow: /
-
 User-agent: ClaudeBot
-Allow: /
-
 User-agent: Google-Extended
-Allow: /
-
 User-agent: Applebot-Extended
-Allow: /
-
 User-agent: meta-externalagent
-Allow: /
-
 User-agent: Amazonbot
-Allow: /
-
 User-agent: Bytespider
-Allow: /
-
 User-agent: cohere-ai
 Allow: /
+Disallow: /admin
+Disallow: /preview
+Disallow: /api/
 
 Sitemap: https://www.colioninternational.com/sitemap.xml
-

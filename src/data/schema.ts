@@ -157,6 +157,8 @@ export const sectionSchema = z.discriminatedUnion('type', [
     answer: str(),
     bullets: strs(),
     image: imageSchema,
+    /** Optional clip that plays over the photo (the photo is its poster). */
+    video: str(),
     cta: linkSchema,
   }),
 
