@@ -1,6 +1,7 @@
 ---
 /**
- * The floating contact dock: WhatsApp, call, back to top.
+ * The floating contact dock: back to top, call and WhatsApp, stacked in the
+ * corner as equal circles. The WhatsApp label slides out on hover only.
  *
  * Hidden while the page's hero is on screen — the hero already carries the
  * same actions — and slides in once it has scrolled away (main.ts toggles
@@ -9,31 +10,35 @@
 import Icon from './Icon.astro';
 import { load } from '../data/load';
 const d = await load();
+const round = 'flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-soft ring-1 ring-line transition sm:h-12 sm:w-12';
 ---
-<div data-dock class="dock fixed bottom-4 right-3 z-40 flex flex-col-reverse items-end gap-1.5 sm:bottom-7 sm:right-7 sm:flex-col sm:gap-2" aria-label="Quick contact">
+<div data-dock class="dock fixed bottom-4 right-3 z-40 flex flex-col items-end gap-2 sm:bottom-7 sm:right-7" aria-label="Quick contact">
+  <button type="button" data-top aria-label="Back to top" class:list={[round, 'text-ink hover:bg-ink hover:text-white']}>
+    <Icon name="arrow" size={17} class="-rotate-90" />
+  </button>
+  <a href={d.telLink} data-track="click_call" aria-label={`Call ${d.site.phone}`} class:list={[round, 'text-brand hover:bg-brand hover:text-white']}>
+    <Icon name="phone" size={17} />
+  </a>
   <a
     href={d.waLink('Hello Colion International, I would like a quotation for:')}
     target="_blank"
     rel="noopener"
     data-track="click_whatsapp"
-    class="dock-wa group flex h-11 w-11 items-center justify-center gap-2 rounded-full bg-whatsapp text-white shadow-lift transition hover:brightness-95 sm:h-12 sm:w-auto sm:justify-start sm:pl-3.5 sm:pr-4"
     aria-label="WhatsApp"
+    class="dock-wa flex h-10 items-center rounded-full bg-whatsapp text-white shadow-lift sm:h-12"
   >
-    <Icon name="whatsapp" size={22} />
-    <span class="hidden font-display text-[0.88rem] font-semibold sm:inline">WhatsApp</span>
+    <span class="dock-wa-label font-display text-[0.88rem] font-semibold">WhatsApp</span>
+    <span class="flex h-10 w-10 shrink-0 items-center justify-center sm:h-12 sm:w-12"><Icon name="whatsapp" size={22} /></span>
   </a>
-  <div class="flex flex-col-reverse gap-1.5 sm:flex-row sm:gap-2">
-    <a href={d.telLink} data-track="click_call" aria-label={`Call ${d.site.phone}`} class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brand shadow-soft ring-1 ring-line transition hover:bg-brand hover:text-white sm:h-11 sm:w-11">
-      <Icon name="phone" size={16} />
-    </a>
-    <button type="button" data-top aria-label="Back to top" class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-ink shadow-soft ring-1 ring-line transition hover:bg-ink hover:text-white sm:h-11 sm:w-11">
-      <Icon name="arrow" size={16} class="-rotate-90" />
-    </button>
-  </div>
 </div>
 
 <style>
   .dock { opacity: 0; transform: translateY(24px); pointer-events: none; transition: opacity .45s cubic-bezier(.2,.7,.2,1), transform .55s cubic-bezier(.2,.7,.2,1); }
   .dock:global(.is-on) { opacity: 1; transform: none; pointer-events: auto; }
   html:not(.js) .dock { opacity: 1; transform: none; pointer-events: auto; }
+
+  /* The label is collapsed to nothing and slides out to the left on hover or keyboard focus. */
+  .dock-wa-label { max-width: 0; overflow: hidden; white-space: nowrap; opacity: 0; transition: max-width .4s cubic-bezier(.2,.7,.2,1), opacity .25s, padding .4s cubic-bezier(.2,.7,.2,1); }
+  .dock-wa:hover .dock-wa-label, .dock-wa:focus-visible .dock-wa-label { max-width: 8rem; opacity: 1; padding-left: 1.1rem; }
+  .dock-wa:hover { filter: brightness(.96); }
 </style>
