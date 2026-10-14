@@ -48,7 +48,7 @@ export const pages = {
         answer:
           'Colion International Trading LLC is an IT hardware stockist, wholesaler and exporter based in Deira, Dubai, trading since 2022. It supplies genuine printers, computers, servers, networking and UPS from more than 50 brands to businesses, resellers and projects across the UAE, the Middle East and Africa, with free installation and AMC support.',
         bullets: ['Two walk-in branches in Deira, Dubai', 'Ready stock at wholesale prices', 'Delivery to all seven emirates', 'Export to the GCC and Africa'],
-        image: G('photo-04', 'The Colion International branch in Deira, Dubai'),
+        image: G('photo-28', 'The sales desk inside the Colion International showroom in Deira, with Lenovo, Epson and HP stock'),
         cta: link('More about us', '/about/'),
       }),
       section('serviceGrid', {
