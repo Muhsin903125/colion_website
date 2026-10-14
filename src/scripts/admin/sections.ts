@@ -105,12 +105,13 @@ export const SECTION_TYPES: Record<string, SectionType> = {
   answerSection: {
     name: 'Question & answer',
     hint: 'A question heading with a 40–60 word answer — the shape search snippets and AI answers quote.',
-    defaults: () => ({ label: '', question: '', answer: '', bullets: [], image: image(), cta: link() }),
+    defaults: () => ({ label: '', question: '', answer: '', bullets: [], image: image(), video: '', cta: link() }),
     fields: (p) => [
       field('Question', [...p, 'question']),
       field('Answer (40–60 words; name Colion and the place)', [...p, 'answer'], { multiline: true, rows: 4 }),
       listField('Bullet points', [...p, 'bullets'], 'One per line. Optional.'),
       mediaField('Photo', [...p, 'image'], { size: SIZE.frame }),
+      field('Video over the photo (optional)', [...p, 'video'], { help: 'e.g. /videos/reels/reel-01-loop.mp4 or a Cloudinary video id. The photo shows until it plays.' }),
       linkField('Button', [...p, 'cta']),
     ],
   },
