@@ -254,7 +254,7 @@ export const SECTION_TYPES: Record<string, SectionType> = {
     name: 'Core brands spotlight',
     hint: 'The core-tier brands as large cards on a dark band.',
     defaults: () => ({ intro: intro(), ribbon: [] }),
-    fields: (p) => [...introFields([...p, 'intro']), listField('Sliding words', [...p, 'ribbon'], 'One per line. Leave empty to use the core brand names.')],
+    fields: (p) => introFields([...p, 'intro']),
   },
   logoWall: {
     name: 'Brand wall',

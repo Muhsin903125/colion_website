@@ -1,9 +1,8 @@
 ---
 /**
- * The core brands, highlighted. Two crossing ribbons of brand names slide in
- * opposite directions with the scroll (`data-scroll-x`), then the core brands
- * rise in as large cards (`data-rise`) with a glow that follows the pointer
- * (`data-glow`) and a navy fill that sweeps up on hover.
+ * The core brands, highlighted: large cards that rise in (`data-rise`) with
+ * a glow that follows the pointer (`data-glow`) and a navy fill that sweeps
+ * up on hover.
  */
 import BrandLogo from '../BrandLogo.astro';
 import Icon from '../Icon.astro';
@@ -15,26 +14,10 @@ type Props = Extract<Section, { type: 'brandSpotlight' }>;
 const s = Astro.props;
 const d = await load();
 const core = d.coreBrands;
-const words = s.ribbon.filter(Boolean).length ? s.ribbon.filter(Boolean) : core.map((b) => b.name);
-const ribbon = [...words, ...words, ...words];
 const RELATION: Record<string, string> = { 'authorized-partner': 'Authorized partner', stockist: 'Stockist', supplier: 'Supplier' };
 ---
-<section id="core-brands" class="relative overflow-clip bg-surface pb-20 lg:pb-28">
-  <!-- Crossing ribbons -->
-  <div class="relative -mx-8 h-[150px] sm:h-[190px]" aria-hidden="true">
-    <div class="absolute inset-x-0 top-8 -rotate-[3deg] bg-gold py-3 shadow-[0_20px_40px_-20px_rgba(138,101,22,.6)] sm:py-4">
-      <div class="flex w-max gap-8 whitespace-nowrap font-display text-2xl font-semibold uppercase tracking-tight text-ink sm:text-4xl" data-scroll-x="-25">
-        {ribbon.map((w) => <span class="flex items-center gap-8">{w}<span class="h-2.5 w-2.5 rotate-45 bg-ink"></span></span>)}
-      </div>
-    </div>
-    <div class="absolute inset-x-0 top-16 rotate-[2deg] bg-[#0b1a3f] py-3 sm:top-20 sm:py-4">
-      <div class="flex w-max gap-8 whitespace-nowrap font-display text-2xl font-semibold uppercase tracking-tight text-white sm:text-4xl" data-scroll-x="25">
-        {ribbon.map((w) => <span class="flex items-center gap-8">{w}<span class="h-2.5 w-2.5 rotate-45 bg-gold"></span></span>)}
-      </div>
-    </div>
-  </div>
-
-  <div class="container-x pt-10 sm:pt-14">
+<section id="core-brands" class="section-y relative overflow-clip bg-surface">
+  <div class="container-x">
     <SectionHead intro={s.intro} aside class="mb-12" />
     <ul class="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3" data-rise>
       {core.map((b, i) => {
