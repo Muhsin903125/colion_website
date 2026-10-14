@@ -6,12 +6,14 @@
  * of the crawl and the session cookie is read on the server. Everything below
  * the shell is built by `src/scripts/admin/app.ts` against `/api/content`.
  *
- * Deliberately not styled with the site's design system: this is a tool, and
- * borrowing the editorial type and the scroll choreography would make it slower
- * and harder to read without making it better to use.
+ * Wears the site's colours and type (navy, gold, Sora and Manrope) so the
+ * editor feels like part of the same brand, but none of its scroll
+ * choreography: this is a tool, and motion would only slow it down.
  */
 export const prerender = false;
 
+import '@fontsource-variable/sora';
+import '@fontsource-variable/manrope';
 import { readContent } from '../lib/cms/store';
 
 const content = await readContent();
@@ -53,7 +55,7 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
     <!-- Never indexed, and never followed into the API. -->
     <meta name="robots" content="noindex, nofollow" />
     <title>Colion CMS</title>
-    <link rel="icon" href="data:," />
+    <link rel="icon" type="image/png" href="/favicon-32.png?v=2" />
   </head>
   <body>
     <!--
@@ -69,7 +71,7 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         <span class="login-art-scrim" aria-hidden="true"></span>
 
         <figcaption class="login-art-copy">
-          <span class="login-mark">Colion <em>International</em></span>
+          <img class="login-logo" src="/images/brand/colion-logo-white.webp" width="640" height="159" alt="Colion International" />
           <p class="login-lede">{content.site.positioning}</p>
           <p class="login-sub">
             Every word, photograph and reel on colioninternational.com is edited here. Changes are
@@ -119,7 +121,7 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
 
     <header class="bar">
       <div class="bar-in">
-        <span class="brand">Colion <em>CMS</em></span>
+        <span class="brand"><img src="/images/brand/colion-logo-white.webp" width="640" height="159" alt="Colion International" /><em>CMS</em></span>
         <div class="bar-actions">
           <a href="/" class="btn btn-ghost" target="_blank" rel="noopener">View site</a>
           <button id="reload" class="btn btn-ghost" type="button">Reload</button>
@@ -177,16 +179,23 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
     </script>
 
     <style is:global>
+      /* The site's own palette (tailwind.config.mjs): navy, gold, surface. */
       :root {
-        --bg: #14140f;
-        --panel: #1c1c16;
-        --card: #23231c;
-        --line: #35352b;
-        --text: #ece7dc;
-        --muted: #9c968a;
-        --gold: #c6a052;
-        --danger: #c05a4e;
-        color-scheme: dark;
+        --bg: #F6F8FC;
+        --panel: #FFFFFF;
+        --card: #F1F4FA;
+        --line: #E3E8F2;
+        --text: #0B1B3F;
+        --muted: #5B6880;
+        --brand: #1E3A8A;
+        --brand-deep: #0B1A3F;
+        --brand-soft: #EEF3FF;
+        --gold: #D5A540;
+        --gold-deep: #8A6516;
+        --gold-soft: #F6EBCF;
+        --ok: #1F7A4A;
+        --danger: #C2410C;
+        color-scheme: light;
       }
 
       * { box-sizing: border-box; }
@@ -199,8 +208,9 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         margin: 0;
         background: var(--bg);
         color: var(--text);
-        font: 14px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        font: 14px/1.55 "Manrope Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
       }
+      h1, h2, h3, .btn, .tab, .brand { font-family: "Sora Variable", "Manrope Variable", system-ui, sans-serif; }
 
       /*
        * Scrollbars.
@@ -229,13 +239,13 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         border: 3px solid transparent;
         background-clip: content-box;
       }
-      ::-webkit-scrollbar-thumb:hover { background: #4c4c3e; background-clip: content-box; }
+      ::-webkit-scrollbar-thumb:hover { background: #C5CEDF; background-clip: content-box; }
       ::-webkit-scrollbar-corner { background: transparent; }
 
       /* The preview stage sits on the darkest ground, so its rail needs to be
          a shade lighter to stay visible. */
-      .preview-stage { scrollbar-color: #43433a transparent; }
-      .preview-stage::-webkit-scrollbar-thumb { background: #43433a; background-clip: content-box; }
+      .preview-stage { scrollbar-color: #C5CEDF transparent; }
+      .preview-stage::-webkit-scrollbar-thumb { background: #C5CEDF; background-clip: content-box; }
 
       /* ── chrome ─────────────────────────────────────────────────────── */
 
@@ -243,8 +253,9 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         position: sticky;
         top: 0;
         z-index: 20;
-        background: var(--panel);
-        border-bottom: 1px solid var(--line);
+        background: var(--brand-deep);
+        border-bottom: 3px solid var(--gold);
+        color: #fff;
       }
       .bar-in {
         display: flex;
@@ -253,11 +264,17 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         gap: 1rem;
         padding: 0.7rem 1.2rem;
       }
-      .brand { font-size: 1rem; letter-spacing: 0.14em; }
-      .brand em { color: var(--muted); font-style: normal; letter-spacing: 0.2em; font-size: 0.7rem; }
+      .brand { display: flex; align-items: center; gap: 0.7rem; }
+      .brand img { height: 28px; width: auto; display: block; }
+      .brand em { color: var(--gold); font-style: normal; font-weight: 600; letter-spacing: 0.2em; font-size: 0.7rem; padding-left: 0.7rem; border-left: 1px solid rgba(255,255,255,.2); }
+      .bar .btn { background: transparent; border-color: rgba(255,255,255,.22); color: #fff; }
+      .bar .btn:hover:not(:disabled) { border-color: var(--gold); color: var(--gold); }
+      .bar .btn-primary { background: var(--gold); border-color: var(--gold); color: var(--text); }
+      .bar .btn-primary:hover:not(:disabled) { filter: brightness(1.06); color: var(--text); }
+      .bar .btn:disabled { opacity: 0.5; }
       .bar-actions { display: flex; gap: 0.5rem; align-items: center; }
 
-      .shell { display: grid; grid-template-columns: 200px 1fr; min-height: calc(100vh - 53px); }
+      .shell { display: grid; grid-template-columns: 210px 1fr; min-height: calc(100vh - 60px); }
 
       .side {
         border-right: 1px solid var(--line);
@@ -266,8 +283,9 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         flex-direction: column;
         gap: 1rem;
         position: sticky;
-        top: 53px;
-        height: calc(100vh - 53px);
+        top: 60px;
+        height: calc(100vh - 60px);
+        background: var(--panel);
       }
       .side nav { display: flex; flex-direction: column; gap: 2px; }
 
@@ -277,13 +295,16 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         border: 0;
         color: var(--muted);
         text-align: left;
-        padding: 0.5rem 0.7rem;
-        border-radius: 6px;
-        font: inherit;
+        padding: 0.55rem 0.8rem;
+        border-radius: 10px;
+        font-size: 0.86rem;
+        font-weight: 500;
         cursor: pointer;
+        position: relative;
       }
-      .tab:hover:not(:disabled) { background: var(--card); color: var(--text); }
-      .tab.is-on { background: var(--card); color: var(--gold); }
+      .tab:hover:not(:disabled) { background: var(--brand-soft); color: var(--brand); }
+      .tab.is-on { background: var(--brand); color: #fff; }
+      .tab.is-on::after { content: ''; position: absolute; right: 0.7rem; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--gold); }
       .tab:disabled { opacity: 0.35; cursor: not-allowed; }
 
       .status { margin: auto 0 0; color: var(--muted); font-size: 0.75rem; line-height: 1.5; }
@@ -301,7 +322,7 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         align-items: flex-start; justify-content: space-between;
       }
       .panel-head-text { flex: 1 1 22rem; min-width: 0; }
-      .panel-head h1 { margin: 0 0 0.35rem; font-size: 1.4rem; font-weight: 600; }
+      .panel-head h1 { margin: 0 0 0.35rem; font-size: 1.5rem; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
       .panel-head p { margin: 0; color: var(--muted); max-width: 62ch; }
       .panel-head-view { flex: none; text-decoration: none; }
 
@@ -312,14 +333,18 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         background: var(--card);
         border: 1px solid var(--line);
         color: var(--text);
-        border-radius: 6px;
-        padding: 0.45rem 0.85rem;
-        font: inherit;
+        border-radius: 999px;
+        padding: 0.45rem 0.95rem;
+        font-size: 0.84rem;
+        font-weight: 500;
         cursor: pointer;
+        white-space: nowrap;
+        transition: background-color .2s, border-color .2s, color .2s;
       }
-      .btn:hover:not(:disabled) { border-color: var(--gold); }
+      .btn:hover:not(:disabled) { border-color: var(--brand); color: var(--brand); }
       .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-      .btn-primary { background: var(--gold); border-color: var(--gold); color: #1a1a14; font-weight: 600; }
+      .btn-primary { background: var(--brand); border-color: var(--brand); color: #fff; font-weight: 600; }
+      .btn-primary:hover:not(:disabled) { background: var(--brand-deep); border-color: var(--brand-deep); color: #fff; }
       .btn-ghost { background: none; }
       .btn-sm { padding: 0.3rem 0.65rem; font-size: 0.8rem; }
       .btn-icon { padding: 0.25rem 0.5rem; line-height: 1; }
@@ -330,33 +355,34 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
       .card {
         background: var(--panel);
         border: 1px solid var(--line);
-        border-radius: 8px;
-        padding: 1rem 1.1rem 1.2rem;
+        border-radius: 16px;
+        padding: 1.1rem 1.2rem 1.3rem;
         margin-bottom: 1rem;
+        box-shadow: 0 8px 24px -18px rgba(11, 27, 63, .35);
       }
-      .card > h2 { margin: 0 0 0.9rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+      .card > h2 { margin: 0 0 0.9rem; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold-deep); }
       .card-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.9rem; }
-      .card-head h2 { margin: 0; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+      .card-head h2 { margin: 0; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold-deep); }
 
       .grid { display: grid; gap: 0.9rem; }
       .stack { display: grid; gap: 0.9rem; }
 
       .f { display: grid; gap: 0.3rem; }
-      .f > label { font-size: 0.78rem; color: var(--muted); }
+      .f > label { font-size: 0.78rem; font-weight: 600; color: #33415C; }
       .f input,
       .f textarea,
       .f select,
       .card select {
         width: 100%;
-        background: var(--bg);
+        background: #fff;
         border: 1px solid var(--line);
         color: var(--text);
-        border-radius: 6px;
-        padding: 0.5rem 0.6rem;
+        border-radius: 10px;
+        padding: 0.55rem 0.7rem;
         font: inherit;
         resize: vertical;
       }
-      .f input:focus, .f textarea:focus, .f select:focus { outline: 2px solid var(--gold); outline-offset: -1px; }
+      .f input:focus, .f textarea:focus, .f select:focus { outline: none; border-color: #2563EB; box-shadow: 0 0 0 4px #DCE6FF; }
       .f input[type='color'] { padding: 0.2rem; height: 2.2rem; }
       .f-help { margin: 0.15rem 0 0; font-size: 0.72rem; color: var(--muted); line-height: 1.5; }
       .f-check { display: flex; align-items: center; gap: 0.45rem; font-size: 0.85rem; }
@@ -365,7 +391,7 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
       /* ── repeaters ──────────────────────────────────────────────────── */
 
       .repeat { display: grid; gap: 0.75rem; }
-      .repeat-item { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 0.85rem; }
+      .repeat-item { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 0.85rem; }
 
       /* Rows are <details>. The default marker is replaced by a chevron on the
          title so the whole head reads as one target, and the head only earns
@@ -395,13 +421,13 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
       .section-item.is-hidden { opacity: 0.55; }
       .section-title { display: flex; align-items: baseline; gap: 0.6rem; min-width: 0; }
       .section-sub { color: var(--muted); font-size: 0.8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      .badge { background: var(--line); color: var(--muted); border-radius: 3px; padding: 0.05rem 0.35rem; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; }
+      .badge { background: var(--brand-soft); color: var(--brand); border-radius: 3px; padding: 0.05rem 0.35rem; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; }
       .section-body { display: grid; gap: 0.9rem; }
       .add-picker { background: var(--card); border: 1px solid var(--line); color: var(--text); border-radius: 6px; padding: 0.35rem 0.5rem; font: inherit; }
 
       .chooser { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.2rem; }
       .chip { appearance: none; background: var(--panel); border: 1px solid var(--line); color: var(--muted); border-radius: 999px; padding: 0.3rem 0.8rem; font: inherit; font-size: 0.82rem; cursor: pointer; }
-      .chip.is-on { border-color: var(--gold); color: var(--gold); }
+      .chip.is-on { background: var(--brand); border-color: var(--brand); color: #fff; }
 
       /* Swatch, hex and clear on one line. The hex takes the slack so a pasted
          value is readable at any panel width, and the swatch keeps the square
@@ -413,7 +439,7 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
       .range-row { display: flex; gap: 0.6rem; align-items: center; }
       /* The generic `.f input` frame is meant for a text box; on a slider it
          draws a second track around the real one. */
-      .range-row input[type='range'] { flex: 1; min-width: 0; padding: 0; border: 0; background: none; accent-color: var(--gold); }
+      .range-row input[type='range'] { flex: 1; min-width: 0; padding: 0; border: 0; background: none; accent-color: var(--brand); }
       .range-value { flex: none; min-width: 3ch; text-align: right; font-size: 0.78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 
       /* ── media ──────────────────────────────────────────────────────── */
@@ -424,19 +450,19 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
       /* The size note sits under the buttons, on its own line, so the row of
          controls keeps its shape whatever the recommendation says. */
       .media-size { flex: 1 0 100%; margin: 0.1rem 0 0; }
-      .f-media > input[type='text'] { width: 100%; background: var(--bg); border: 1px solid var(--line); color: var(--text); border-radius: 6px; padding: 0.45rem 0.6rem; font: inherit; margin-top: 0.4rem; }
+      .f-media > input[type='text'] { width: 100%; background: #fff; border: 1px solid var(--line); color: var(--text); border-radius: 6px; padding: 0.45rem 0.6rem; font: inherit; margin-top: 0.4rem; }
 
       .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.75rem; }
       .tile { position: relative; display: grid; gap: 0.25rem; background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 0.5rem; text-align: left; color: inherit; font: inherit; cursor: pointer; }
       .tile img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 4px; background: var(--bg); }
       .tile-cap { font-size: 0.72rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .tile-meta { font-size: 0.66rem; color: var(--muted); }
-      .tile-del { position: absolute; top: 0.6rem; right: 0.6rem; background: rgba(0,0,0,.65); }
+      .tile-del { position: absolute; top: 0.6rem; right: 0.6rem; background: rgba(11,26,63,.75); color: #fff; border-color: transparent; }
 
       /* ── modal ──────────────────────────────────────────────────────── */
 
-      .modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: grid; place-items: center; z-index: 50; padding: 1.5rem; }
-      .modal-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; width: min(920px, 100%); max-height: 84vh; display: flex; flex-direction: column; }
+      .modal { position: fixed; inset: 0; background: rgba(11,26,63,.55); display: grid; place-items: center; z-index: 50; padding: 1.5rem; }
+      .modal-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 30px 70px -30px rgba(11,27,63,.5); width: min(920px, 100%); max-height: 84vh; display: flex; flex-direction: column; }
       .modal-head { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1.1rem; border-bottom: 1px solid var(--line); }
       .modal-head h2 { margin: 0; font-size: 0.95rem; }
       .modal-body { padding: 1.1rem; overflow: auto; }
@@ -470,15 +496,14 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         position: absolute;
         inset: 0;
         background:
-          linear-gradient(105deg, rgba(10,10,7,.92) 8%, rgba(10,10,7,.55) 55%, rgba(10,10,7,.8) 100%),
-          linear-gradient(to top, rgba(10,10,7,.95), transparent 62%);
+          linear-gradient(105deg, rgba(11,26,63,.94) 8%, rgba(11,26,63,.6) 55%, rgba(11,26,63,.82) 100%),
+          linear-gradient(to top, rgba(8,22,52,.96), transparent 62%);
       }
 
       .login-art-copy { position: relative; padding: clamp(1.75rem, 4vw, 3.25rem); max-width: 40rem; }
-      .login-mark { display: block; font-size: 1.35rem; letter-spacing: 0.22em; color: var(--text); }
-      .login-mark em { font-style: normal; font-size: 0.62rem; letter-spacing: 0.34em; color: var(--gold); margin-left: 0.5rem; text-transform: uppercase; }
-      .login-lede { margin: 1.5rem 0 0; font-size: clamp(1.2rem, 2.2vw, 1.7rem); line-height: 1.32; color: var(--text); max-width: 20ch; }
-      .login-sub { margin: 0.9rem 0 0; color: var(--muted); max-width: 46ch; line-height: 1.7; }
+      .login-logo { display: block; height: 40px; width: auto; }
+      .login-lede { margin: 1.5rem 0 0; font-family: "Sora Variable", sans-serif; font-weight: 600; font-size: clamp(1.3rem, 2.4vw, 1.9rem); line-height: 1.25; color: #fff; max-width: 22ch; }
+      .login-sub { margin: 0.9rem 0 0; color: rgba(255,255,255,.72); max-width: 46ch; line-height: 1.7; }
 
       .login-stats {
         display: grid;
@@ -486,13 +511,13 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         gap: 1rem;
         margin: 2rem 0 0;
         padding-top: 1.4rem;
-        border-top: 1px solid rgba(236, 231, 220, 0.16);
+        border-top: 1px solid rgba(255, 255, 255, 0.16);
         max-width: 30rem;
       }
       .login-stats div { min-width: 0; }
-      .login-stats dt { font-size: 1.6rem; line-height: 1; color: var(--gold); }
-      .login-stats dd { margin: 0.4rem 0 0; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
-      .login-meta { margin: 1.6rem 0 0; font-size: 0.72rem; color: var(--muted); }
+      .login-stats dt { font-family: "Sora Variable", sans-serif; font-weight: 600; font-size: 1.7rem; line-height: 1; color: var(--gold); }
+      .login-stats dd { margin: 0.4rem 0 0; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,.6); }
+      .login-meta { margin: 1.6rem 0 0; font-size: 0.72rem; color: rgba(255,255,255,.6); }
 
       /* The form side. */
       .login-side {
@@ -505,22 +530,22 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         border-left: 1px solid var(--line);
       }
       .login-card { width: min(24rem, 100%); }
-      .login-eyebrow { font-size: 0.66rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
-      .login-card h1 { margin: 0.7rem 0 0.3rem; font-size: 1.5rem; font-weight: 600; }
+      .login-eyebrow { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold-deep); }
+      .login-card h1 { margin: 0.7rem 0 0.3rem; font-size: 1.9rem; font-weight: 600; color: var(--text); }
       .login-card > p { margin: 0 0 1.4rem; color: var(--muted); }
-      .login-card label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.35rem; }
+      .login-card label { display: block; font-size: 0.78rem; font-weight: 600; color: #33415C; margin-bottom: 0.35rem; }
       .login-card input {
         width: 100%;
-        background: var(--bg);
+        background: #fff;
         border: 1px solid var(--line);
         color: var(--text);
-        border-radius: 6px;
-        padding: 0.65rem 0.7rem;
+        border-radius: 12px;
+        padding: 0.75rem 0.9rem;
         font: inherit;
         letter-spacing: 0.1em;
       }
-      .login-card input:focus { outline: 2px solid var(--gold); outline-offset: -1px; }
-      .btn-block { width: 100%; margin-top: 0.75rem; padding: 0.6rem; }
+      .login-card input:focus { outline: none; border-color: #2563EB; box-shadow: 0 0 0 4px #DCE6FF; }
+      .btn-block { width: 100%; margin-top: 0.9rem; padding: 0.75rem; font-size: 0.92rem; }
       .login-help { margin: 1.1rem 0 0; font-size: 0.72rem; line-height: 1.65; color: var(--muted); }
       .login-help code { background: var(--card); border: 1px solid var(--line); border-radius: 3px; padding: 0.05rem 0.3rem; font-size: 0.9em; }
 
@@ -529,7 +554,7 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
       .login-tips li::before { content: '◆'; position: absolute; left: 0; top: 0.05rem; color: var(--gold); font-size: 0.5rem; }
       .login-tips strong { color: var(--text); font-weight: 600; }
       .login-back { font-size: 0.74rem; color: var(--muted); text-decoration: none; }
-      .login-back:hover { color: var(--gold); }
+      .login-back:hover { color: var(--brand); }
 
       @media (max-width: 900px) {
         .login { grid-template-columns: 1fr; }
@@ -554,7 +579,7 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         border-radius: 10px;
         padding: 1.5rem;
         width: min(30rem, 100%);
-        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 30px 70px -30px rgba(11, 27, 63, 0.5);
       }
       .confirm-title { margin: 0 0 0.6rem; font-size: 1.1rem; font-weight: 600; }
       .confirm-body { margin: 0; color: var(--muted); line-height: 1.65; }
@@ -563,7 +588,7 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         margin: 0.9rem 0 0;
         padding: 0.6rem 0.75rem;
         border-left: 2px solid var(--danger);
-        background: rgba(192, 90, 78, 0.09);
+        background: rgba(194, 65, 12, 0.07);
         color: var(--text);
         font-size: 0.85rem;
         line-height: 1.6;
@@ -580,7 +605,7 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
 
       .preview {
         position: fixed;
-        top: 53px;
+        top: 60px;
         right: 0;
         bottom: 0;
         width: min(46vw, 720px);
@@ -589,7 +614,7 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         border-left: 1px solid var(--line);
         display: flex;
         flex-direction: column;
-        box-shadow: -18px 0 40px rgba(0, 0, 0, 0.35);
+        box-shadow: -18px 0 40px rgba(11, 27, 63, 0.18);
       }
 
       /* The panel shifts rather than overlapping, so an editor can type in a
@@ -607,7 +632,7 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
       }
       .preview-heading { display: grid; min-width: 0; }
       .preview-title { font-size: 0.85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      .preview-state { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); }
+      .preview-state { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-deep); }
 
       .preview-toggle { display: flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
       .preview-mode {
@@ -620,7 +645,7 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         padding: 0.3rem 0.6rem;
         cursor: pointer;
       }
-      .preview-mode.is-on { background: var(--card); color: var(--gold); }
+      .preview-mode.is-on { background: var(--brand); color: #fff; }
 
       .preview-stage {
         flex: 1;
@@ -667,10 +692,12 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         left: 50%;
         bottom: 1.5rem;
         transform: translate(-50%, 1rem);
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: 6px;
-        padding: 0.6rem 1rem;
+        background: var(--brand-deep);
+        border: 1px solid var(--brand-deep);
+        color: #fff;
+        border-radius: 999px;
+        padding: 0.65rem 1.2rem;
+        box-shadow: 0 18px 40px -20px rgba(11, 27, 63, .6);
         opacity: 0;
         transition: opacity .25s, transform .25s;
         cursor: pointer;
@@ -678,25 +705,25 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
         max-width: min(520px, 90vw);
       }
       .toast.is-in { opacity: 1; transform: translate(-50%, 0); }
-      .toast-error { border-color: var(--danger); color: var(--danger); }
+      .toast-error { background: #fff; border-color: var(--danger); color: var(--danger); }
 
       @media (max-width: 820px) {
         .shell { grid-template-columns: 1fr; }
         .side { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
         .side nav { flex-direction: row; flex-wrap: wrap; }
       }
-          /* ── Colion additions: quality badges and the gallery uploader ───── */
+      /* ── Colion additions: quality badges and the gallery uploader ───── */
       .quality { margin: 0 0 .4rem; padding: .55rem .8rem; border-radius: 8px; font-size: 12.5px; }
-      .quality-ok { background: rgba(80, 160, 110, .14); color: #8fd3a8; }
-      .quality-no { background: rgba(198, 160, 82, .12); color: var(--gold); }
+      .quality-ok { background: rgba(31, 122, 74, .1); color: var(--ok); }
+      .quality-no { background: var(--gold-soft); color: var(--gold-deep); }
       .dropzone { display: grid; place-items: center; gap: .35rem; padding: 2.4rem 1rem; margin-bottom: 1rem; border: 2px dashed var(--line); border-radius: 14px; background: var(--card); text-align: center; cursor: pointer; transition: border-color .2s, background .2s; }
       .dropzone strong { font-size: 16px; }
       .dropzone span { color: var(--muted); font-size: 13px; }
-      .dropzone:hover, .dropzone.is-over { border-color: var(--gold); background: #2a2a20; }
+      .dropzone:hover, .dropzone.is-over { border-color: var(--brand); background: var(--brand-soft); }
       .dropzone.is-disabled { cursor: not-allowed; opacity: .7; }
       .upload-queue { display: grid; gap: .35rem; margin-bottom: 1rem; }
       .upload-row { display: grid; grid-template-columns: 1fr 180px; gap: .8rem; align-items: center; font-size: 12.5px; color: var(--muted); }
-      .upload-row.is-done { color: #8fd3a8; }
+      .upload-row.is-done { color: var(--ok); }
       .upload-row.is-error { color: var(--danger); }
       .upload-bar { width: 100%; height: 6px; }
       .gallery-actions { display: flex; justify-content: flex-end; margin: .5rem 0 1rem; }
@@ -704,11 +731,11 @@ const plates = ['/images/gallery/photo-04.webp', '/images/gallery/photo-25.webp'
       .g-card { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 12px; background: var(--card); overflow: hidden; }
       .g-media { position: relative; aspect-ratio: 4 / 3; background: #000; }
       .g-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
-      .g-kind { position: absolute; left: .5rem; top: .5rem; padding: .15rem .5rem; border-radius: 6px; background: rgba(0,0,0,.65); font-size: 11px; }
+      .g-kind { position: absolute; left: .5rem; top: .5rem; padding: .15rem .5rem; border-radius: 6px; background: rgba(11,26,63,.75); color: #fff; font-size: 11px; }
       .g-body { padding: .8rem; display: grid; gap: .5rem; }
       .g-tags { display: flex; flex-wrap: wrap; gap: .3rem; }
       .tag { padding: .2rem .55rem; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--muted); font-size: 11.5px; cursor: pointer; }
-      .tag.is-on { border-color: var(--gold); color: var(--gold); }
+      .tag.is-on { background: var(--brand); border-color: var(--brand); color: #fff; }
       .g-more summary { cursor: pointer; color: var(--muted); font-size: 12px; }
       .g-tools { display: flex; justify-content: flex-end; gap: .3rem; padding: 0 .8rem .8rem; }
 
