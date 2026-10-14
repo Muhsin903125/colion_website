@@ -25,7 +25,7 @@
     "email": "info@colioninternational.com",
     "phone": "+971 50 766 8536",
     "whatsapp": "971507668536",
-    "hours": "Monday to Saturday, 9:00 AM – 7:00 PM (Sunday closed)",
+    "hours": "Monday to Saturday, 10:00 AM – 10:00 PM (Sunday closed)",
     "instagramHandle": "colioninternational.ae",
     "social": [
       {
@@ -66,7 +66,7 @@
           "lng": 55.3020782
         },
         "mapUrl": "https://maps.app.goo.gl/3MH6Gfy4HggJdf5J6",
-        "hours": "Mon–Sat 9:00–19:00",
+        "hours": "Mon–Sat 10:00–22:00",
         "phone": "+971 50 766 8536",
         "image": {
           "publicId": "/images/places/deira.webp",
@@ -97,7 +97,7 @@
           "lng": 55.3025545
         },
         "mapUrl": "https://maps.app.goo.gl/38tDH4sYMhe1Fhxr8",
-        "hours": "Mon–Sat 9:00–19:00",
+        "hours": "Mon–Sat 10:00–22:00",
         "phone": "+971 50 766 8536",
         "image": {
           "publicId": "/images/places/deira.webp",
@@ -185,8 +185,8 @@
         "Friday",
         "Saturday"
       ],
-      "opens": "09:00",
-      "closes": "19:00"
+      "opens": "10:00",
+      "closes": "22:00"
     },
     "priceRange": "AED",
     "vatId": "",
@@ -5409,7 +5409,7 @@
       "faqs": [
         {
           "q": "Where is Colion International located in Dubai?",
-          "a": "Colion International has two branches in Deira — Shop 1, Al Jaziri Building, Al Sabkha, and Shop 4, Khalifya Building, Al Dhagaya, which is also the corporate office. The branches are open Monday to Saturday, 9 AM to 7 PM.",
+          "a": "Colion International has two branches in Deira — Shop 1, Al Jaziri Building, Al Sabkha, and Shop 4, Khalifya Building, Al Dhagaya, which is also the corporate office. The branches are open Monday to Saturday, 10 AM to 10 PM.",
           "top": true
         },
         {
@@ -5571,7 +5571,7 @@
         },
         {
           "q": "Can I collect my order from your branch instead?",
-          "a": "Yes. Sharjah customers can collect from the Colion International branches in Deira, Dubai, Monday to Saturday, 9 AM to 7 PM.",
+          "a": "Yes. Sharjah customers can collect from the Colion International branches in Deira, Dubai, Monday to Saturday, 10 AM to 10 PM.",
           "top": false
         }
       ]
@@ -6980,7 +6980,7 @@
         },
         {
           "q": "Can I collect my order from your branch?",
-          "a": "Yes. Orders can be collected from either Colion International branch in Deira, Dubai — Al Sabkha or Al Dhagaya — Monday to Saturday, 9 AM to 7 PM.",
+          "a": "Yes. Orders can be collected from either Colion International branch in Deira, Dubai — Al Sabkha or Al Dhagaya — Monday to Saturday, 10 AM to 10 PM.",
           "top": false
         }
       ]
@@ -8884,7 +8884,7 @@
     },
     "contact": {
       "title": "Contact Colion International — Deira, Dubai",
-      "description": "Contact Colion International, Deira, Dubai: +971 50 766 8536 or info@colioninternational.com. Branches in Al Sabkha and Al Dhagaya, Mon–Sat 9–7.",
+      "description": "Contact Colion International, Deira, Dubai: +971 50 766 8536 or info@colioninternational.com. Branches in Al Sabkha and Al Dhagaya, Mon–Sat 10am–10pm.",
       "sections": [
         {
           "id": "pageHero-53",

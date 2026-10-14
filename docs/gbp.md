@@ -48,7 +48,7 @@ Dubai, United Arab Emirates
 - United Arab Emirates
 
 ## Business Hours
-Monday - Saturday: 9:00 AM - 7:00 PM
+Monday - Saturday: 10:00 AM - 10:00 PM
 Sunday: Closed
 
 ## Attributes

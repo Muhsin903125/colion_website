@@ -31,7 +31,7 @@ export const locations = [
     sectors: ['Trading and wholesale', 'Hospitality', 'Healthcare', 'Education', 'Logistics', 'Real estate and facilities'],
     popularCategories: ['printers', 'desktops', 'routers-switches', 'ups'],
     faqs: [
-      faq('Where is Colion International located in Dubai?', 'Colion International has two branches in Deira — Shop 1, Al Jaziri Building, Al Sabkha, and Shop 4, Khalifya Building, Al Dhagaya, which is also the corporate office. The branches are open Monday to Saturday, 9 AM to 7 PM.', true),
+      faq('Where is Colion International located in Dubai?', 'Colion International has two branches in Deira — Shop 1, Al Jaziri Building, Al Sabkha, and Shop 4, Khalifya Building, Al Dhagaya, which is also the corporate office. The branches are open Monday to Saturday, 10 AM to 10 PM.', true),
       faq('Do you deliver IT hardware the same day in Dubai?', 'Yes, for stock items. Colion International usually delivers same day within central Dubai for orders confirmed in the morning, and next working day elsewhere in the emirate.', true),
       faq('Do you deliver to free zones like JAFZA and DMCC?', 'Yes. Colion International delivers to Dubai free zones including JAFZA, DMCC, Dubai Internet City, Dubai Silicon Oasis and DAFZA, with the documentation free zone warehouses require.'),
     ],
@@ -87,7 +87,7 @@ export const locations = [
     faqs: [
       faq('Do you deliver IT hardware to Sharjah the same day?', 'Often, yes. Colion International\'s Deira branches are close to Sharjah, so stock items are usually delivered the same or next working day.'),
       faq('Do you deliver to SAIF Zone and Hamriyah Free Zone?', 'Yes. Colion International delivers to SAIF Zone and Hamriyah Free Zone with the documentation their warehouses require.'),
-      faq('Can I collect my order from your branch instead?', 'Yes. Sharjah customers can collect from the Colion International branches in Deira, Dubai, Monday to Saturday, 9 AM to 7 PM.'),
+      faq('Can I collect my order from your branch instead?', 'Yes. Sharjah customers can collect from the Colion International branches in Deira, Dubai, Monday to Saturday, 10 AM to 10 PM.'),
     ],
   },
   {

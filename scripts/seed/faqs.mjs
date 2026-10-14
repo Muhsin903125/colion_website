@@ -25,7 +25,7 @@ export const faqGroups = [
     items: [
       faq('How fast does Colion International deliver in the UAE?', 'For stock items, Colion International delivers the same or next working day in Dubai and Sharjah, next working day to Ajman and Umm Al Quwain, and within one to two working days to Abu Dhabi, Ras Al Khaimah and Fujairah.', true),
       faq('Does Colion International export IT hardware?', 'Yes. Colion International exports IT hardware from Dubai to customers in the GCC, the wider Middle East and Africa, and prepares the commercial invoice, packing list and other export documentation.', true),
-      faq('Can I collect my order from your branch?', 'Yes. Orders can be collected from either Colion International branch in Deira, Dubai — Al Sabkha or Al Dhagaya — Monday to Saturday, 9 AM to 7 PM.'),
+      faq('Can I collect my order from your branch?', 'Yes. Orders can be collected from either Colion International branch in Deira, Dubai — Al Sabkha or Al Dhagaya — Monday to Saturday, 10 AM to 10 PM.'),
     ],
   },
   {

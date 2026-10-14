@@ -19,7 +19,7 @@ export const site = {
   email: 'info@colioninternational.com',
   phone: '+971 50 766 8536',
   whatsapp: '971507668536',
-  hours: 'Monday to Saturday, 9:00 AM – 7:00 PM (Sunday closed)',
+  hours: 'Monday to Saturday, 10:00 AM – 10:00 PM (Sunday closed)',
   instagramHandle: 'colioninternational.ae',
   social: [
     { label: 'Instagram', href: 'https://www.instagram.com/colioninternational.ae/', icon: 'instagram' },
@@ -42,7 +42,7 @@ export const site = {
       country: 'AE',
       geo: { lat: 25.2735367, lng: 55.3020782 },
       mapUrl: 'https://maps.app.goo.gl/3MH6Gfy4HggJdf5J6',
-      hours: 'Mon–Sat 9:00–19:00',
+      hours: 'Mon–Sat 10:00–22:00',
       phone: '+971 50 766 8536',
       image: PLACE('deira', 'Deira, Dubai — home of the Colion International corporate office and store in Al Dhagaya'),
       gbp: { cid: '', placeId: '', url: '' },
@@ -61,7 +61,7 @@ export const site = {
       // The Google Business Profile pin.
       geo: { lat: 25.2723295, lng: 55.3025545 },
       mapUrl: 'https://maps.app.goo.gl/38tDH4sYMhe1Fhxr8',
-      hours: 'Mon–Sat 9:00–19:00',
+      hours: 'Mon–Sat 10:00–22:00',
       phone: '+971 50 766 8536',
       image: PLACE('deira', 'Dubai Creek at Deira, near the Colion International branch in Al Sabkha'),
       gbp: {
@@ -107,7 +107,7 @@ export const seo = {
     'IT hardware export to Africa and the Middle East',
     'Bulk IT procurement for businesses',
   ],
-  openingHours: { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '09:00', closes: '19:00' },
+  openingHours: { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '10:00', closes: '22:00' },
   priceRange: 'AED',
   vatId: '',
   tradeLicense: '',

@@ -188,8 +188,8 @@ function renderSeo() {
     ]),
     group('Opening hours (schema)', [
       listField('Days', 'seo.openingHours.days', 'One per line, e.g. Monday.'),
-      field('Opens', 'seo.openingHours.opens', { placeholder: '09:00' }),
-      field('Closes', 'seo.openingHours.closes', { placeholder: '19:00' }),
+      field('Opens', 'seo.openingHours.opens', { placeholder: '10:00' }),
+      field('Closes', 'seo.openingHours.closes', { placeholder: '22:00' }),
     ]),
     group('Vocabulary', [listField('Topics (knowsAbout)', 'seo.knowsAbout', 'One per line. The terms an answer engine matches a buyer\'s question against.')]),
     group('Footer', [field('Trademark note', 'seo.trademarkNote', { multiline: true, rows: 3 })]),
