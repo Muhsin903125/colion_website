@@ -84,29 +84,31 @@ const ring = 'GENUINE STOCK • UAE WARRANTY • VAT INVOICE • ';
         )}
 
         <!-- Story card -->
-        <div class="absolute right-4 top-1/2 z-[2] w-[300px] -translate-y-1/2" data-depth="0.35">
-          <div class="relative aspect-[9/14] overflow-hidden rounded-[32px] bg-brand-deep shadow-[0_50px_100px_-30px_rgba(0,0,0,.8)] ring-[6px] ring-white/10" data-slides>
-            {slides.map((sl, i) => (
-              <figure class:list={['hero-slide absolute inset-0', i === 0 && 'is-on']} data-slide aria-hidden={i === 0 ? undefined : 'true'}>
-                {sl.image?.publicId && <Img image={sl.image} sizes="300px" loading={i === 0 ? 'eager' : 'lazy'} class="absolute inset-0 h-full w-full object-cover" />}
-                {sl.video && <video class="absolute inset-0 h-full w-full object-cover" data-slide-video data-src={videoUrl(sl.video)} muted loop playsinline preload="none" aria-hidden="true"></video>}
-                {sl.caption && (
-                  <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#081634]/95 via-[#081634]/50 to-transparent p-5 pt-20 text-white">
-                    <span class="mb-1.5 flex items-center gap-1.5 text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-gold"><span class="live-dot"></span> Live from Deira</span>
-                    <span class="font-display text-[1rem] font-semibold leading-snug">{sl.caption}</span>
-                  </figcaption>
-                )}
-              </figure>
-            ))}
-            <div class="pointer-events-none absolute inset-x-0 top-0 z-[5] h-24 bg-gradient-to-b from-[#081634]/70 to-transparent" aria-hidden="true"></div>
-            <div class="absolute inset-x-4 top-4 z-10 flex gap-1.5">
-              {slides.map((_, i) => (
-                <button type="button" class="slide-bar h-1 flex-1 overflow-hidden rounded-full bg-white/30" data-slide-go={i} aria-label={`Show slide ${i + 1}`}><span class="block h-full w-full origin-left bg-white"></span></button>
+        <div class="absolute inset-y-0 right-6 z-[2] flex w-[300px] items-center">
+          <div class="w-full" data-depth="0.35">
+            <div class="relative aspect-[9/14] overflow-hidden rounded-[32px] bg-brand-deep shadow-[0_50px_100px_-30px_rgba(0,0,0,.8)] ring-[6px] ring-white/10" data-slides>
+              {slides.map((sl, i) => (
+                <figure class:list={['hero-slide absolute inset-0', i === 0 && 'is-on']} data-slide aria-hidden={i === 0 ? undefined : 'true'}>
+                  {sl.image?.publicId && <Img image={sl.image} sizes="300px" loading={i === 0 ? 'eager' : 'lazy'} class="absolute inset-0 h-full w-full object-cover" />}
+                  {sl.video && <video class="absolute inset-0 h-full w-full object-cover" data-slide-video data-src={videoUrl(sl.video)} muted loop playsinline preload="none" aria-hidden="true"></video>}
+                  {sl.caption && (
+                    <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#081634]/95 via-[#081634]/50 to-transparent p-5 pt-20 text-white">
+                      <span class="mb-1.5 flex items-center gap-1.5 text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-gold"><span class="live-dot"></span> Live from Deira</span>
+                      <span class="font-display text-[1rem] font-semibold leading-snug">{sl.caption}</span>
+                    </figcaption>
+                  )}
+                </figure>
               ))}
-            </div>
-            <div class="absolute left-4 top-8 z-10 flex items-center gap-2">
-              <img src="/images/brand/colion-shield.png" alt="" width="28" height="28" class="h-7 w-7 rounded-full bg-white object-contain p-1" />
-              <span class="text-[0.72rem] font-semibold text-white">colioninternational.ae</span>
+              <div class="pointer-events-none absolute inset-x-0 top-0 z-[5] h-24 bg-gradient-to-b from-[#081634]/70 to-transparent" aria-hidden="true"></div>
+              <div class="absolute inset-x-4 top-4 z-10 flex gap-1.5">
+                {slides.map((_, i) => (
+                  <button type="button" class="slide-bar h-1 flex-1 overflow-hidden rounded-full bg-white/30" data-slide-go={i} aria-label={`Show slide ${i + 1}`}><span class="block h-full w-full origin-left bg-white"></span></button>
+                ))}
+              </div>
+              <div class="absolute left-4 top-8 z-10 flex items-center gap-2">
+                <img src="/images/brand/colion-shield.png" alt="" width="28" height="28" class="h-7 w-7 rounded-full bg-white object-contain p-1" />
+                <span class="text-[0.72rem] font-semibold text-white">colioninternational.ae</span>
+              </div>
             </div>
           </div>
         </div>
@@ -132,13 +134,13 @@ const ring = 'GENUINE STOCK • UAE WARRANTY • VAT INVOICE • ';
         )}
 
         <!-- Spinning seal -->
-        <div class="absolute left-10 top-2 z-[3]" data-depth="1.5">
-          <div class="relative flex h-[118px] w-[118px] items-center justify-center rounded-full bg-[#0b1a3f]/80 ring-1 ring-gold/40 backdrop-blur-md">
+        <div class="absolute right-0 top-2 z-[3]" data-depth="1.5">
+          <div class="relative flex h-[84px] w-[84px] items-center justify-center rounded-full bg-[#0b1a3f]/80 ring-1 ring-gold/40 backdrop-blur-md">
             <svg viewBox="0 0 120 120" class="seal absolute inset-0 h-full w-full" aria-hidden="true">
               <defs><path id="seal-ring" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0" /></defs>
-              <text class="fill-gold font-display text-[9px] font-semibold"><textPath href="#seal-ring" textLength="286" lengthAdjust="spacing">{ring}</textPath></text>
+              <text class="fill-gold font-display text-[9.5px] font-bold"><textPath href="#seal-ring" textLength="286" lengthAdjust="spacing">{ring}</textPath></text>
             </svg>
-            <img src="/images/brand/colion-shield.png" alt="" width="44" height="44" class="relative h-11 w-auto" />
+            <img src="/images/brand/colion-shield.png" alt="" width="30" height="30" class="relative h-8 w-auto" />
           </div>
         </div>
       </div>
