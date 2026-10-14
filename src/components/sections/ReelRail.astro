@@ -1,0 +1,34 @@
+---
+/** The vertical reels as a swipeable rail; each previews silently and opens with sound. */
+import CarouselButtons from '../CarouselButtons.astro';
+import GalleryTile from '../GalleryTile.astro';
+import Icon from '../Icon.astro';
+import SectionHead from '../SectionHead.astro';
+import { load } from '../../data/load';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'reelRail' }>;
+const s = Astro.props;
+const d = await load();
+const reels = d.gallery.filter((g) => g.kind !== 'image').slice(0, s.limit || 10);
+const ig = d.socialLinks.find((x) => x.icon === 'instagram');
+---
+{reels.length > 0 && (
+  <section class="section-y relative overflow-hidden bg-brand-deep text-white" data-carousel>
+    <div class="container-x relative">
+      <div class="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <SectionHead intro={{ ...s.intro, cta: undefined as any }} dark />
+        <div class="flex flex-wrap items-center gap-3 reveal">
+          {ig && <a href={ig.href} target="_blank" rel="noopener" class="btn btn-light"><Icon name="instagram" size={18} /> Follow @{d.site.instagramHandle || 'colioninternational'}</a>}
+          {s.intro.cta?.href && <a href={s.intro.cta.href} class="btn btn-ghost-light">{s.intro.cta.label} <Icon name="arrow" size={16} class="arrow" /></a>}
+          <CarouselButtons dark />
+        </div>
+      </div>
+      <div class="no-scrollbar rail -mx-4 flex snap-x gap-4 overflow-x-auto scroll-px-4 px-4 pb-2" data-lb-root data-carousel-track>
+        {reels.map((g, i) => (
+          <GalleryTile item={g} class:list={['w-[44vw] shrink-0 snap-start !rounded-[22px] ring-1 ring-white/10 sm:w-[260px] reveal', `d${(i % 4) + 1}`]} aspect="aspect-[9/16]" sizes="260px" />
+        ))}
+      </div>
+    </div>
+  </section>
+)}

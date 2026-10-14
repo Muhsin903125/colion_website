@@ -1,0 +1,16 @@
+---
+import SectionHead from '../SectionHead.astro';
+import { inline } from '../../lib/inline';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'richText' }>;
+const s = Astro.props;
+---
+<section class:list={['section-y', s.tone === 'surface' && 'bg-surface', s.tone === 'sky' && 'bg-sky']}>
+  <div class:list={['container-x max-w-3xl', s.align === 'center' && 'text-center']}>
+    <SectionHead intro={s.intro} align={s.align} class="mb-8" />
+    <div class="prose-x text-[1.02rem]">
+      {s.paragraphs.map((p) => <p set:html={inline(p)} />)}
+    </div>
+  </div>
+</section>

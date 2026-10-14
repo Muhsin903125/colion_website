@@ -1,0 +1,102 @@
+---
+/**
+ * The brands page opener. Core brand logos float around the heading on white
+ * tiles; `motion.ts` drifts them with the pointer (`data-depth`) and scatters
+ * them outward as the hero scrolls away (`data-scatter`). On phones the tiles
+ * give way to a logo marquee under the copy.
+ */
+import BrandLogo from '../BrandLogo.astro';
+import Cta from '../Cta.astro';
+import SectionHead from '../SectionHead.astro';
+import { load } from '../../data/load';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'brandHero' }>;
+const s = Astro.props;
+const d = await load();
+
+const withLogo = d.brands.filter((b) => b.logo?.publicId);
+const featured = [...d.coreBrands.filter((b) => b.logo?.publicId), ...withLogo.filter((b) => b.tier !== 'core')];
+
+// Tile centres as % of the hero, kept clear of the centred copy.
+const SPOTS: [number, number, number][] = [
+  [9, 24, 150], [19, 48, 118], [7, 70, 138], [20, 86, 112],
+  [31, 17, 104], [69, 16, 116], [91, 25, 146], [82, 47, 120],
+  [93, 68, 132], [80, 86, 142], [36, 89, 118], [63, 90, 108],
+];
+const tiles = SPOTS.map(([x, y, w], i) => ({ x, y, w, h: Math.round(w * 0.56), brand: featured[i], depth: 0.4 + ((i * 7) % 5) / 5 })).filter((t) => t.brand);
+const strip = withLogo.slice(0, 16);
+---
+<section data-hero data-scatter-root class="relative isolate overflow-hidden bg-[#0b1a3f] text-white">
+  <!-- Glow and grid texture -->
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+    <div class="absolute left-1/2 top-1/2 h-[720px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-400/25 blur-[140px]"></div>
+    <div class="absolute -right-24 top-0 h-[380px] w-[380px] rounded-full bg-gold/20 blur-[120px]"></div>
+    <div class="brand-grid absolute inset-0 opacity-[0.07]"></div>
+  </div>
+
+  <!-- Floating logo tiles (desktop) -->
+  <div class="pointer-events-none absolute inset-0 hidden lg:block" aria-hidden="true">
+    {tiles.map((t, i) => (
+      <div class="absolute" style={`left:${t.x}%;top:${t.y}%;width:${t.w}px;height:${t.h}px;margin-left:-${t.w / 2}px;margin-top:-${t.h / 2}px`} data-scatter>
+        <div class="h-full w-full" data-depth={t.depth.toFixed(2)}>
+          <div class="brand-float h-full w-full" style={`animation-delay:-${(i * 0.9).toFixed(1)}s;animation-duration:${6 + (i % 4)}s`}>
+            <BrandLogo brand={t.brand!} link={false} mono={false} class="pointer-events-auto h-full w-full rounded-2xl bg-white px-5 py-3 shadow-[0_24px_60px_-24px_rgba(0,0,0,.6)] ring-1 ring-white/20" tabindex="-1" />
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="container-x relative flex min-h-[100svh] flex-col items-center justify-center pb-16 pt-36 text-center lg:h-[100svh] lg:max-h-[900px] lg:min-h-[680px] lg:pb-24">
+    <div data-hero-copy class="mx-auto max-w-2xl">
+      <slot name="before" />
+      <SectionHead intro={{ ...s.intro, cta: undefined as any }} as="h1" size="display" align="center" dark />
+      {(s.intro.cta?.href || s.secondary?.href) && (
+        <div class="mt-8 flex flex-wrap justify-center gap-3 reveal d2">
+          <Cta link={s.intro.cta} variant="gold" />
+          <Cta link={s.secondary} variant="ghost-light" />
+        </div>
+      )}
+      <dl class="mx-auto mt-10 grid max-w-md grid-cols-3 divide-x divide-white/15 reveal d3">
+        <div><dt class="text-xs text-white/60">Brands</dt><dd class="font-display text-2xl font-semibold text-gold sm:text-3xl"><span data-count={d.brands.length}>{d.brands.length}</span>+</dd></div>
+        <div><dt class="text-xs text-white/60">Categories</dt><dd class="font-display text-2xl font-semibold text-white sm:text-3xl"><span data-count={d.categories.length}>{d.categories.length}</span></dd></div>
+        <div><dt class="text-xs text-white/60">Core partners</dt><dd class="font-display text-2xl font-semibold text-white sm:text-3xl"><span data-count={d.coreBrands.length}>{d.coreBrands.length}</span></dd></div>
+      </dl>
+    </div>
+
+    <!-- Phones: a moving strip instead of floating tiles -->
+    <div class="mask-x -mx-4 mt-12 w-screen overflow-hidden lg:hidden" aria-hidden="true">
+      <div class="flex w-max animate-marquee gap-3">
+        {[...strip, ...strip].map((b) => (
+          <BrandLogo brand={b} link={false} mono={false} class="h-14 w-28 rounded-xl bg-white px-3 py-2" tabindex="-1" />
+        ))}
+      </div>
+    </div>
+
+    <a href="#core-brands" class="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-xs text-white/60 transition hover:text-white lg:flex">
+      Scroll
+      <span class="scroll-cue relative h-10 w-6 rounded-full border border-white/30"></span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .brand-grid {
+    background-image: linear-gradient(rgba(255,255,255,.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.6) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 70%);
+    -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 70%);
+  }
+  .brand-float { animation: brand-float 7s ease-in-out infinite alternate; }
+  @keyframes brand-float {
+    0% { transform: translate3d(0, -8px, 0) rotate(-2deg); }
+    100% { transform: translate3d(0, 10px, 0) rotate(2deg); }
+  }
+  .scroll-cue::after {
+    content: ''; position: absolute; left: 50%; top: 8px; width: 4px; height: 8px; margin-left: -2px; border-radius: 4px; background: #D5A540;
+    animation: cue 1.8s ease-in-out infinite;
+  }
+  @keyframes cue { 0% { opacity: 0; transform: translateY(0); } 40% { opacity: 1; } 100% { opacity: 0; transform: translateY(14px); } }
+  @media (prefers-reduced-motion: reduce) { .brand-float, .scroll-cue::after { animation: none; } }
+</style>

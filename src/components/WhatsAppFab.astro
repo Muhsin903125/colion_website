@@ -1,0 +1,44 @@
+---
+/**
+ * The floating contact dock: back to top, call and WhatsApp, stacked in the
+ * corner as equal circles. The WhatsApp label slides out on hover only.
+ *
+ * Hidden while the page's hero is on screen — the hero already carries the
+ * same actions — and slides in once it has scrolled away (main.ts toggles
+ * `is-on` on `[data-dock]`). Pages without a hero show it after a short scroll.
+ */
+import Icon from './Icon.astro';
+import { load } from '../data/load';
+const d = await load();
+const round = 'flex h-10 w-10 items-center justify-center rounded-full shadow-lift ring-2 ring-white/25 transition sm:h-12 sm:w-12';
+---
+<div data-dock class="dock fixed bottom-4 right-3 z-40 flex flex-col items-end gap-2 sm:bottom-7 sm:right-7" aria-label="Quick contact">
+  <button type="button" data-top aria-label="Back to top" class:list={[round, 'bg-brand text-white hover:bg-brand-deep']}>
+    <Icon name="arrow" size={17} class="-rotate-90" />
+  </button>
+  <a href={d.telLink} data-track="click_call" aria-label={`Call ${d.site.phone}`} class:list={[round, 'bg-gold text-ink hover:brightness-105']}>
+    <Icon name="phone" size={17} />
+  </a>
+  <a
+    href={d.waLink('Hello Colion International, I would like a quotation for:')}
+    target="_blank"
+    rel="noopener"
+    data-track="click_whatsapp"
+    aria-label="WhatsApp"
+    class="dock-wa flex h-10 items-center rounded-full bg-whatsapp text-white shadow-lift ring-2 ring-white/25 sm:h-12"
+  >
+    <span class="dock-wa-label font-display text-[0.88rem] font-semibold">WhatsApp</span>
+    <span class="flex h-10 w-10 shrink-0 items-center justify-center sm:h-12 sm:w-12"><Icon name="whatsapp" size={22} /></span>
+  </a>
+</div>
+
+<style>
+  .dock { opacity: 0; transform: translateY(24px); pointer-events: none; transition: opacity .45s cubic-bezier(.2,.7,.2,1), transform .55s cubic-bezier(.2,.7,.2,1); }
+  .dock:global(.is-on) { opacity: 1; transform: none; pointer-events: auto; }
+  html:not(.js) .dock { opacity: 1; transform: none; pointer-events: auto; }
+
+  /* The label is collapsed to nothing and slides out to the left on hover or keyboard focus. */
+  .dock-wa-label { max-width: 0; overflow: hidden; white-space: nowrap; opacity: 0; transition: max-width .4s cubic-bezier(.2,.7,.2,1), opacity .25s, padding .4s cubic-bezier(.2,.7,.2,1); }
+  .dock-wa:hover .dock-wa-label, .dock-wa:focus-visible .dock-wa-label { max-width: 8rem; opacity: 1; padding-left: 1.1rem; }
+  .dock-wa:hover { filter: brightness(.96); }
+</style>

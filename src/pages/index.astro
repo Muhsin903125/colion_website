@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionRenderer from '../components/SectionRenderer.astro';
+import { load } from '../data/load';
+import { faqEntity, howTo, itemList, webPage } from '../data/seo';
+import { resolveImage } from '../lib/cloudinary';
+
+const d = await load();
+const page = d.content.pages.home;
+
+const hero = page.sections.find((s) => s.type === 'videoHero');
+const heroPoster = hero?.type === 'videoHero' ? resolveImage(hero.video.poster, { width: 1280 }) : '';
+const steps = page.sections.find((s) => s.type === 'processSteps' && s.asHowTo);
+
+const schema = [
+  webPage({
+    path: '/',
+    name: page.title,
+    description: page.description,
+    image: heroPoster,
+    mainEntity: faqEntity(d.topFaqs),
+    dateModified: d.content.sections['pages.home'] ?? d.content.updatedAt,
+  }),
+  itemList('IT hardware services', d.services.map((s) => ({ name: s.name, url: `/services/${s.slug}/` })), '/'),
+  steps?.type === 'processSteps' ? howTo(steps.intro.lines.join(' '), steps.steps, '/') : null,
+];
+---
+<BaseLayout title={page.title} description={page.description} schema={schema} preloadImage={heroPoster} darkTop>
+  {page.sections.map((section) => <SectionRenderer section={section} />)}
+</BaseLayout>

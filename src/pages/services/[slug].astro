@@ -1,0 +1,119 @@
+---
+import DetailLayout from '../../layouts/DetailLayout.astro';
+import BrandLogo from '../../components/BrandLogo.astro';
+import CategoryCard from '../../components/CategoryCard.astro';
+import Icon from '../../components/Icon.astro';
+import SectionRenderer from '../../components/SectionRenderer.astro';
+import { load } from '../../data/load';
+import { howTo, serviceNode } from '../../data/seo';
+import { inline, plain } from '../../lib/inline';
+
+const d = await load();
+const s = d.service(Astro.params.slug ?? '');
+if (!s) return Astro.rewrite('/404/');
+
+const v = d.verdictFor('service', s);
+const path = `/services/${s.slug}/`;
+const title = s.seoTitle || `${s.name} in Dubai & UAE | Colion International`;
+const description = s.seoDescription || plain(s.answer).slice(0, 158);
+const categories = s.categories.map(d.category).filter(Boolean);
+const brands = s.brands.map(d.brand).filter(Boolean);
+const gallery = d.galleryFor({ service: s.slug, category: s.categories[0] });
+---
+<DetailLayout
+  title={title}
+  description={description}
+  h1={s.name}
+  h1Accent="in Dubai & across the UAE"
+  answer={s.answer}
+  trail={[{ name: 'Home', path: '/' }, { name: 'Services', path: '/services/' }, { name: s.name, path }]}
+  path={path}
+  image={s.image}
+  video={s.video}
+  faqs={s.faqs}
+  gallery={gallery}
+  ctaMessage={`Hello Colion International, I need a quotation for ${s.name.toLowerCase()}:`}
+  noindex={!v.index}
+  reviewedBy={s.reviewedBy}
+  updated={d.content.sections[`services.${s.slug}`] ?? s.reviewedAt}
+  facts={[
+    { icon: 'truck', label: 'Delivery', value: 'All 7 emirates' },
+    { icon: 'tools', label: 'Installation', value: 'Free in Dubai' },
+    { icon: 'shield', label: 'Warranty', value: 'Manufacturer, UAE' },
+  ]}
+  related={[
+    { title: 'Other services', links: d.services.filter((x) => x.slug !== s.slug).map((x) => ({ name: x.name, href: `/services/${x.slug}/` })) },
+    { title: 'Delivery areas', links: d.emirates.map((e) => ({ name: e.name, href: `/locations/${e.slug}/`, note: e.deliveryTime })) },
+  ]}
+  schema={[serviceNode(d, s), s.steps.length ? howTo(`How Colion International delivers ${s.name.toLowerCase()}`, s.steps, path) : null]}
+>
+  <section class="section-y">
+    <div class="container-x grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:gap-20">
+      <div class="prose-x text-[1.05rem]">
+        {s.intro.map((p) => <p class="reveal" set:html={inline(p)} />)}
+      </div>
+      {s.includes.length > 0 && (
+        <aside class="card h-fit p-7 lg:sticky lg:top-32">
+          <h2 class="font-display text-xl font-semibold">What's included</h2>
+          <ul class="mt-5 space-y-3">
+            {s.includes.map((x) => <li class="flex gap-3 text-[0.95rem] text-ink-soft"><Icon name="check" size={18} class="mt-0.5 shrink-0 text-brand" />{x}</li>)}
+          </ul>
+        </aside>
+      )}
+    </div>
+  </section>
+
+  {s.benefits.length > 0 && (
+    <section class="section-y-sm bg-sky">
+      <div class="container-x grid gap-5 md:grid-cols-3">
+        {s.benefits.map((b, i) => (
+          <div class:list={['card p-7 reveal', `d${i + 1}`]}>
+            <h3 class="h-card">{b.title}</h3>
+            <p class="mt-2 text-[0.95rem] text-slate" set:html={inline(b.body)} />
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {s.steps.length > 0 && (
+    <section class="section-y">
+      <div class="container-x">
+        <h2 class="h-section max-w-2xl">How it <span class="accent">works</span></h2>
+        <ol class="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {s.steps.map((st, i) => (
+            <li class:list={['border-t-2 border-brand pt-5 reveal', `d${(i % 4) + 1}`]}>
+              <span class="font-display text-sm font-semibold text-brand">Step {i + 1}</span>
+              <h3 class="h-card mt-1">{st.title}</h3>
+              <p class="mt-2 text-[0.93rem] text-slate" set:html={inline(st.body)} />
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  )}
+
+  {categories.length > 0 && (
+    <section class="section-y-sm bg-surface">
+      <div class="container-x">
+        <h2 class="h-section mb-8">Products for <span class="accent">{s.shortName || s.name}</span></h2>
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {categories.map((c, i) => <CategoryCard category={c!} index={i} brandCount={d.brandsIn(c!.slug).length} />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {brands.length > 0 && (
+    <section class="section-y-sm">
+      <div class="container-x">
+        <h2 class="h-section mb-8">Brands we <span class="accent">supply</span></h2>
+        <ul class="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6">
+          {brands.map((b) => <li><BrandLogo brand={b!} class="card card-hover h-20 p-4" /></li>)}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  {s.extraSections.map((section) => <SectionRenderer section={section} />)}
+</DetailLayout>

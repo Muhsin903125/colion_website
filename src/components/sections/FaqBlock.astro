@@ -1,0 +1,23 @@
+---
+import FaqList from '../FaqList.astro';
+import SectionHead from '../SectionHead.astro';
+import { load } from '../../data/load';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'faqBlock' }>;
+const s = Astro.props;
+const d = await load();
+const items =
+  s.source === 'top' ? d.topFaqs : s.source === 'all' ? d.allFaqs : d.faqGroups.filter((g) => s.groupIds.includes(g.id)).flatMap((g) => g.items);
+---
+{items.length > 0 && (
+  <section class="section-y bg-surface">
+    <div class="container-x grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+      <div class="lg:sticky lg:top-32 lg:self-start">
+        <SectionHead intro={s.intro} />
+        <p class="mt-6 text-sm text-slate reveal">Can't find your answer? <a href={d.waLink('Hello Colion International, I have a question:')} target="_blank" rel="noopener" class="inline-link" data-track="click_whatsapp">Ask us on WhatsApp</a>.</p>
+      </div>
+      <FaqList items={items} />
+    </div>
+  </section>
+)}

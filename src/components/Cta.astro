@@ -1,0 +1,33 @@
+---
+/** A single button from a CMS link, with WhatsApp / phone handling and tracking. */
+import Icon from './Icon.astro';
+import { load } from '../data/load';
+
+interface Props {
+  link: { label: string; href: string };
+  variant?: 'primary' | 'outline' | 'light' | 'ghost-light' | 'wa' | 'gold';
+  class?: string;
+  size?: 'sm' | 'md';
+}
+const { link, variant = 'primary', class: className = '', size = 'md' } = Astro.props;
+const { href } = await load();
+const url = link?.href ? href(link.href) : '';
+const wa = url.includes('wa.me');
+const tel = url.startsWith('tel:');
+const external = /^https?:/.test(url);
+---
+{url && link.label && (
+  <a
+    href={url}
+    target={external ? '_blank' : undefined}
+    rel={external ? 'noopener' : undefined}
+    class:list={['btn', `btn-${variant}`, size === 'sm' && 'btn-sm', className]}
+    data-track={wa ? 'click_whatsapp' : tel ? 'click_call' : undefined}
+    data-magnetic
+  >
+    {wa && <Icon name="whatsapp" size={18} />}
+    {tel && <Icon name="phone" size={17} />}
+    {link.label}
+    {!wa && !tel && <Icon name="arrow" size={17} class="arrow" />}
+  </a>
+)}

@@ -1,0 +1,110 @@
+---
+/**
+ * The footer is a link hub as much as a sign-off: every service, category,
+ * the top brands and all seven emirates, one click from any page. That is
+ * where most of the programmatic pages get their internal links from, and the
+ * addresses here are the same `site.locations` records the schema uses.
+ */
+import Icon from './Icon.astro';
+import { load } from '../data/load';
+
+const d = await load();
+const { site, seo } = d;
+const year = new Date().getFullYear();
+---
+<footer class="relative overflow-hidden bg-[#0b1a3f] text-white/75">
+  <div class="pointer-events-none absolute -right-40 -top-40 h-[420px] w-[420px] rounded-full bg-gold/10 blur-[120px]" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute -bottom-48 -left-32 h-[420px] w-[420px] rounded-full bg-brand-400/15 blur-[120px]" aria-hidden="true"></div>
+
+  <div class="container-x relative">
+    <!-- Brand + call to action -->
+    <div class="grid gap-6 border-b border-white/10 py-8 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-12">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
+        <img src="/images/brand/colion-logo-white.webp" width="640" height="159" alt={site.name} class="h-9 w-auto self-start sm:self-center" loading="lazy" />
+        <span class="hidden h-10 w-px bg-white/15 sm:block" aria-hidden="true"></span>
+        <div>
+          <p class="font-display text-lg font-semibold text-white">Need IT hardware today?</p>
+          <p class="text-sm text-white/60">Send the model on WhatsApp — price, stock and delivery date in reply.</p>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-2.5">
+        <a href={d.waLink('Hello Colion International, I would like a quotation for:')} target="_blank" rel="noopener" class="btn btn-wa btn-sm" data-track="click_whatsapp"><Icon name="whatsapp" size={17} /> WhatsApp</a>
+        <a href={d.telLink} class="btn btn-ghost-light btn-sm" data-track="click_call"><Icon name="phone" size={16} /> {site.phone}</a>
+      </div>
+    </div>
+
+    <!-- Link hub -->
+    <div class="grid gap-x-6 gap-y-8 py-7 sm:grid-cols-3 sm:py-9 lg:grid-cols-[1.25fr_1fr_1.5fr_0.8fr_1fr] lg:gap-x-10">
+      <div class="sm:col-span-3 lg:col-span-1">
+        <p class="footer-head">Visit us</p>
+        <ul class="space-y-4">
+          {site.locations.map((l) => (
+            <li>
+              <a href={l.mapUrl || '/contact/'} target={l.mapUrl ? '_blank' : undefined} rel="noopener" class="group flex gap-3" data-track="click_directions">
+                <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/[0.07] text-gold transition group-hover:bg-gold group-hover:text-ink"><Icon name="pin" size={15} /></span>
+                <span class="text-[0.82rem] leading-snug">
+                  <span class="block font-semibold text-white">{l.label}</span>
+                  <span class="text-white/60 group-hover:text-white/80">{l.streetAddress}, {l.area}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div class="mt-5 flex gap-2">
+          {d.socialLinks.map((s) => (
+            <a href={s.href} target="_blank" rel="noopener" aria-label={s.label} class="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/80 transition hover:border-gold hover:bg-gold hover:text-ink">
+              <Icon name={s.icon} size={16} />
+            </a>
+          ))}
+        </div>
+      </div>
+      <div class="hidden sm:block">
+        <p class="footer-head">Services</p>
+        <ul class="footer-list">
+          {d.services.map((s) => <li><a href={`/services/${s.slug}/`}>{s.shortName || s.name}</a></li>)}
+        </ul>
+      </div>
+      <div class="hidden sm:block">
+        <p class="footer-head">Products</p>
+        <ul class="footer-list">
+          {d.categories.map((c) => <li><a href={`/products/${c.slug}/`}>{c.name}</a></li>)}
+        </ul>
+      </div>
+      <div class="hidden sm:block">
+        <p class="footer-head">Brands</p>
+        <ul class="footer-list">
+          {d.coreBrands.slice(0, 6).map((b) => <li><a href={`/brands/${b.slug}/`}>{b.name}</a></li>)}
+          <li><a href="/brands/" class="!text-gold">All brands →</a></li>
+        </ul>
+      </div>
+      <div class="hidden sm:block">
+        <p class="footer-head">Delivery areas</p>
+        <ul class="footer-list">
+          {d.emirates.map((e) => <li><a href={`/locations/${e.slug}/`}>{e.name}</a></li>)}
+        </ul>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2 border-t border-white/10 py-4 text-[0.75rem] text-white/50 md:flex-row md:items-center md:justify-between">
+      <p>© {year} {site.legalName}.{seo.tradeLicense && ` · Trade licence ${seo.tradeLicense}`}{seo.vatId && ` · TRN ${seo.vatId}`}</p>
+      <ul class="flex flex-wrap gap-x-4 gap-y-1">
+        <li><a href="/about/" class="hover:text-white">About</a></li>
+        <li><a href="/team/" class="hover:text-white">Team</a></li>
+        <li><a href="/gallery/" class="hover:text-white">Gallery</a></li>
+        <li><a href="/faq/" class="hover:text-white">FAQ</a></li>
+        <li><a href="/contact/" class="hover:text-white">Contact</a></li>
+        <li><a href="/privacy/" class="hover:text-white">Privacy</a></li>
+        <li><a href="/terms/" class="hover:text-white">Terms</a></li>
+        <li><a href="/sitemap.xml" class="hover:text-white">Sitemap</a></li>
+      </ul>
+    </div>
+    {seo.trademarkNote && <p class="hidden pb-4 text-[0.66rem] leading-relaxed text-white/30 sm:block">{seo.trademarkNote}</p>}
+  </div>
+</footer>
+
+<style>
+  .footer-head { font-size: .7rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: theme('colors.gold.DEFAULT'); margin-bottom: .9rem; }
+  .footer-list { display: grid; gap: .45rem; font-size: .84rem; line-height: 1.3; }
+  .footer-list a { color: rgba(255,255,255,.68); transition: color .2s, padding .3s; }
+  .footer-list a:hover { color: #fff; padding-left: 3px; }
+</style>

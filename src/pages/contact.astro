@@ -1,0 +1,9 @@
+---
+import CmsPage from '../components/CmsPage.astro';
+import { load } from '../data/load';
+import { ids } from '../data/seo';
+
+const d = await load();
+const faqs = d.faqGroups.filter((g) => ['ordering', 'delivery'].includes(g.id)).flatMap((g) => g.items);
+---
+<CmsPage page="contact" path="/contact/" name="Contact" type="ContactPage" mainEntity={{ '@id': ids.org }} faqs={faqs} />

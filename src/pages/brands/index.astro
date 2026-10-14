@@ -1,0 +1,16 @@
+---
+import CmsPage from '../../components/CmsPage.astro';
+import { load } from '../../data/load';
+import { itemList } from '../../data/seo';
+
+const d = await load();
+const faqs = d.faqGroups.filter((g) => g.id === 'warranty').flatMap((g) => g.items);
+---
+<CmsPage
+  page="brands"
+  path="/brands/"
+  name="Brands"
+  type="CollectionPage"
+  faqs={faqs}
+  schema={[itemList('IT brands supplied by Colion International', d.brands.map((b) => ({ name: b.name, url: `/brands/${b.slug}/` })), '/brands/')]}
+/>

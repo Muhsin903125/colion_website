@@ -1,0 +1,31 @@
+---
+/** The newest gallery items — "latest from our operations". */
+import GalleryTile from '../GalleryTile.astro';
+import SectionHead from '../SectionHead.astro';
+import { load } from '../../data/load';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'galleryStrip' }>;
+const s = Astro.props;
+const d = await load();
+const photos = d.gallery.filter((g) => g.kind === 'image');
+const pool = s.tag ? photos.filter((g) => g.tags.includes(s.tag)) : [...photos.filter((g) => g.featured), ...photos.filter((g) => !g.featured)];
+const items = pool.slice(0, s.limit || 8);
+---
+{items.length > 0 && (
+  <section class="section-y">
+    <div class="container-x">
+      <SectionHead intro={s.intro} aside class="mb-10" />
+      <div class="grid auto-rows-[150px] grid-cols-2 gap-3 sm:auto-rows-[190px] md:grid-cols-4 lg:auto-rows-[220px]" data-lb-root>
+        {items.map((g, i) => (
+          <GalleryTile
+            item={g}
+            class:list={['reveal-scale h-full', i === 0 && 'col-span-2 row-span-2', i === 3 && 'row-span-2', `d${(i % 4) + 1}`]}
+            aspect="h-full"
+            sizes={i === 0 ? '(min-width:768px) 50vw, 100vw' : '(min-width:768px) 25vw, 50vw'}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+)}

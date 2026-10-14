@@ -1,0 +1,22 @@
+---
+import Icon from './Icon.astro';
+import Img from './Img.astro';
+import type { Service } from '../data/schema';
+
+interface Props {
+  service: Service;
+  index?: number;
+}
+const { service: s, index = 0 } = Astro.props;
+---
+<a href={`/services/${s.slug}/`} class:list={['card card-hover group flex h-full flex-col overflow-hidden reveal', `d${(index % 4) + 1}`]} data-tilt>
+  <div class="zoom relative aspect-[2/1] overflow-hidden bg-sky sm:aspect-[16/10] lg:aspect-[2/1]">
+    <Img image={s.image} sizes="(min-width:1024px) 30vw, (min-width:640px) 45vw, 92vw" class="h-full w-full object-cover" />
+    <div class="absolute inset-0 bg-gradient-to-t from-brand-deep/50 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" aria-hidden="true"></div>
+  </div>
+  <div class="flex flex-1 flex-col p-6">
+    <h3 class="h-card flex items-center gap-2.5 transition-colors group-hover:text-brand"><Icon name={s.icon} size={20} class="shrink-0 text-brand" />{s.name}</h3>
+    <p class="mt-2 flex-1 text-[0.92rem] leading-relaxed text-slate">{s.tagline}</p>
+    <span class="link-arrow mt-5">Explore <Icon name="arrow" size={16} /></span>
+  </div>
+</a>

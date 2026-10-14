@@ -1,0 +1,108 @@
+---
+/**
+ * Renders one draft section, for the admin's preview drawer.
+ *
+ * A real Astro page rather than an API route, because a page goes through the
+ * normal build pipeline and so inherits the site's stylesheet and fonts. An
+ * endpoint returning a bare HTML string would have to reconstruct the CSS URL
+ * by hand, differently in dev and in production.
+ *
+ * The section arrives as a POST body rather than a query parameter: a hero with
+ * five slides is several kilobytes, and that is past the point where URL length
+ * becomes a question of which proxy is in front of you.
+ *
+ * Note what is deliberately absent — the `js` class on `<html>`. The scroll
+ * reveals in `global.css` are gated on it (`html.js .reveal { opacity: 0 }`),
+ * so leaving it off is what makes a static preview render fully visible instead
+ * of as an empty band waiting for a scroll that will never come.
+ */
+export const prerender = false;
+
+import SectionRenderer from '../components/SectionRenderer.astro';
+import { sectionSchema } from '../data/schema';
+import { cookieName, isValidSession } from '../lib/cms/auth';
+import '../styles/global.css';
+
+const signedIn = await isValidSession(Astro.cookies.get(cookieName)?.value);
+
+let sections: any[] = [];
+let error: string | null = null;
+
+if (!signedIn) {
+  error = 'Not signed in.';
+} else if (Astro.request.method !== 'POST') {
+  error = 'Preview is rendered from a POST.';
+} else {
+  try {
+    const form = await Astro.request.formData();
+    const raw = JSON.parse(String(form.get('sections') ?? '[]'));
+    const list = Array.isArray(raw) ? raw : [raw];
+
+    // Parsed through the schema so a half-finished section previews as it would
+    // render rather than throwing on a field the editor has not reached yet.
+    // Hidden sections are dropped here, exactly as the page drops them.
+    sections = list
+      .filter((s) => !s?.hidden)
+      .map((s) => sectionSchema.parse(s));
+
+    if (!sections.length) error = 'Nothing to preview — every section here is hidden.';
+  } catch (e: any) {
+    error = e?.message ?? 'Could not read that section.';
+  }
+}
+
+Astro.response.headers.set('cache-control', 'no-store');
+// Framed only by the admin on the same origin.
+Astro.response.headers.set('x-frame-options', 'SAMEORIGIN');
+---
+<!doctype html>
+<html lang="en" class="preview-html">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Section preview</title>
+  </head>
+  <body class="preview-body">
+    {error
+      ? <p class="preview-error">{error}</p>
+      : sections.map((section) => <SectionRenderer section={section} />)}
+
+    <style is:global>
+      /*
+       * The section supplies its own ground; the page must not add another.
+       * Height is collapsed to the content because the drawer measures
+       * `scrollHeight` to size the frame — any inherited `min-height` from the
+       * site's own body rules would be measured as a band of empty page under
+       * the section.
+       */
+      html.preview-html,
+      .preview-body {
+        margin: 0;
+        min-height: 0;
+        height: auto;
+        background: transparent;
+      }
+
+      .preview-error {
+        margin: 0;
+        padding: 2rem;
+        font: 14px/1.6 ui-sans-serif, system-ui, sans-serif;
+        color: #8a8378;
+        background: #14140f;
+      }
+
+      /*
+       * Sections that pin or scrub rely on `main.ts`, which does not run here.
+       * `pin` mode in particular sets a tall scroll range and starts words at
+       * low opacity, so without this a pinned scene previews as a near-blank
+       * screen. This is a preview of composition and copy, not of motion.
+       */
+      [data-scrub-zoom], [data-parallax] { transform: none !important; }
+      .reveal, .reveal-scale { opacity: 1 !important; transform: none !important; }
+      [data-clip] { clip-path: none !important; }
+      .reveal { opacity: 1 !important; transform: none !important; }
+      [data-lines] .line-inner { transform: none !important; }
+    </style>
+  </body>
+</html>

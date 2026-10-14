@@ -1,0 +1,17 @@
+---
+import CmsPage from '../components/CmsPage.astro';
+import { load } from '../data/load';
+import { itemList, person } from '../data/seo';
+
+const d = await load();
+const people = d.realTeam.map(person).filter(Boolean);
+/*
+ * Indexed only once at least one real profile exists: a page of placeholder
+ * team functions is not something to rank, and not E-E-A-T evidence.
+ */
+const noindex = d.realTeam.length === 0;
+const list = d.realTeam.length
+  ? itemList('Colion International team', d.realTeam.map((m) => ({ name: m.name, url: `/team/#${m.id}` })), '/team/')
+  : null;
+---
+<CmsPage page="team" path="/team/" name="Team" type="CollectionPage" noindex={noindex} schema={[...people, list]} />

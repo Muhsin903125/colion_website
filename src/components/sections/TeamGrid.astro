@@ -1,0 +1,111 @@
+---
+/**
+ * The people. One featured person renders as a founder spotlight — portrait,
+ * name, role, bio and their social profiles; several render as a grid of
+ * portrait cards with the profiles under each name.
+ *
+ * Social links come from each member's `social` list in the CMS (LinkedIn,
+ * Instagram, Facebook, X, TikTok, YouTube, WhatsApp, website) and double as
+ * the Person's `sameAs` in the structured data.
+ */
+import Icon from '../Icon.astro';
+import Img from '../Img.astro';
+import SectionHead from '../SectionHead.astro';
+import { load } from '../../data/load';
+import type { Section, TeamMember } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'teamGrid' }>;
+const s = Astro.props;
+const d = await load();
+const team = (s.source === 'featured' ? d.team.filter((t) => t.featured) : d.team).filter((t) => !t.placeholder || t.photo?.publicId);
+
+const LABEL: Record<string, string> = { linkedin: 'LinkedIn', instagram: 'Instagram', facebook: 'Facebook', x: 'X', tiktok: 'TikTok', youtube: 'YouTube', whatsapp: 'WhatsApp', website: 'Website' };
+const links = (m: TeamMember) => {
+  const list: { icon: string; href: string; label: string }[] = m.social.filter((x) => x.href).map((x) => ({ icon: x.network, href: x.network === 'whatsapp' && /^\+?\d[\d\s]+$/.test(x.href) ? `https://wa.me/${x.href.replace(/\D/g, '')}` : x.href, label: `${m.name} on ${LABEL[x.network] ?? x.network}` }));
+  if (m.linkedin && !m.social.some((x) => x.network === 'linkedin')) list.unshift({ icon: 'linkedin', href: m.linkedin, label: `${m.name} on LinkedIn` });
+  if (m.email) list.push({ icon: 'mail', href: `mailto:${m.email}`, label: `Email ${m.name}` });
+  return list;
+};
+const spotlight = team.length === 1;
+---
+{team.length > 0 && (
+  <section class="section-y">
+    <div class="container-x">
+      {spotlight ? (
+        (() => {
+          const m = team[0];
+          return (
+            <div class="grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20" id={m.id}>
+              <div class="relative mx-auto w-full max-w-[460px]">
+                <div class="media aspect-square shadow-lift sm:aspect-[4/5]" data-clip>
+                  {m.photo?.publicId ? (
+                    <Img image={m.photo} sizes="(min-width:1024px) 460px, 90vw" class="h-full w-full object-cover" />
+                  ) : (
+                    <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand to-brand-deep text-gold"><Icon name="users" size={56} /></div>
+                  )}
+                </div>
+                {m.yearsExperience > 0 && (
+                  <div class="absolute -right-3 top-6 rounded-2xl bg-[#0b1a3f] px-4 py-3 text-center text-white shadow-lift sm:-right-5 reveal">
+                    <p class="font-display text-3xl font-semibold leading-none text-gold">{m.yearsExperience}+</p>
+                    <p class="mt-1 text-[0.7rem] uppercase tracking-[0.14em] text-white/70">Years in<br />IT trade</p>
+                  </div>
+                )}
+                <div class="absolute -bottom-5 left-6 right-6 rounded-2xl bg-white px-6 py-4 shadow-soft ring-1 ring-line reveal">
+                  <p class="font-display text-lg font-semibold text-ink">{m.name}</p>
+                  <p class="text-sm text-gold-deep">{m.role}, {d.site.name}</p>
+                </div>
+              </div>
+              <div class="pt-6 lg:pt-0">
+                <SectionHead intro={{ ...s.intro, cta: undefined as any }} />
+                {m.bio && <p class="mt-6 text-[1.1rem] leading-[1.8] text-ink-soft reveal">{m.bio}</p>}
+                {m.expertise.length > 0 && (
+                  <ul class="mt-6 space-y-2">
+                    {m.expertise.map((e) => <li class="flex items-center gap-3 text-[0.98rem] text-ink reveal"><Icon name="check" size={18} class="text-brand" />{e}</li>)}
+                  </ul>
+                )}
+                {links(m).length > 0 && (
+                  <ul class="mt-8 flex flex-wrap gap-2 reveal" aria-label={`${m.name} on social media`}>
+                    {links(m).map((l) => (
+                      <li>
+                        <a href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel="noopener me" aria-label={l.label} class="flex h-11 w-11 items-center justify-center rounded-full border border-line text-ink transition hover:border-brand hover:bg-brand hover:text-white">
+                          <Icon name={l.icon} size={18} />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          );
+        })()
+      ) : (
+        <>
+          <SectionHead intro={s.intro} aside class="mb-12" />
+          <ul class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {team.map((m, i) => (
+              <li class:list={['group reveal', `d${(i % 4) + 1}`]} id={m.id}>
+                <div class="media aspect-[4/5]">
+                  {m.photo?.publicId ? (
+                    <Img image={m.photo} sizes="(min-width:1024px) 22vw, 45vw" class="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                  ) : (
+                    <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand to-brand-deep text-gold"><Icon name="users" size={40} /></div>
+                  )}
+                </div>
+                <h3 class="h-card mt-5">{m.name}</h3>
+                <p class="text-sm text-gold-deep">{m.role}</p>
+                {m.bio && <p class="mt-2 text-[0.9rem] leading-relaxed text-slate">{m.bio}</p>}
+                {links(m).length > 0 && (
+                  <ul class="mt-4 flex gap-1.5">
+                    {links(m).map((l) => (
+                      <li><a href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel="noopener me" aria-label={l.label} class="flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink transition hover:border-brand hover:text-brand"><Icon name={l.icon} size={16} /></a></li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+    </div>
+  </section>
+)}

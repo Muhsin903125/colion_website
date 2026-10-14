@@ -1,0 +1,83 @@
+---
+/**
+ * The quotation form. Option lists left empty in the CMS are built from the
+ * catalogue, so a new service or category appears here by itself. Submitting
+ * opens WhatsApp with the request composed (src/scripts/ui.ts).
+ */
+import Icon from '../Icon.astro';
+import SectionHead from '../SectionHead.astro';
+import { load } from '../../data/load';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'formBlock' }>;
+const s = Astro.props;
+const d = await load();
+const interests = s.interests.length ? s.interests : [...d.categories.map((c) => c.name), ...d.services.map((x) => x.name), 'Other'];
+---
+<section class="section-y-sm bg-surface" id="quote">
+  <div class="container-x grid gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:gap-14">
+    <div class="lg:sticky lg:top-32 lg:self-start">
+      <SectionHead intro={s.intro} />
+      {s.next.length > 0 && (
+        <ol class="mt-7 space-y-4">
+          {s.next.map((n, i) => (
+            <li class="flex gap-4 reveal">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold font-display text-sm font-bold text-ink">{i + 1}</span>
+              <div><p class="font-display font-semibold text-ink">{n.title}</p><p class="text-sm text-slate">{n.body}</p></div>
+            </li>
+          ))}
+        </ol>
+      )}
+    </div>
+
+    <form class="card form-compact p-5 shadow-soft sm:p-7 reveal" data-enquiry data-whatsapp={d.site.whatsapp} novalidate={false}>
+      <div class="grid gap-x-4 gap-y-3.5 sm:grid-cols-2 xl:grid-cols-3">
+        <div><label class="label" for="f-name">Your name *</label><input id="f-name" name="name" class="field" required autocomplete="name" /></div>
+        <div><label class="label" for="f-company">Company</label><input id="f-company" name="company" class="field" autocomplete="organization" /></div>
+        <div><label class="label" for="f-phone">Phone / WhatsApp *</label><input id="f-phone" name="phone" type="tel" class="field" required autocomplete="tel" placeholder="+971" /></div>
+        <div><label class="label" for="f-email">Email</label><input id="f-email" name="email" type="email" class="field" autocomplete="email" /></div>
+        <div class="xl:col-span-2">
+          <label class="label" for="f-interest">Interested in *</label>
+          <select id="f-interest" name="interest" class="field" required>
+            <option value="">Choose…</option>
+            {interests.map((i) => <option>{i}</option>)}
+          </select>
+        </div>
+        <div>
+          <label class="label" for="f-emirate">Emirate</label>
+          <select id="f-emirate" name="emirate" class="field">
+            <option value="">Choose…</option>
+            {d.emirates.map((e) => <option>{e.name}</option>)}
+            <option>Outside the UAE (export)</option>
+          </select>
+        </div>
+        <div>
+          <label class="label" for="f-brand">Preferred brand</label>
+          <input id="f-brand" name="brand" class="field" list="f-brands" placeholder="Any" />
+          <datalist id="f-brands">{d.brands.map((b) => <option value={b.name} />)}</datalist>
+        </div>
+        <div>
+          <label class="label" for="f-qty">Quantity</label>
+          <select id="f-qty" name="quantity" class="field">
+            <option value="">Choose…</option>
+            {s.quantities.map((q) => <option>{q}</option>)}
+          </select>
+        </div>
+        <div class="sm:col-span-2 xl:col-span-3">
+          <label class="label" for="f-message">Details</label>
+          <textarea id="f-message" name="message" rows="2" class="field resize-y" placeholder="Model numbers, specifications, delivery date…"></textarea>
+        </div>
+      </div>
+      <div class="mt-5">
+        <button type="submit" class="btn btn-primary w-full">Submit request <Icon name="arrow" size={18} class="arrow" /></button>
+      </div>
+      <p class="mt-3 rounded-xl bg-sky px-4 py-3 text-sm font-medium text-brand" data-enquiry-msg role="status" hidden></p>
+      {s.note && <p class="mt-3 text-xs text-slate">{s.note}</p>}
+    </form>
+  </div>
+</section>
+
+<style>
+  .form-compact :global(.field) { padding-top: .6rem; padding-bottom: .6rem; font-size: .92rem; }
+  .form-compact :global(.label) { margin-bottom: .3rem; font-size: .78rem; }
+</style>

@@ -1,0 +1,44 @@
+---
+/**
+ * The label / heading / body / CTA opener most sections share.
+ *
+ * Heading lines reveal one at a time behind a mask (`data-lines`); the last
+ * line takes the accent colour, which is the site's one typographic flourish.
+ */
+import Cta from './Cta.astro';
+import { inline } from '../lib/inline';
+
+interface Props {
+  intro: { label?: string; lines?: string[]; body?: string; cta?: { label: string; href: string } };
+  align?: 'left' | 'center';
+  dark?: boolean;
+  as?: 'h1' | 'h2';
+  size?: 'display' | 'section';
+  class?: string;
+  /** Put the CTA beside the heading on wide screens instead of under it. */
+  aside?: boolean;
+}
+const { intro, align = 'left', dark = false, as: Tag = 'h2', size = 'section', class: className = '', aside = false } = Astro.props;
+const lines = (intro.lines ?? []).filter(Boolean);
+const cta = intro.cta?.href && intro.cta?.label ? intro.cta : null;
+const center = align === 'center';
+---
+{(intro.label || lines.length || intro.body || cta) && (
+  <div class:list={['flex flex-col gap-6', aside && 'lg:flex-row lg:items-end lg:justify-between', center && 'items-center text-center', className]}>
+    <div class:list={['max-w-3xl', center && 'mx-auto']}>
+      {lines.length > 0 && (
+        <Tag class:list={[size === 'display' ? 'h-display' : 'h-section', dark && '!text-white']} data-lines>
+          {lines.map((line, i) => (
+            <span class="line"><span class:list={['line-inner', i === lines.length - 1 && lines.length > 1 && (dark ? 'accent !text-gold' : 'accent')]}>{line}</span></span>
+          ))}
+        </Tag>
+      )}
+      {intro.body && <p class:list={['lead mt-5 reveal d1', dark && '!text-white/75', center && 'mx-auto max-w-2xl']} set:html={inline(intro.body)} />}
+    </div>
+    {cta && (
+      <div class:list={['reveal d2 shrink-0', !aside && 'mt-1']}>
+        <Cta link={cta} variant={dark ? 'light' : 'primary'} />
+      </div>
+    )}
+  </div>
+)}

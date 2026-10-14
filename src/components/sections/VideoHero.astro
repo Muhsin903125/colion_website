@@ -1,0 +1,181 @@
+---
+/**
+ * The home opener: a full-bleed background clip under the headline.
+ *
+ * Desktop plays the landscape `src`; phones (portrait) play `srcMobile`, which
+ * for Colion is the vertical reel shot outside the Deira branch — so each
+ * screen gets footage composed for its shape. The poster is the LCP element
+ * and is preloaded by the page. The header sits transparent over this band
+ * until the page scrolls (see Header.astro, `data-dark-top`).
+ *
+ * Beside the headline (desktop) sits a small composition: the owner's photos
+ * and reels cycling in a story card (`data-slides`, driven by main.ts), a
+ * tilted still, two figure chips, a brand-logo pill and a spinning "genuine
+ * stock" seal. The pieces drift with the pointer at different depths
+ * (`data-depth-root`, motion.ts) and bob gently on their own.
+ */
+import BgVideo from '../BgVideo.astro';
+import BrandLogo from '../BrandLogo.astro';
+import Cta from '../Cta.astro';
+import Icon from '../Icon.astro';
+import Img from '../Img.astro';
+import { load } from '../../data/load';
+import { videoUrl } from '../../lib/cloudinary';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'videoHero' }>;
+const s = Astro.props;
+const lines = s.lines.filter(Boolean);
+const slides = s.slides.filter((x) => x.image?.publicId || x.video);
+const d = await load();
+const logos = d.coreBrands.filter((b) => b.logo?.publicId).slice(0, 4);
+// A still from the slides that is not a clip, for the small tilted card.
+const side = slides.filter((x) => !x.video)[1] ?? slides[1];
+const [chipA, chipB] = s.chips;
+const ring = 'GENUINE STOCK • UAE WARRANTY • VAT INVOICE • ';
+---
+<!-- Fills the screen, but never taller than 900px or shorter than 680px on desktop. -->
+<section data-hero class="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-brand-deep text-white lg:h-[100svh] lg:max-h-[900px] lg:min-h-[680px]">
+  <div class="absolute inset-0 -z-20 will-change-transform" data-hero-bg>
+    <BgVideo video={s.video} priority alt={s.video.poster.alt} />
+  </div>
+  <div class="absolute inset-0 -z-10 bg-gradient-to-r from-[#081634]/90 via-[#0d2152]/65 to-[#0d2152]/15" aria-hidden="true"></div>
+  <div class="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-[#081634]/70 to-transparent" aria-hidden="true"></div>
+
+  <div class:list={['container-x w-full pb-24 pt-36 lg:pb-12 lg:pt-32', slides.length > 0 && 'lg:grid lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:gap-12']}>
+    <div class="max-w-3xl" data-hero-copy>
+      <h1 class="h-display !text-white" data-lines>
+        {lines.map((line, i) => (
+          <span class="line">
+            <span class="line-inner">
+              {line}
+              {i === lines.length - 1 && s.rotating.length > 0 && (
+                <>
+                  {' '}
+                  <span data-rotate class="accent !text-gold">
+                    {s.rotating.map((w, j) => <span data-word class:list={[j === 0 && 'is-on']}>{w}.</span>)}
+                  </span>
+                </>
+              )}
+            </span>
+          </span>
+        ))}
+      </h1>
+      {s.body && <p class="mt-6 max-w-xl text-[1.08rem] leading-relaxed text-white/80 sm:text-lg" data-hero-in="2">{s.body}</p>}
+
+      <div class="mt-9 flex flex-wrap items-center gap-3" data-hero-in="3">
+        <Cta link={s.cta} variant="wa" />
+        <Cta link={s.secondary} variant="ghost-light" />
+      </div>
+    </div>
+
+    {slides.length > 0 && (
+      <div class="hero-stage relative mx-auto hidden h-[560px] w-full max-w-[520px] lg:block" data-hero-in="3" data-depth-root>
+        <!-- Glow -->
+        <div class="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/25 blur-[110px]" aria-hidden="true"></div>
+
+        <!-- Tilted still behind the story card -->
+        {side?.image?.publicId && (
+          <div class="absolute bottom-16 -left-6 z-[1] w-[176px]" data-depth="0.9">
+            <div class="float-b -rotate-[8deg] overflow-hidden rounded-[22px] bg-white p-2 shadow-[0_30px_60px_-25px_rgba(0,0,0,.7)]">
+              <div class="aspect-[4/5] overflow-hidden rounded-[16px]"><Img image={side.image} sizes="176px" class="h-full w-full object-cover" /></div>
+              <p class="line-clamp-1 px-1.5 pb-1 pt-2 font-display text-[0.72rem] font-semibold text-ink">{side.caption}</p>
+            </div>
+          </div>
+        )}
+
+        <!-- Story card -->
+        <div class="absolute inset-y-0 right-6 z-[2] flex w-[300px] items-center">
+          <div class="w-full" data-depth="0.35">
+            <div class="relative aspect-[9/14] overflow-hidden rounded-[32px] bg-brand-deep shadow-[0_50px_100px_-30px_rgba(0,0,0,.8)] ring-[6px] ring-white/10" data-slides>
+              {slides.map((sl, i) => (
+                <figure class:list={['hero-slide absolute inset-0', i === 0 && 'is-on']} data-slide aria-hidden={i === 0 ? undefined : 'true'}>
+                  {sl.image?.publicId && <Img image={sl.image} sizes="300px" loading={i === 0 ? 'eager' : 'lazy'} class="absolute inset-0 h-full w-full object-cover" />}
+                  {sl.video && <video class="absolute inset-0 h-full w-full object-cover" data-slide-video data-src={videoUrl(sl.video)} muted loop playsinline preload="none" aria-hidden="true"></video>}
+                  {sl.caption && (
+                    <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#081634]/95 via-[#081634]/50 to-transparent p-5 pt-20 text-white">
+                      <span class="mb-1.5 flex items-center gap-1.5 text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-gold"><span class="live-dot"></span> Live from Deira</span>
+                      <span class="font-display text-[1rem] font-semibold leading-snug">{sl.caption}</span>
+                    </figcaption>
+                  )}
+                </figure>
+              ))}
+              <div class="pointer-events-none absolute inset-x-0 top-0 z-[5] h-24 bg-gradient-to-b from-[#081634]/70 to-transparent" aria-hidden="true"></div>
+              <div class="absolute inset-x-4 top-4 z-10 flex gap-1.5">
+                {slides.map((_, i) => (
+                  <button type="button" class="slide-bar h-1 flex-1 overflow-hidden rounded-full bg-white/30" data-slide-go={i} aria-label={`Show slide ${i + 1}`}><span class="block h-full w-full origin-left bg-white"></span></button>
+                ))}
+              </div>
+              <div class="absolute left-4 top-8 z-10 flex items-center gap-2">
+                <img src="/images/brand/colion-shield.png" alt="" width="28" height="28" class="h-7 w-7 rounded-full bg-white object-contain p-1" />
+                <span class="text-[0.72rem] font-semibold text-white">colioninternational.ae</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Figure chips -->
+        {chipA && (
+          <div class="absolute -left-2 top-[34%] z-[3]" data-depth="1.2">
+            <div class="float-a flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-white shadow-[0_20px_40px_-20px_rgba(0,0,0,.6)] backdrop-blur-md">
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-gold text-ink"><Icon name="users" size={18} /></span>
+              <span><span class="block font-display text-xl font-semibold leading-none">{Number(chipA.value).toLocaleString('en-US')}{chipA.unit}</span><span class="text-[0.72rem] text-white/70">{chipA.label}</span></span>
+            </div>
+          </div>
+        )}
+        {logos.length > 0 && (
+          <div class="absolute -bottom-2 right-0 z-[3]" data-depth="1">
+            <div class="float-c flex items-center gap-3 rounded-full bg-white py-2 pl-2 pr-4 shadow-[0_24px_50px_-20px_rgba(0,0,0,.6)]">
+              <div class="flex -space-x-2">
+                {logos.map((b) => <BrandLogo brand={b} link={false} mono={false} class="h-9 w-9 rounded-full bg-white p-1.5 ring-2 ring-surface" tabindex="-1" />)}
+              </div>
+              <span class="font-display text-[0.8rem] font-semibold text-ink">{chipB ? `${chipB.value}${chipB.unit} ${chipB.label.toLowerCase()}` : `${d.brands.length}+ brands`}</span>
+            </div>
+          </div>
+        )}
+
+        <!-- Spinning seal -->
+        <div class="absolute right-0 top-2 z-[3]" data-depth="1.5">
+          <div class="relative flex h-[84px] w-[84px] items-center justify-center rounded-full bg-[#0b1a3f]/80 ring-1 ring-gold/40 backdrop-blur-md">
+            <svg viewBox="0 0 120 120" class="seal absolute inset-0 h-full w-full" aria-hidden="true">
+              <defs><path id="seal-ring" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0" /></defs>
+              <text class="fill-gold font-display text-[9.5px] font-bold"><textPath href="#seal-ring" textLength="286" lengthAdjust="spacing">{ring}</textPath></text>
+            </svg>
+            <img src="/images/brand/colion-shield.png" alt="" width="30" height="30" class="relative h-8 w-auto" />
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
+
+  <a href="#main-content" class="absolute bottom-8 left-1/2 hidden -translate-x-1/2 md:block" aria-label="Scroll to content">
+    <span class="relative block h-10 w-px overflow-hidden bg-white/25"><span class="cue absolute inset-x-0 top-0 h-4 bg-white"></span></span>
+  </a>
+</section>
+<span id="main-content"></span>
+
+<style>
+  .hero-slide { opacity: 0; transition: opacity 1s ease; }
+  .hero-slide.is-on { opacity: 1; z-index: 1; }
+  .hero-slide :global(img), .hero-slide video { transform: scale(1.12); transition: transform 6.5s linear; }
+  .hero-slide.is-on :global(img), .hero-slide.is-on video { transform: scale(1); }
+  .slide-bar span { transform: scaleX(0); }
+  .slide-bar.is-done span { transform: scaleX(1); }
+  .slide-bar.is-on span { animation: slide-fill var(--slide-ms, 5000ms) linear forwards; }
+  @keyframes slide-fill { to { transform: scaleX(1); } }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-slide :global(img), .hero-slide video { transform: none; transition: none; }
+  }
+  .live-dot { position: relative; width: 7px; height: 7px; border-radius: 50%; background: #25D366; }
+  .live-dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid #25D366; animation: ping 1.6s ease-out infinite; }
+  @keyframes ping { from { transform: scale(.4); opacity: 1; } to { transform: scale(1.4); opacity: 0; } }
+  .seal { animation: spin 22s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .float-a { animation: bob 6s ease-in-out infinite alternate; }
+  .float-b { animation: bob 7.5s ease-in-out -2s infinite alternate; }
+  .float-c { animation: bob 6.8s ease-in-out -4s infinite alternate; }
+  @keyframes bob { from { translate: 0 -7px; } to { translate: 0 8px; } }
+  @media (prefers-reduced-motion: reduce) { .seal, .float-a, .float-b, .float-c, .live-dot::after { animation: none; } }
+  .cue { animation: cue 1.8s ease-in-out infinite; }
+  @keyframes cue { 0% { transform: translateY(-100%); } 100% { transform: translateY(250%); } }
+</style>

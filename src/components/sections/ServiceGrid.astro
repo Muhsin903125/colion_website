@@ -1,0 +1,21 @@
+---
+import SectionHead from '../SectionHead.astro';
+import ServiceCard from '../ServiceCard.astro';
+import { load } from '../../data/load';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'serviceGrid' }>;
+const s = Astro.props;
+const d = await load();
+const services =
+  s.source === 'featured' ? d.services.filter((x) => x.featured) : s.source === 'slugs' ? s.slugs.map(d.service).filter(Boolean) : d.services;
+---
+<section class="section-y">
+  <div class="container-x">
+    <SectionHead intro={s.intro} aside class="mb-10 sm:mb-12" />
+    <!-- A swipe rail on phones, a grid from `sm` up. -->
+    <div class="no-scrollbar -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
+      {services.map((svc, i) => <div class="w-[80%] shrink-0 snap-start sm:w-auto"><ServiceCard service={svc!} index={i} /></div>)}
+    </div>
+  </div>
+</section>

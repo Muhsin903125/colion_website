@@ -1,0 +1,44 @@
+---
+import Cta from '../Cta.astro';
+import Icon from '../Icon.astro';
+import Img from '../Img.astro';
+import SectionHead from '../SectionHead.astro';
+import { inline } from '../../lib/inline';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'aboutBlock' }>;
+const s = Astro.props;
+---
+<section class="section-y relative overflow-hidden">
+  <div class="container-x grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+    <div class="relative pb-16 pr-10 sm:pr-20">
+      <div class="media zoom aspect-[4/5] shadow-lift" data-clip>
+        <Img image={s.image} sizes="(min-width:1024px) 40vw, 90vw" class="h-full w-full object-cover" />
+      </div>
+      {s.secondImage?.publicId && (
+        <div class="media absolute bottom-0 right-0 aspect-square w-[48%] border-[6px] border-white shadow-lift reveal-scale" data-parallax="0.12">
+          <Img image={s.secondImage} sizes="25vw" class="h-full w-full object-cover" />
+        </div>
+      )}
+    </div>
+    <div>
+      <SectionHead intro={{ ...s.intro, cta: undefined as any }} />
+      <div class="prose-x mt-6">
+        {s.paragraphs.map((p) => <p class="reveal" set:html={inline(p)} />)}
+      </div>
+      {s.highlights.length > 0 && (
+        <ul class="mt-8 grid gap-3 sm:grid-cols-2">
+          {s.highlights.map((h, i) => (
+            <li class:list={['flex items-center gap-3 border-b border-line py-3 text-[0.95rem] font-medium reveal', `d${(i % 4) + 1}`]}>
+              <Icon name="check" size={18} class="shrink-0 text-gold-deep" /> {h}
+            </li>
+          ))}
+        </ul>
+      )}
+      <div class="mt-9 flex flex-wrap gap-3 reveal">
+        <Cta link={s.intro.cta} variant="primary" />
+        <Cta link={s.secondary} variant="outline" />
+      </div>
+    </div>
+  </div>
+</section>

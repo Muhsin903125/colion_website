@@ -1,0 +1,64 @@
+---
+/**
+ * A page composed entirely from CMS sections, with its WebPage node,
+ * breadcrumb and any extra schema the caller adds. Breadcrumbs render inside
+ * the first section when it is a page hero.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import SectionRenderer from './SectionRenderer.astro';
+import BrandHero from './sections/BrandHero.astro';
+import PageHero from './sections/PageHero.astro';
+import { load } from '../data/load';
+import { breadcrumb, faqEntity, webPage } from '../data/seo';
+import { resolveImage } from '../lib/cloudinary';
+import type { Content, FaqItem } from '../data/schema';
+
+interface Props {
+  page: keyof Content['pages'];
+  path: string;
+  name: string;
+  type?: string;
+  schema?: (object | null)[];
+  faqs?: FaqItem[];
+  noindex?: boolean;
+  mainEntity?: object | object[];
+}
+const { page: key, path, name, type, schema = [], faqs = [], noindex = false, mainEntity } = Astro.props;
+const d = await load();
+const page = d.content.pages[key];
+const [first, ...rest] = page.sections;
+const trail = [{ name: 'Home', path: '/' }, { name, path }];
+const crumbs = breadcrumb(trail);
+const heroImage = first?.type === 'pageHero' ? resolveImage(first.video?.poster?.publicId ? first.video.poster : first.background, { width: 1280 }) : '';
+
+const graph = [
+  webPage({
+    path,
+    name: page.title || name,
+    description: page.description,
+    type,
+    breadcrumbId: crumbs['@id'],
+    image: heroImage,
+    mainEntity: mainEntity ?? (faqs.length ? faqEntity(faqs) : undefined),
+    dateModified: d.content.sections[`pages.${key}`] ?? d.content.updatedAt,
+  }),
+  crumbs,
+  ...schema,
+];
+---
+<BaseLayout title={page.title || name} description={page.description} schema={graph} noindex={noindex} preloadImage={heroImage || undefined} darkTop={first?.type === 'brandHero'}>
+  {first?.type === 'pageHero' ? (
+    <PageHero {...first}>
+      <Breadcrumbs slot="before" trail={trail} />
+    </PageHero>
+  ) : first?.type === 'brandHero' ? (
+    <BrandHero {...first}>
+      <Breadcrumbs slot="before" trail={trail} dark />
+    </BrandHero>
+  ) : (
+    first && <SectionRenderer section={first} />
+  )}
+  {rest.map((section) => <SectionRenderer section={section} />)}
+  <slot />
+</BaseLayout>

@@ -1,0 +1,101 @@
+---
+/**
+ * Renders one CMS section.
+ *
+ * A closed registry rather than arbitrary HTML: editors compose pages from the
+ * blocks this design has, and cannot introduce markup that breaks the reveal
+ * choreography or the `data-answer` hooks the SEO layer depends on.
+ */
+import type { Section } from '../data/schema';
+import BgVideo from './BgVideo.astro';
+import Img from './Img.astro';
+
+import AboutBlock from './sections/AboutBlock.astro';
+import AnswerSection from './sections/AnswerSection.astro';
+import BrandHero from './sections/BrandHero.astro';
+import BrandMarquee from './sections/BrandMarquee.astro';
+import BrandSpotlight from './sections/BrandSpotlight.astro';
+import CardGrid from './sections/CardGrid.astro';
+import CategoryGrid from './sections/CategoryGrid.astro';
+import ComparisonTable from './sections/ComparisonTable.astro';
+import ContactPanel from './sections/ContactPanel.astro';
+import CredentialsBand from './sections/CredentialsBand.astro';
+import CtaBand from './sections/CtaBand.astro';
+import FaqBlock from './sections/FaqBlock.astro';
+import FeatureSplit from './sections/FeatureSplit.astro';
+import FeatureStrip from './sections/FeatureStrip.astro';
+import FormBlock from './sections/FormBlock.astro';
+import GalleryStrip from './sections/GalleryStrip.astro';
+import LocationGrid from './sections/LocationGrid.astro';
+import LogoWall from './sections/LogoWall.astro';
+import PageHero from './sections/PageHero.astro';
+import PillarGrid from './sections/PillarGrid.astro';
+import ProcessSteps from './sections/ProcessSteps.astro';
+import ReelRail from './sections/ReelRail.astro';
+import RichText from './sections/RichText.astro';
+import ServiceGrid from './sections/ServiceGrid.astro';
+import SplitProse from './sections/SplitProse.astro';
+import StatBand from './sections/StatBand.astro';
+import TeamGrid from './sections/TeamGrid.astro';
+import TestimonialSlider from './sections/TestimonialSlider.astro';
+import Ticker from './sections/Ticker.astro';
+import VideoHero from './sections/VideoHero.astro';
+
+interface Props {
+  section: Section;
+}
+const { section } = Astro.props;
+
+const REGISTRY: Record<Section['type'], any> = {
+  videoHero: VideoHero,
+  pageHero: PageHero,
+  featureStrip: FeatureStrip,
+  answerSection: AnswerSection,
+  splitProse: SplitProse,
+  aboutBlock: AboutBlock,
+  pillarGrid: PillarGrid,
+  featureSplit: FeatureSplit,
+  statBand: StatBand,
+  cardGrid: CardGrid,
+  processSteps: ProcessSteps,
+  faqBlock: FaqBlock,
+  ctaBand: CtaBand,
+  richText: RichText,
+  formBlock: FormBlock,
+  ticker: Ticker,
+  serviceGrid: ServiceGrid,
+  categoryGrid: CategoryGrid,
+  brandMarquee: BrandMarquee,
+  brandHero: BrandHero,
+  brandSpotlight: BrandSpotlight,
+  logoWall: LogoWall,
+  teamGrid: TeamGrid,
+  testimonialSlider: TestimonialSlider,
+  locationGrid: LocationGrid,
+  comparisonTable: ComparisonTable,
+  credentialsBand: CredentialsBand,
+  contactPanel: ContactPanel,
+  galleryStrip: GalleryStrip,
+  reelRail: ReelRail,
+};
+const Component = REGISTRY[section.type];
+const bd = (section as any).backdrop;
+const hasBackdrop = Boolean(bd?.video?.src || bd?.image?.publicId);
+---
+{!section.hidden && Component && (
+  hasBackdrop ? (
+    <div id={section.anchor || undefined} data-section={section.type} class="has-backdrop relative isolate overflow-clip">
+      <div class="absolute inset-0 -z-20 overflow-hidden" aria-hidden="true">
+        <div class="absolute inset-[-12%_0]" data-parallax="0.12">
+          {bd.video?.src ? <BgVideo video={bd.video} /> : <Img image={bd.image} alt="" class="absolute inset-0 h-full w-full object-cover" />}
+        </div>
+      </div>
+      <div class="absolute inset-0 -z-10" style={`background:linear-gradient(180deg, rgba(255,255,255,${bd.wash / 100}) 0%, rgba(246,248,252,${Math.min(1, bd.wash / 100 + 0.04)}) 100%)`} aria-hidden="true"></div>
+      <Component {...section} />
+    </div>
+  ) : (
+    <div id={section.anchor || undefined} data-section={section.type}>
+      <Component {...section} />
+    </div>
+  )
+)}

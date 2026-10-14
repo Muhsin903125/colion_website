@@ -1,0 +1,16 @@
+---
+import CmsPage from '../../components/CmsPage.astro';
+import { load } from '../../data/load';
+import { ids, itemList } from '../../data/seo';
+
+const d = await load();
+const faqs = d.faqGroups.filter((g) => ['ordering', 'warranty'].includes(g.id)).flatMap((g) => g.items);
+---
+<CmsPage
+  page="products"
+  path="/products/"
+  name="Products"
+  type="CollectionPage"
+  faqs={faqs}
+  schema={[itemList('IT hardware product categories', d.categories.map((c) => ({ name: c.name, url: `/products/${c.slug}/` })), '/products/'), { '@id': ids.catalog }]}
+/>

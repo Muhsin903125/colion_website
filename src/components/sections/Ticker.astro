@@ -1,0 +1,13 @@
+---
+import type { Section } from '../../data/schema';
+type Props = Extract<Section, { type: 'ticker' }>;
+const s = Astro.props;
+const dark = s.tone === 'dark';
+---
+{s.items.length > 0 && (
+  <div class:list={['overflow-hidden border-y py-5', dark ? 'border-white/10 bg-brand-deep text-white' : 'border-line bg-white text-ink']} aria-hidden="true">
+    <div class="flex w-max animate-marquee gap-12 whitespace-nowrap font-display text-xl font-semibold" data-marquee-track>
+      {[...s.items, ...s.items].map((t) => <span class="flex items-center gap-12">{t}<span class="h-2 w-2 rounded-full bg-gold"></span></span>)}
+    </div>
+  </div>
+)}
