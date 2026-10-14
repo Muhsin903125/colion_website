@@ -1,0 +1,84 @@
+---
+/**
+ * Name, address and phone for every location — the single NAP block, from the
+ * same `site.locations` records the structured data uses. The map is a
+ * click-to-load facade: Google Maps' embed is ~1 MB of script, so it loads
+ * only when someone asks for it.
+ */
+import Icon from '../Icon.astro';
+import Img from '../Img.astro';
+import SectionHead from '../SectionHead.astro';
+import { load } from '../../data/load';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'contactPanel' }>;
+const s = Astro.props;
+const d = await load();
+const { site } = d;
+const embed = (l: (typeof site.locations)[number]) =>
+  l.geo.lat ? `https://www.google.com/maps?q=${l.geo.lat},${l.geo.lng}&z=17&output=embed` : '';
+---
+<section class="section-y">
+  <div class="container-x">
+    <SectionHead intro={s.intro} class="mb-10" />
+
+    <div class="mb-6 grid gap-4 sm:grid-cols-3">
+      <a href={d.waLink('Hello Colion International,')} target="_blank" rel="noopener" class="card card-hover flex items-center gap-4 p-5" data-track="click_whatsapp">
+        <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-whatsapp/15 text-[#128C4A]"><Icon name="whatsapp" /></span>
+        <span><span class="block text-xs font-semibold uppercase tracking-wider text-slate">WhatsApp</span><span class="font-display font-semibold">{site.phone}</span></span>
+      </a>
+      <a href={d.telLink} class="card card-hover flex items-center gap-4 p-5" data-track="click_call">
+        <span class="icon-chip"><Icon name="phone" /></span>
+        <span><span class="block text-xs font-semibold uppercase tracking-wider text-slate">Call</span><span class="font-display font-semibold">{site.phone}</span></span>
+      </a>
+      <a href={`mailto:${site.email}`} class="card card-hover flex items-center gap-4 p-5" data-track="click_email">
+        <span class="icon-chip"><Icon name="mail" /></span>
+        <span class="min-w-0"><span class="block text-xs font-semibold uppercase tracking-wider text-slate">Email</span><span class="block truncate font-display font-semibold">{site.email}</span></span>
+      </a>
+    </div>
+
+    <ul class="grid gap-6 lg:grid-cols-3">
+      {site.locations.map((l, i) => (
+        <li class:list={['card overflow-hidden reveal', `d${i + 1}`]}>
+          {s.showMap && embed(l) ? (
+            <div class="relative aspect-[16/10] bg-sky" data-map={embed(l)}>
+              <Img image={l.image} sizes="(min-width:1024px) 30vw, 100vw" class="h-full w-full object-cover" />
+              <button type="button" class="absolute inset-0 flex items-center justify-center bg-brand-deep/35 font-display text-sm font-semibold text-white transition hover:bg-brand-deep/50" data-map-load>
+                <span class="flex items-center gap-2 rounded-full bg-white px-4 py-2 text-brand shadow-soft"><Icon name="pin" size={17} /> Show on map</span>
+              </button>
+            </div>
+          ) : null}
+          <div class="p-6">
+            <h3 class="h-card">{l.label}</h3>
+            <address class="mt-3 not-italic text-[0.95rem] leading-relaxed text-ink-soft">
+              {l.streetAddress}<br />{l.area}<br />{l.locality}, United Arab Emirates
+            </address>
+            <p class="mt-3 flex items-center gap-2 text-sm text-slate"><Icon name="clock" size={16} class="text-brand" /> {l.hours || site.hours}</p>
+            <div class="mt-5 flex flex-wrap gap-2">
+              {l.mapUrl && <a href={l.mapUrl} target="_blank" rel="noopener" class="btn btn-outline btn-sm" data-track="click_directions"><Icon name="pin" size={15} /> Directions</a>}
+              {l.gbp.url && <a href={l.gbp.url} target="_blank" rel="noopener" class="btn btn-outline btn-sm"><Icon name="star" size={15} /> Google reviews</a>}
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLButtonElement>('[data-map-load]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const box = btn.closest<HTMLElement>('[data-map]');
+        if (!box) return;
+        const frame = document.createElement('iframe');
+        frame.src = box.dataset.map!;
+        frame.title = 'Map';
+        frame.loading = 'lazy';
+        frame.referrerPolicy = 'no-referrer-when-downgrade';
+        frame.className = 'absolute inset-0 h-full w-full border-0';
+        box.replaceChildren(frame);
+      });
+    });
+  });
+</script>

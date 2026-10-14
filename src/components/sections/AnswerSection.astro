@@ -1,0 +1,42 @@
+---
+/**
+ * A question H2 and a self-contained 40–60 word answer — the paragraph shape a
+ * featured snippet and an answer engine lift whole. `data-answer` is what the
+ * speakable spec points at.
+ */
+import Cta from '../Cta.astro';
+import Icon from '../Icon.astro';
+import Img from '../Img.astro';
+import { inline } from '../../lib/inline';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'answerSection' }>;
+const s = Astro.props;
+const hasImage = Boolean(s.image?.publicId);
+---
+{s.question && (
+  <section class="section-y-sm">
+    <div class:list={['container-x grid items-center gap-10', hasImage && 'lg:grid-cols-[1.1fr_0.9fr] lg:gap-16']}>
+      <div class:list={['rounded-[28px] border border-line bg-surface p-7 sm:p-10', !hasImage && 'mx-auto max-w-4xl']}>
+        <h2 class="h-section reveal">{s.question}</h2>
+        <p class="mt-5 text-[1.12rem] leading-[1.8] text-ink" data-answer data-scrub-words set:html={inline(s.answer)} />
+        {s.bullets.length > 0 && (
+          <ul class="mt-6 grid gap-3 sm:grid-cols-2">
+            {s.bullets.map((b, i) => (
+              <li class:list={['flex items-start gap-3 text-[0.95rem] font-medium text-ink reveal', `d${(i % 4) + 1}`]}>
+                <Icon name="check" size={18} class="mt-0.5 shrink-0 text-brand" />
+                {b}
+              </li>
+            ))}
+          </ul>
+        )}
+        {s.cta?.href && <div class="mt-8 reveal"><Cta link={s.cta} variant="outline" /></div>}
+      </div>
+      {hasImage && (
+        <div class="media zoom aspect-[4/3] shadow-soft" data-clip data-tilt>
+          <Img image={s.image} sizes="(min-width:1024px) 40vw, 100vw" class="h-full w-full object-cover" data-parallax="0.08" />
+        </div>
+      )}
+    </div>
+  </section>
+)}

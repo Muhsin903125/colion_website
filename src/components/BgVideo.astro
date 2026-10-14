@@ -1,0 +1,55 @@
+---
+/**
+ * A muted, looping background clip over its poster.
+ *
+ * - `preload="none"`: nothing downloads until the clip is on screen.
+ * - It plays only while visible (main.ts wires an IntersectionObserver), so a
+ *   page with four clips decodes one at a time.
+ * - Phones get the smaller `srcMobile` encode; Save-Data and 2G/3G visitors,
+ *   and anyone asking for reduced motion, get the poster only.
+ * - Wired on every `astro:page-load`, not once at module load — the LOPAZ
+ *   version only ran on the first page, so after a ViewTransitions navigation
+ *   the videos never started.
+ */
+import { videoPoster, videoUrl, resolveImage, type ImageRef } from '../lib/cloudinary';
+
+interface Props {
+  video: { src: string; srcMobile?: string; poster?: ImageRef };
+  class?: string;
+  /** Show the poster image underneath (true for full-bleed bands). */
+  poster?: boolean;
+  alt?: string;
+  priority?: boolean;
+}
+const { video, class: className = '', poster = true, alt = '', priority = false } = Astro.props;
+const src = videoUrl(video.src);
+const mobile = video.srcMobile ? videoUrl(video.srcMobile, 540) : '';
+const posterSrc = resolveImage(video.poster, { width: 1280 }) || videoPoster(video.src, 1280);
+---
+{poster && posterSrc && (
+  <img
+    src={posterSrc}
+    alt={alt || video.poster?.alt || ''}
+    class:list={['absolute inset-0 h-full w-full object-cover', className]}
+    loading={priority ? 'eager' : 'lazy'}
+    fetchpriority={priority ? 'high' : undefined}
+    width={video.poster?.width ?? undefined}
+    height={video.poster?.height ?? undefined}
+  />
+)}
+{src && (
+  <video
+    data-bg-video
+    data-src={src}
+    data-src-mobile={mobile || undefined}
+    class:list={['absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-1000', className]}
+    muted
+    loop
+    playsinline
+    preload="none"
+    tabindex="-1"
+    disablepictureinpicture
+    aria-hidden="true"
+    poster={posterSrc || undefined}
+  ></video>
+)}

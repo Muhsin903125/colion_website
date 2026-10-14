@@ -1,0 +1,38 @@
+---
+/**
+ * The floating contact dock: WhatsApp, call, back to top.
+ *
+ * Hidden while the page's hero is on screen — the hero already carries the
+ * same actions — and slides in once it has scrolled away (main.ts toggles
+ * `is-on` on `[data-dock]`). Pages without a hero show it after a short scroll.
+ */
+import Icon from './Icon.astro';
+import { load } from '../data/load';
+const d = await load();
+---
+<div data-dock class="dock fixed bottom-5 right-4 z-40 flex flex-col items-end gap-2 sm:bottom-7 sm:right-7" aria-label="Quick contact">
+  <a
+    href={d.waLink('Hello Colion International, I would like a quotation for:')}
+    target="_blank"
+    rel="noopener"
+    data-track="click_whatsapp"
+    class="dock-wa group flex h-12 items-center gap-2 rounded-full bg-whatsapp pl-3.5 pr-4 text-white shadow-lift transition hover:brightness-95"
+  >
+    <Icon name="whatsapp" size={22} />
+    <span class="font-display text-[0.88rem] font-semibold">WhatsApp</span>
+  </a>
+  <div class="flex gap-2">
+    <a href={d.telLink} data-track="click_call" aria-label={`Call ${d.site.phone}`} class="flex h-11 w-11 items-center justify-center rounded-full bg-white text-brand shadow-soft ring-1 ring-line transition hover:bg-brand hover:text-white">
+      <Icon name="phone" size={18} />
+    </a>
+    <button type="button" data-top aria-label="Back to top" class="flex h-11 w-11 items-center justify-center rounded-full bg-white text-ink shadow-soft ring-1 ring-line transition hover:bg-ink hover:text-white">
+      <Icon name="arrow" size={18} class="-rotate-90" />
+    </button>
+  </div>
+</div>
+
+<style>
+  .dock { opacity: 0; transform: translateY(24px); pointer-events: none; transition: opacity .45s cubic-bezier(.2,.7,.2,1), transform .55s cubic-bezier(.2,.7,.2,1); }
+  .dock:global(.is-on) { opacity: 1; transform: none; pointer-events: auto; }
+  html:not(.js) .dock { opacity: 1; transform: none; pointer-events: auto; }
+</style>

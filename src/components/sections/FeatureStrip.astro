@@ -1,0 +1,26 @@
+---
+import Icon from '../Icon.astro';
+import SectionHead from '../SectionHead.astro';
+import { load } from '../../data/load';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'featureStrip' }>;
+const s = Astro.props;
+const { features } = await load();
+---
+{features.length > 0 && (
+  <section class="section-y-sm relative">
+    <div class="container-x">
+      <SectionHead intro={s.intro} class="mb-10" />
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        {features.map((f, i) => (
+          <li class:list={['card card-hover group p-6 reveal', `d${(i % 4) + 1}`]}>
+            <span class="icon-chip mb-4"><Icon name={f.icon} size={24} /></span>
+            <h3 class="h-card">{f.title}</h3>
+            <p class="mt-2 text-[0.9rem] leading-relaxed text-slate">{f.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}

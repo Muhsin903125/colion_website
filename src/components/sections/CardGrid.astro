@@ -1,0 +1,31 @@
+---
+import Icon from '../Icon.astro';
+import Img from '../Img.astro';
+import SectionHead from '../SectionHead.astro';
+import { load } from '../../data/load';
+import { inline } from '../../lib/inline';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'cardGrid' }>;
+const s = Astro.props;
+const { href } = await load();
+const cols = { 2: 'md:grid-cols-2', 3: 'md:grid-cols-2 lg:grid-cols-3', 4: 'md:grid-cols-2 lg:grid-cols-4' }[s.columns] ?? 'lg:grid-cols-3';
+---
+<section class="section-y">
+  <div class="container-x">
+    <SectionHead intro={s.intro} aside class="mb-12" />
+    <ul class:list={['grid gap-6', cols]}>
+      {s.cards.map((c, i) => (
+        <li class:list={['card card-hover group overflow-hidden reveal', `d${(i % 4) + 1}`]}>
+          {c.image?.publicId && <div class="zoom aspect-[16/10] overflow-hidden"><Img image={c.image} sizes="(min-width:1024px) 30vw, 90vw" class="h-full w-full object-cover" /></div>}
+          <div class="p-6">
+            {c.icon && !c.image?.publicId && <span class="icon-chip mb-4"><Icon name={c.icon} /></span>}
+            <h3 class="h-card">{c.title}</h3>
+            <p class="mt-2 text-[0.93rem] text-slate" set:html={inline(c.body)} />
+            {c.cta?.href && <a href={href(c.cta.href)} class="link-arrow mt-4">{c.cta.label || 'Learn more'} <Icon name="arrow" size={16} /></a>}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

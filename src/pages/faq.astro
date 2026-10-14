@@ -1,0 +1,60 @@
+---
+/**
+ * Every FAQ, grouped, on one page — the FAQPage the answer engines read. The
+ * answers render in the HTML whether expanded or not.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import FaqList from '../components/FaqList.astro';
+import Cta from '../components/Cta.astro';
+import { load } from '../data/load';
+import { breadcrumb, faqEntity, webPage } from '../data/seo';
+
+const d = await load();
+const page = d.content.pages.faq;
+const trail = [{ name: 'Home', path: '/' }, { name: 'FAQ', path: '/faq/' }];
+const crumbs = breadcrumb(trail);
+const schema = [
+  webPage({
+    path: '/faq/',
+    name: page.title,
+    description: page.description,
+    type: 'FAQPage',
+    breadcrumbId: crumbs['@id'],
+    mainEntity: faqEntity(d.allFaqs),
+    dateModified: d.content.sections.faqGroups ?? d.content.updatedAt,
+  }),
+  crumbs,
+];
+---
+<BaseLayout title={page.title} description={page.description} schema={schema}>
+  <section data-hero class="bg-gradient-to-b from-sky to-white">
+    <div class="container-x py-14 lg:py-20">
+      <Breadcrumbs trail={trail} />
+      <h1 class="h-display" data-lines><span class="line"><span class="line-inner">Frequently asked</span></span><span class="line"><span class="line-inner accent">questions</span></span></h1>
+      <p class="lead mt-5 max-w-2xl" data-answer>Answers about ordering IT hardware from Colion International — quotations, delivery across the UAE, export, warranty, installation and support.</p>
+      <nav class="mt-8 flex flex-wrap gap-x-6 gap-y-2" aria-label="FAQ topics">
+        {d.faqGroups.map((g) => <a href={`#${g.id}`} class="border-b-2 border-transparent pb-1 text-[0.95rem] font-medium text-slate hover:border-brand hover:text-ink">{g.title}</a>)}
+      </nav>
+    </div>
+  </section>
+
+  <div class="container-x pb-16">
+    {d.faqGroups.map((g) => (
+      <section id={g.id} class="grid gap-8 border-t border-line py-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
+        <div>
+          <h2 class="h-section text-[1.8rem]">{g.title}</h2>
+          {g.blurb && <p class="mt-3 text-slate">{g.blurb}</p>}
+        </div>
+        <FaqList items={g.items} openFirst={false} />
+      </section>
+    ))}
+  </div>
+
+  <section class="px-3 pb-10 sm:px-6">
+    <div class="mx-auto flex max-w-[1400px] flex-col items-start justify-between gap-6 rounded-[32px] bg-brand-deep px-6 py-12 text-white sm:px-12 md:flex-row md:items-center">
+      <h2 class="font-display text-2xl font-semibold !text-white sm:text-3xl">Still have a question?</h2>
+      <Cta link={{ label: 'Ask on WhatsApp', href: 'wa:Hello Colion International, I have a question:' }} variant="wa" />
+    </div>
+  </section>
+</BaseLayout>

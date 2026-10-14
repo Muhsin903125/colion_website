@@ -1,0 +1,31 @@
+---
+import SectionHead from '../SectionHead.astro';
+import { inline } from '../../lib/inline';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'splitProse' }>;
+const s = Astro.props;
+---
+<section class="section-y">
+  <div class="container-x grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+    <div class="lg:sticky lg:top-32 lg:self-start">
+      <SectionHead intro={s.intro} />
+    </div>
+    <div>
+      <div class="prose-x text-[1.05rem]">
+        {s.paragraphs.map((p, i) => <p class:list={['reveal', i === 0 && 'text-[1.15rem] !text-ink']} set:html={inline(p)} />)}
+      </div>
+      {s.stats.length > 0 && (
+        <dl class="mt-10 grid grid-cols-2 gap-6 border-t border-line pt-8 sm:grid-cols-4">
+          {s.stats.map((st) => (
+            <div class="reveal">
+              <dt class="sr-only">{st.label}</dt>
+              <dd class="font-display text-3xl font-bold text-brand"><span data-count={st.value}>{st.value}</span>{st.unit}</dd>
+              <dd class="mt-1 text-sm text-slate">{st.label}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+    </div>
+  </div>
+</section>

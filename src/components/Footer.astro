@@ -1,0 +1,101 @@
+---
+/**
+ * The footer is a link hub as much as a sign-off: every service, category,
+ * the top brands and all seven emirates, one click from any page. That is
+ * where most of the programmatic pages get their internal links from, and the
+ * two addresses here are the same `site.locations` records the schema uses.
+ */
+import Icon from './Icon.astro';
+import { load } from '../data/load';
+
+const d = await load();
+const { site, seo } = d;
+const year = new Date().getFullYear();
+---
+<footer class="relative overflow-hidden bg-brand-deep text-white/80">
+
+  <div class="container-x relative">
+    <div class="flex flex-col items-start justify-between gap-5 border-b border-white/10 py-8 md:flex-row md:items-center">
+      <div>
+        <p class="font-display text-xl font-semibold text-white md:text-2xl">Need IT hardware today?</p>
+        <p class="mt-1 text-white/70">Send the model on WhatsApp — we reply with price, stock and delivery date.</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href={d.waLink('Hello Colion International, I would like a quotation for:')} target="_blank" rel="noopener" class="btn btn-wa" data-track="click_whatsapp"><Icon name="whatsapp" size={18} /> WhatsApp</a>
+        <a href={d.telLink} class="btn btn-ghost-light" data-track="click_call"><Icon name="phone" size={17} /> {site.phone}</a>
+      </div>
+    </div>
+
+    <div class="grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <img src="/images/brand/colion-logo-white.webp" width="640" height="159" alt={site.name} class="h-9 w-auto" loading="lazy" />
+        <p class="mt-4 max-w-sm text-[0.88rem] leading-relaxed text-white/65">{site.tagline}.</p>
+        <ul class="mt-5 space-y-2.5 text-[0.85rem] leading-snug">
+          {site.locations.map((l) => (
+            <li class="flex gap-2.5">
+              <Icon name="pin" size={16} class="mt-0.5 shrink-0 text-gold" />
+              <a href={l.mapUrl || '/contact/'} target={l.mapUrl ? '_blank' : undefined} rel="noopener" class="hover:text-white" data-track="click_directions">
+                <span class="font-semibold text-white">{l.label}:</span> {l.streetAddress}, {l.area}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div class="mt-5 flex gap-2">
+          {d.socialLinks.map((s) => (
+            <a href={s.href} target="_blank" rel="noopener" aria-label={s.label} class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-gold hover:text-ink">
+              <Icon name={s.icon} size={18} />
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div class="lg:col-span-2">
+        <p class="footer-head">Services</p>
+        <ul class="footer-list">
+          {d.services.map((s) => <li><a href={`/services/${s.slug}/`}>{s.shortName || s.name}</a></li>)}
+        </ul>
+      </div>
+      <div class="lg:col-span-2">
+        <p class="footer-head">Products</p>
+        <ul class="footer-list">
+          {d.categories.map((c) => <li><a href={`/products/${c.slug}/`}>{c.name}</a></li>)}
+        </ul>
+      </div>
+      <div class="lg:col-span-2">
+        <p class="footer-head">Brands</p>
+        <ul class="footer-list">
+          {d.coreBrands.slice(0, 6).map((b) => <li><a href={`/brands/${b.slug}/`}>{b.name}</a></li>)}
+          <li><a href="/brands/" class="!text-gold">All brands →</a></li>
+        </ul>
+      </div>
+      <div class="lg:col-span-2">
+        <p class="footer-head">Delivery areas</p>
+        <ul class="footer-list">
+          {d.emirates.map((e) => <li><a href={`/locations/${e.slug}/`}>{e.name}</a></li>)}
+        </ul>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-3 border-t border-white/10 py-5 text-[0.78rem] text-white/55 md:flex-row md:items-center md:justify-between">
+      <p>© {year} {site.legalName}. All rights reserved.{seo.tradeLicense && ` · Trade licence ${seo.tradeLicense}`}{seo.vatId && ` · TRN ${seo.vatId}`}</p>
+      <ul class="flex flex-wrap gap-x-5 gap-y-1">
+        <li><a href="/about/" class="hover:text-white">About</a></li>
+        <li><a href="/team/" class="hover:text-white">Team</a></li>
+        <li><a href="/gallery/" class="hover:text-white">Gallery</a></li>
+        <li><a href="/faq/" class="hover:text-white">FAQ</a></li>
+        <li><a href="/contact/" class="hover:text-white">Contact</a></li>
+        <li><a href="/privacy/" class="hover:text-white">Privacy</a></li>
+        <li><a href="/terms/" class="hover:text-white">Terms of sale</a></li>
+        <li><a href="/sitemap.xml" class="hover:text-white">Sitemap</a></li>
+      </ul>
+    </div>
+    {seo.trademarkNote && <p class="pb-5 text-[0.68rem] leading-relaxed text-white/35">{seo.trademarkNote}</p>}
+  </div>
+</footer>
+
+<style>
+  .footer-head { font-family: 'Sora Variable', system-ui, sans-serif; font-weight: 600; color: #fff; font-size: .92rem; margin-bottom: .7rem; }
+  .footer-list { display: grid; gap: .35rem; font-size: .86rem; }
+  .footer-list a { color: rgba(255,255,255,.7); transition: color .2s; }
+  .footer-list a:hover { color: #fff; }
+</style>

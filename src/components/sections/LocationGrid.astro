@@ -1,0 +1,31 @@
+---
+import Icon from '../Icon.astro';
+import Img from '../Img.astro';
+import SectionHead from '../SectionHead.astro';
+import { load } from '../../data/load';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'locationGrid' }>;
+const s = Astro.props;
+const d = await load();
+---
+<section class="section-y">
+  <div class="container-x">
+    <SectionHead intro={s.intro} aside class="mb-12" />
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {d.emirates.map((e, i) => (
+        <li class:list={['reveal', i === 0 && 'sm:col-span-2 sm:row-span-2', `d${(i % 4) + 1}`]}>
+          <a href={`/locations/${e.slug}/`} class="group relative block h-full min-h-[200px] overflow-hidden rounded-[22px] bg-brand-deep">
+            <Img image={e.image} sizes={i === 0 ? '(min-width:1024px) 50vw, 100vw' : '(min-width:1024px) 25vw, 50vw'} class="absolute inset-0 h-full w-full scale-110 object-cover transition duration-1000 group-hover:scale-[1.15]" data-parallax="0.08" />
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-deep/90 via-brand-deep/30 to-transparent" aria-hidden="true"></div>
+            <div class="relative flex h-full flex-col justify-end p-5 text-white sm:p-6">
+              <h3 class:list={['font-display font-semibold !text-white', i === 0 ? 'text-3xl' : 'text-xl']}>{e.name}</h3>
+              <p class="mt-1 flex items-center gap-1.5 text-sm text-white/80"><Icon name="truck" size={15} /> {e.deliveryTime}</p>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="mt-4 text-xs text-slate">Emirate photos: Wikimedia Commons contributors, used under Creative Commons licences — credited on each emirate's page.</p>
+  </div>
+</section>

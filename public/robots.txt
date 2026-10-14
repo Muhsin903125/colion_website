@@ -1,0 +1,89 @@
+# Colion International — https://www.colioninternational.com
+# IT hardware stockist, wholesaler and exporter in Deira, Dubai, UAE.
+
+# ---------------------------------------------------------------------------
+# Default: everything is open except the CMS.
+#
+# Thin programmatic pages and /404 are deliberately NOT disallowed. They carry
+# `<meta name="robots" content="noindex, follow">`, and a noindex only works
+# if the crawler may fetch the page and read it.
+# ---------------------------------------------------------------------------
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /preview
+Disallow: /api/
+
+# ---------------------------------------------------------------------------
+# Answer engines — retrieval and citation agents.
+# These fetch a page live to ground an answer and cite the source. Being in
+# this set is the whole point of the FAQ and the structured data, so they are
+# allowed explicitly rather than left to the wildcard.
+# ---------------------------------------------------------------------------
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+# Bravebot indexes for Brave Search, which is the index Claude's web search
+# reads from — so this one crawler gates whether Claude can cite Colion International at all.
+# Brave will not crawl anything Googlebot is blocked from, which is the other
+# reason there are no Disallow rules in this file. There is no Brave webmaster
+# console; discovery is robots.txt -> the Sitemap line at the bottom.
+User-agent: Bravebot
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: MistralAI-User
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+# ---------------------------------------------------------------------------
+# Model-training crawlers.
+# Allowed deliberately: a supplier wants its brands, stock and delivery
+# coverage inside the models buyers ask for sourcing recommendations.
+# Disallow any of these if that trade-off is ever reconsidered.
+# ---------------------------------------------------------------------------
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+Sitemap: https://www.colioninternational.com/sitemap.xml
+

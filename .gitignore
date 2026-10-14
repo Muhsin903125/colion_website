@@ -1,0 +1,64 @@
+# ── build output ───────────────────────────────────────────────────────────
+dist/
+.astro/
+# The Vercel adapter writes the whole deployable site here — ~54 MB, rebuilt on
+# every `npm run build`. It also holds the project link written by `vercel`.
+.vercel/
+
+# ── dependencies ───────────────────────────────────────────────────────────
+node_modules/
+.pnpm-store/
+
+# ── environment ────────────────────────────────────────────────────────────
+# Real secrets. `.env.example` is the committed template and must stay tracked,
+# which is why these are listed individually rather than as `.env*`.
+.env
+.env.local
+.env.development.local
+.env.production
+.env.production.local
+.env.test.local
+
+# ── logs ───────────────────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ── editor / OS ────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*~
+
+# ── local agent + tooling scratch ──────────────────────────────────────────
+.claude/settings.local.json
+.playwright-mcp/
+# Temp files written by the seed and migration scripts.
+.astro/tmp/
+*.tmp
+
+# ── stray screenshots from local QA ────────────────────────────────────────
+# Root-level only, so real site imagery under public/ is unaffected.
+/*.png
+/*.jpeg
+/*.jpg
+/*.webp
+cms-backup-*.json
+
+# ── source media that is not committed ─────────────────────────────────────
+# Large originals (videos, the client's photo/reel drop). They are uploaded to
+# Cloudinary or compressed into public/ by the media scripts.
+source-media/video/
+source-media/client/
+source-media/stock/
+
+# The owner's raw media drop. Imported into public/images/gallery and
+# public/videos/reels by scripts/import-client-media.mjs; the originals are
+# kept out of git and out of the deployed site.
+/public/Onwer contents/

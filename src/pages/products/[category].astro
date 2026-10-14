@@ -1,0 +1,153 @@
+---
+import DetailLayout from '../../layouts/DetailLayout.astro';
+import BrandLogo from '../../components/BrandLogo.astro';
+import Icon from '../../components/Icon.astro';
+import Img from '../../components/Img.astro';
+import SectionRenderer from '../../components/SectionRenderer.astro';
+import { load } from '../../data/load';
+import { categoryCatalog, itemList } from '../../data/seo';
+import { inline, plain } from '../../lib/inline';
+
+const d = await load();
+const c = d.category(Astro.params.category ?? '');
+if (!c) return Astro.rewrite('/404/');
+
+const v = d.verdictFor('category', c);
+const path = `/products/${c.slug}/`;
+const title = c.seoTitle || `${c.name} Supplier in Dubai, UAE – Wholesale | Colion`;
+const description = c.seoDescription || plain(c.answer).slice(0, 158);
+const brands = d.brandsIn(c.slug);
+const service = d.service(c.service);
+const gallery = d.galleryFor({ category: c.slug });
+---
+<DetailLayout
+  title={title}
+  description={description}
+  h1={`${c.name}`}
+  h1Accent="supplier in Dubai, UAE"
+  answer={c.answer}
+  trail={[{ name: 'Home', path: '/' }, { name: 'Products', path: '/products/' }, { name: c.name, path }]}
+  path={path}
+  image={c.image}
+  faqs={c.faqs}
+  gallery={gallery}
+  ctaMessage={`Hello Colion International, I need a quotation for ${c.name.toLowerCase()}:`}
+  ctaTitle={`Need ${c.name.toLowerCase()}?`}
+  noindex={!v.index}
+  pageType="CollectionPage"
+  reviewedBy={c.reviewedBy}
+  updated={d.content.sections[`productCategories.${c.slug}`] ?? c.reviewedAt}
+  facts={[
+    { icon: 'tag', label: 'Brands', value: `${brands.length} in stock` },
+    { icon: 'truck', label: 'Dubai delivery', value: 'Same / next day' },
+    { icon: 'shield', label: 'Warranty', value: 'Manufacturer, UAE' },
+  ]}
+  related={[
+    { title: 'Related service', links: service ? [{ name: service.name, href: `/services/${service.slug}/` }] : [] },
+    { title: 'Other categories', links: d.categories.filter((x) => x.slug !== c.slug).map((x) => ({ name: x.name, href: `/products/${x.slug}/` })) },
+    { title: `${c.name} by emirate`, links: d.emirates.map((e) => ({ name: `${c.name} in ${e.name}`, href: `/locations/${e.slug}/` })) },
+  ]}
+  schema={[
+    categoryCatalog(d, c),
+    itemList(`${c.name} brands`, brands.map((b) => ({ name: b.name, url: `/brands/${b.slug}/` })), path),
+  ]}
+>
+  <section class="section-y">
+    <div class="container-x grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:gap-20">
+      <div>
+        <div class="prose-x text-[1.05rem]">
+          {c.intro.map((p) => <p class="reveal" set:html={inline(p)} />)}
+        </div>
+        {c.useCases.length > 0 && (
+          <div class="mt-10">
+            <h2 class="font-display text-xl font-semibold">Who buys {c.name.toLowerCase()} from us</h2>
+            <ul class="mt-4 grid gap-2 sm:grid-cols-2">
+              {c.useCases.map((u) => <li class="flex gap-2 text-[0.95rem] text-ink-soft"><Icon name="check" size={18} class="mt-0.5 shrink-0 text-brand" />{u}</li>)}
+            </ul>
+          </div>
+        )}
+      </div>
+      {c.buyingGuide.steps.length > 0 && (
+        <aside class="card h-fit p-7 lg:sticky lg:top-32">
+          <h2 class="font-display text-xl font-semibold">{c.buyingGuide.title}</h2>
+          <ol class="mt-5 space-y-3">
+            {c.buyingGuide.steps.map((st, i) => (
+              <li class="flex gap-3 text-[0.95rem] text-ink-soft"><span class="font-display font-semibold text-brand">{i + 1}.</span><span>{st}</span></li>
+            ))}
+          </ol>
+        </aside>
+      )}
+    </div>
+  </section>
+
+  {c.comparison.rows.length > 0 && (
+    <section class="section-y-sm bg-surface">
+      <div class="container-x max-w-5xl">
+        <h2 class="h-section mb-8">{c.comparison.caption}</h2>
+        <div class="overflow-x-auto rounded-[22px] border border-line bg-white">
+          <table class="table-x min-w-[560px]">
+            <caption class="sr-only">{c.comparison.caption}</caption>
+            <thead><tr>{c.comparison.columns.map((col) => <th scope="col">{col}</th>)}</tr></thead>
+            <tbody>
+              {c.comparison.rows.map((r) => (
+                <tr>{r.cells.map((cell, i) => (i === 0 ? <th scope="row" class="border-t border-line px-4 py-3 text-left text-[0.92rem] font-semibold text-ink">{cell}</th> : <td>{cell}</td>))}</tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {c.models.length > 0 && (
+    <section class="section-y">
+      <div class="container-x">
+        <h2 class="h-section mb-10">Popular <span class="accent">ranges</span></h2>
+        <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {c.models.map((m, i) => {
+            const b = d.brand(m.brand);
+            return (
+              <li class:list={['card card-hover flex flex-col p-6 reveal', `d${(i % 4) + 1}`]}>
+                {m.image?.publicId && <div class="mb-5 aspect-[4/3] overflow-hidden rounded-xl bg-surface"><Img image={m.image} class="h-full w-full object-contain" sizes="30vw" /></div>}
+                {b && <a href={`/brands/${b.slug}/`} class="text-xs font-semibold uppercase tracking-wider text-gold-deep hover:underline">{b.name}</a>}
+                <h3 class="h-card mt-1">{m.name}</h3>
+                <ul class="mt-3 flex-1 space-y-1.5 text-[0.9rem] text-slate">
+                  {m.highlights.map((h) => <li class="flex gap-2"><Icon name="check" size={16} class="mt-0.5 shrink-0 text-brand" />{h}</li>)}
+                </ul>
+                <a href={d.waLink(`Hello Colion International, please quote: ${m.name}`)} target="_blank" rel="noopener" class="link-arrow mt-5" data-track="click_whatsapp">
+                  {m.priceFrom > 0 ? `From AED ${m.priceFrom.toLocaleString('en')}` : 'Ask for price'} <Icon name="arrow" size={16} />
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  {brands.length > 0 && (
+    <section class="section-y-sm bg-surface">
+      <div class="container-x">
+        <h2 class="h-section mb-8">{c.name} <span class="accent">brands</span></h2>
+        <ul class="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6">
+          {brands.map((b) => <li><BrandLogo brand={b} class="card card-hover h-20 bg-white p-4" /></li>)}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  {c.specs.length > 0 && (
+    <section class="section-y-sm">
+      <div class="container-x max-w-4xl">
+        <h2 class="h-section mb-6">At a <span class="accent">glance</span></h2>
+        <dl class="divide-y divide-line border-y border-line">
+          {c.specs.map((sp) => (
+            <div class="grid gap-1 py-4 sm:grid-cols-[0.35fr_0.65fr]"><dt class="font-display font-semibold text-ink">{sp.label}</dt><dd class="text-ink-soft">{sp.value}</dd></div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  )}
+
+  {c.extraSections.map((section) => <SectionRenderer section={section} />)}
+</DetailLayout>

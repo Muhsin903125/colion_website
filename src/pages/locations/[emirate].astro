@@ -1,0 +1,82 @@
+---
+import DetailLayout from '../../layouts/DetailLayout.astro';
+import CategoryCard from '../../components/CategoryCard.astro';
+import Icon from '../../components/Icon.astro';
+import { load } from '../../data/load';
+import { deliveryService, storeId } from '../../data/seo';
+import { inline, plain } from '../../lib/inline';
+
+const d = await load();
+const e = d.emirate(Astro.params.emirate ?? '');
+if (!e) return Astro.rewrite('/404/');
+
+const v = d.verdictFor('location', e);
+const path = `/locations/${e.slug}/`;
+const title = e.seoTitle || `IT Hardware Supplier in ${e.name} | Colion International`;
+const description = e.seoDescription || plain(e.answer).slice(0, 158);
+const popular = e.popularCategories.map(d.category).filter(Boolean);
+const gallery = d.galleryFor({ location: e.slug, tag: e.slug === 'dubai' ? 'showroom' : 'delivery' });
+const isHome = e.slug === 'dubai';
+---
+<DetailLayout
+  title={title}
+  description={description}
+  h1="IT hardware supplier"
+  h1Accent={`in ${e.name}`}
+  answer={e.answer}
+  trail={[{ name: 'Home', path: '/' }, { name: 'Delivery areas', path: '/locations/' }, { name: e.name, path }]}
+  path={path}
+  image={e.image}
+  credit={e.imageCredit}
+  faqs={e.faqs}
+  gallery={gallery}
+  ctaMessage={`Hello Colion International, I am in ${e.name} and need a quotation for:`}
+  ctaTitle={`Ordering from ${e.name}?`}
+  noindex={!v.index}
+  updated={d.content.sections[`locations.${e.slug}`]}
+  facts={[
+    { icon: 'truck', label: 'Delivery', value: e.deliveryTime },
+    { icon: 'tools', label: 'Installation', value: e.installation },
+    { icon: 'pin', label: 'Supplied from', value: 'Deira, Dubai' },
+  ]}
+  related={[
+    { title: 'Other emirates', links: d.emirates.filter((x) => x.slug !== e.slug).map((x) => ({ name: x.name, href: `/locations/${x.slug}/`, note: x.deliveryTime })) },
+    { title: 'Services', links: d.services.map((s) => ({ name: `${s.name} in ${e.name}`, href: `/services/${s.slug}/` })) },
+  ]}
+  schema={[deliveryService(d, e), ...(isHome ? d.stores.map((l) => ({ '@id': storeId(l.id) })) : [])]}
+>
+  <section class="section-y">
+    <div class="container-x grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:gap-20">
+      <div class="prose-x text-[1.05rem]">
+        {e.intro.map((p) => <p class="reveal" set:html={inline(p)} />)}
+        {!isHome && <p class="reveal !text-slate">Colion International does not have a branch in {e.name}; every order is supplied from our branches in Deira, Dubai, and delivered to you.</p>}
+      </div>
+      <aside class="card h-fit p-7 lg:sticky lg:top-32">
+        <h2 class="font-display text-xl font-semibold">Areas we deliver to in {e.name}</h2>
+        {e.districts.length > 0 && (
+          <ul class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-[0.93rem] text-ink-soft">
+            {e.districts.map((x) => <li class="flex items-center gap-1.5"><Icon name="pin" size={14} class="text-brand" />{x}</li>)}
+          </ul>
+        )}
+        {e.freeZones.length > 0 && (
+          <>
+            <h3 class="mt-6 font-display font-semibold">Free zones</h3>
+            <ul class="mt-3 space-y-1.5 text-[0.93rem] text-ink-soft">{e.freeZones.map((x) => <li>{x}</li>)}</ul>
+          </>
+        )}
+        {e.sectors.length > 0 && <p class="mt-6 border-t border-line pt-4 text-sm text-slate">Sectors we supply here: {e.sectors.join(', ')}.</p>}
+      </aside>
+    </div>
+  </section>
+
+  {popular.length > 0 && (
+    <section class="section-y-sm bg-surface">
+      <div class="container-x">
+        <h2 class="h-section mb-8">Popular in <span class="accent">{e.name}</span></h2>
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {popular.map((c, i) => <CategoryCard category={c!} index={i} />)}
+        </div>
+      </div>
+    </section>
+  )}
+</DetailLayout>

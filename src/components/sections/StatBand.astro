@@ -1,0 +1,31 @@
+---
+/** Headline numbers over a dark, full-bleed video band. Empty `stats` reads the site's own. */
+import BgVideo from '../BgVideo.astro';
+import Img from '../Img.astro';
+import SectionHead from '../SectionHead.astro';
+import { load } from '../../data/load';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'statBand' }>;
+const s = Astro.props;
+const d = await load();
+const stats = s.stats.length ? s.stats : d.stats;
+---
+<section class="relative isolate overflow-hidden bg-brand-deep py-20 text-white lg:py-28" data-scale-in>
+  <div class="absolute inset-0 -z-10" data-scrub-zoom>
+    {s.video?.src ? <BgVideo video={s.video} /> : <Img image={s.background} class="absolute inset-0 h-full w-full object-cover" />}
+  </div>
+  <div class="absolute inset-0 -z-10 bg-gradient-to-r from-brand-deep/95 via-brand-deep/80 to-brand-deep/60" aria-hidden="true"></div>
+  <div class="container-x">
+    <SectionHead intro={s.intro} dark class="mb-14" />
+    <dl class="grid grid-cols-2 gap-px overflow-hidden rounded-[24px] border border-white/10 bg-white/10 lg:grid-cols-4">
+      {stats.map((st, i) => (
+        <div class:list={['bg-brand-deep/60 p-6 backdrop-blur-sm sm:p-8 reveal', `d${(i % 4) + 1}`]}>
+          <dt class="sr-only">{st.label}</dt>
+          <dd class="font-display text-4xl font-bold sm:text-5xl"><span data-count={st.value}>{st.value}</span><span class="text-gold">{st.unit}</span></dd>
+          <dd class="mt-2 text-sm text-white/70">{st.label}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>

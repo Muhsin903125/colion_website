@@ -1,0 +1,16 @@
+---
+import CmsPage from '../../components/CmsPage.astro';
+import { load } from '../../data/load';
+import { itemList, serviceNode } from '../../data/seo';
+
+const d = await load();
+const faqs = d.faqGroups.filter((g) => g.id === 'services').flatMap((g) => g.items);
+---
+<CmsPage
+  page="services"
+  path="/services/"
+  name="Services"
+  type="CollectionPage"
+  faqs={faqs}
+  schema={[itemList('IT hardware services', d.services.map((s) => ({ name: s.name, url: `/services/${s.slug}/` })), '/services/'), ...d.services.map((s) => serviceNode(d, s))]}
+/>

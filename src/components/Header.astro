@@ -1,0 +1,204 @@
+---
+/**
+ * The site header: logo, primary navigation with two mega menus built from the
+ * collections (so a new service or category appears in the menu by itself),
+ * and the two actions every visitor is here for — call, or ask on WhatsApp.
+ *
+ * Desktop menus open on hover and on focus (`:focus-within`), so they work
+ * with a keyboard and without JavaScript. Below `lg` the same links live in a
+ * slide-in drawer driven by `ui.ts`.
+ */
+import Icon from './Icon.astro';
+import { load } from '../data/load';
+
+const d = await load();
+const { nav, site, logo } = d;
+const path = Astro.url.pathname;
+const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+const quote = d.waLink('Hello Colion International, I would like a quotation for:');
+---
+<header data-header class="fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,backdrop-filter] duration-500">
+  <div class="hidden border-b border-line/70 bg-surface/80 text-[0.8rem] text-slate lg:block" data-topbar>
+    <div class="container-x flex h-9 items-center justify-between">
+      <p class="flex items-center gap-2"><Icon name="clock" size={14} class="text-brand" /> {site.hours}</p>
+      <div class="flex items-center gap-5">
+        <a href={`mailto:${site.email}`} class="flex items-center gap-1.5 hover:text-brand" data-track="click_email"><Icon name="mail" size={14} /> {site.email}</a>
+        <a href="/locations/" class="flex items-center gap-1.5 hover:text-brand"><Icon name="truck" size={14} /> Delivery to all 7 emirates</a>
+        <div class="flex items-center gap-3">
+          {d.socialLinks.map((s) => (
+            <a href={s.href} target="_blank" rel="noopener" aria-label={s.label} class="hover:text-brand"><Icon name={s.icon} size={15} /></a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="header-bar">
+    <div class="container-x flex h-[72px] items-center justify-between gap-6">
+      <a href="/" class="shrink-0" aria-label={`${site.name} — home`}>
+        <img src={logo.src} width={logo.width} height={logo.height} alt={site.name} class="logo-dark h-9 w-auto sm:h-10" fetchpriority="high" />
+        <img src="/images/brand/colion-logo-white.webp" width="640" height="159" alt="" aria-hidden="true" class="logo-light hidden h-9 w-auto sm:h-10" />
+      </a>
+
+      <nav aria-label="Primary" class="hidden lg:block">
+        <ul class="flex items-center gap-1">
+          {nav.map((item) => (
+            <li class="group relative">
+              <a
+                href={item.href}
+                class:list={['nav-link', { 'is-active': active(item.href) }]}
+                aria-current={active(item.href) ? 'page' : undefined}
+              >
+                {item.label}
+                {item.mega !== 'none' && <Icon name="chevron" size={15} class="transition-transform duration-300 group-hover:rotate-180" />}
+              </a>
+
+              {item.mega === 'services' && (
+                <div class="mega">
+                  <div class="grid w-[720px] grid-cols-2 gap-1 p-3">
+                    {d.services.map((s) => (
+                      <a href={`/services/${s.slug}/`} class="mega-item">
+                        <span class="icon-chip h-10 w-10 rounded-xl"><Icon name={s.icon} size={20} /></span>
+                        <span>
+                          <span class="block font-display text-[0.92rem] font-semibold text-ink">{s.name}</span>
+                          <span class="block text-[0.8rem] leading-snug text-slate">{s.tagline}</span>
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                  <div class="flex items-center justify-between border-t border-line bg-surface px-6 py-3 text-sm">
+                    <span class="text-slate">Free installation in Dubai · AMC available</span>
+                    <a href="/services/" class="link-arrow">All services <Icon name="arrow" size={16} /></a>
+                  </div>
+                </div>
+              )}
+
+              {item.mega === 'products' && (
+                <div class="mega">
+                  <div class="flex w-[860px]">
+                    <div class="grid flex-1 grid-cols-2 gap-1 p-3">
+                      {d.categories.map((c) => (
+                        <a href={`/products/${c.slug}/`} class="mega-item">
+                          <span class="icon-chip h-10 w-10 rounded-xl"><Icon name={c.icon} size={20} /></span>
+                          <span>
+                            <span class="block font-display text-[0.92rem] font-semibold text-ink">{c.name}</span>
+                            <span class="block text-[0.8rem] leading-snug text-slate line-clamp-1">{c.tagline}</span>
+                          </span>
+                        </a>
+                      ))}
+                    </div>
+                    <div class="w-[230px] border-l border-line bg-surface p-5">
+                      <p class="mb-3 font-display text-sm font-semibold text-ink">Top brands</p>
+                      <ul class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-sm">
+                        {d.coreBrands.map((b) => (
+                          <li><a href={`/brands/${b.slug}/`} class="text-ink-soft hover:text-brand">{b.name}</a></li>
+                        ))}
+                      </ul>
+                      <a href="/brands/" class="link-arrow mt-4">All 50+ brands <Icon name="arrow" size={16} /></a>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a href={d.telLink} class="header-call hidden items-center gap-2 rounded-full px-3 py-2 font-display text-sm font-semibold text-ink hover:text-brand xl:flex" data-track="click_call">
+          <span class="flex h-9 w-9 items-center justify-center rounded-full bg-sky text-brand"><Icon name="phone" size={17} /></span>
+          {site.phone}
+        </a>
+        <a href={quote} target="_blank" rel="noopener" class="btn btn-primary btn-sm hidden sm:inline-flex" data-track="click_whatsapp" data-magnetic>
+          Get a quote <Icon name="arrow" size={16} class="arrow" />
+        </a>
+        <button type="button" class="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-white text-ink lg:hidden" data-menu-open aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+          <Icon name="menu" size={22} />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- mobile drawer -->
+  <div id="mobile-menu" data-menu class="fixed inset-0 z-[60] hidden lg:hidden">
+    <div data-overlay data-menu-close class="absolute inset-0 bg-ink/40 opacity-0 transition-opacity duration-500"></div>
+    <div data-panel tabindex="-1" role="dialog" aria-modal="true" aria-label="Menu" class="absolute inset-y-0 right-0 flex w-[min(92vw,400px)] translate-x-full flex-col overflow-y-auto bg-white shadow-lift transition-transform duration-500 ease-out">
+      <div class="flex items-center justify-between border-b border-line px-5 py-4">
+        <img src={logo.src} width={logo.width} height={logo.height} alt={site.name} class="h-8 w-auto" />
+        <button type="button" data-menu-close class="flex h-10 w-10 items-center justify-center rounded-full bg-surface" aria-label="Close menu"><Icon name="close" size={20} /></button>
+      </div>
+      <nav aria-label="Mobile" class="flex-1 px-5 py-4">
+        <ul class="divide-y divide-line">
+          <li><a href="/" class="mobile-link">Home</a></li>
+          {nav.map((item) => (
+            <li>
+              {item.mega === 'services' || item.mega === 'products' ? (
+                <details class="group">
+                  <summary class="mobile-link cursor-pointer list-none">
+                    {item.label}
+                    <Icon name="chevron" size={18} class="transition-transform group-open:rotate-180" />
+                  </summary>
+                  <ul class="mb-3 grid gap-1 pl-1">
+                    {(item.mega === 'services' ? d.services : d.categories).map((x) => (
+                      <li>
+                        <a href={`/${item.mega}/${x.slug}/`} class="flex items-center gap-3 rounded-xl px-2 py-2 text-[0.95rem] text-ink-soft hover:bg-sky">
+                          <Icon name={x.icon} size={18} class="text-brand" /> {x.name}
+                        </a>
+                      </li>
+                    ))}
+                    <li><a href={item.href} class="link-arrow px-2 py-2">View all <Icon name="arrow" size={15} /></a></li>
+                  </ul>
+                </details>
+              ) : (
+                <a href={item.href} class="mobile-link">{item.label}</a>
+              )}
+            </li>
+          ))}
+          <li><a href="/faq/" class="mobile-link">FAQ</a></li>
+        </ul>
+      </nav>
+      <div class="space-y-3 border-t border-line bg-surface p-5">
+        <a href={quote} target="_blank" rel="noopener" class="btn btn-wa w-full" data-track="click_whatsapp"><Icon name="whatsapp" size={18} /> WhatsApp us</a>
+        <a href={d.telLink} class="btn btn-outline w-full" data-track="click_call"><Icon name="phone" size={17} /> {site.phone}</a>
+        <p class="pt-1 text-center text-xs text-slate">{site.hours}</p>
+      </div>
+    </div>
+  </div>
+</header>
+<div aria-hidden="true" class="header-spacer h-[72px] lg:h-[108px]"></div>
+
+<style>
+  .header-bar { background: rgba(255, 255, 255, 0.86); backdrop-filter: blur(16px) saturate(1.6); -webkit-backdrop-filter: blur(16px) saturate(1.6); border-bottom: 1px solid transparent; transition: border-color .4s, box-shadow .4s; }
+  :global([data-header].is-solid) .header-bar { border-bottom-color: #E3E8F2; box-shadow: 0 10px 30px -20px rgba(11, 27, 63, .25); }
+  [data-topbar] { transition: margin-top .45s cubic-bezier(.2,.7,.2,1); }
+  :global([data-header].is-solid) [data-topbar] { margin-top: -36px; }
+
+  .nav-link { position: relative; display: inline-flex; align-items: center; gap: .25rem; padding: .6rem .9rem; border-radius: 999px; font-family: 'Sora Variable', system-ui, sans-serif; font-size: .92rem; font-weight: 500; color: #0B1B3F; transition: color .25s, background-color .25s; }
+  .nav-link:hover, .group:focus-within > .nav-link { color: #1E3A8A; background: #EEF4FF; }
+  .nav-link.is-active { color: #1E3A8A; }
+  .nav-link.is-active::after { content: ''; position: absolute; left: 50%; bottom: 2px; width: 5px; height: 5px; border-radius: 50%; background: #D5A540; transform: translateX(-50%); }
+
+  .mega { position: absolute; left: 50%; top: 100%; padding-top: 14px; opacity: 0; visibility: hidden; transform: translate(-50%, 8px); transition: opacity .3s, transform .4s cubic-bezier(.2,.7,.2,1), visibility .3s; }
+  .mega > * { background: #fff; border: 1px solid #E3E8F2; border-radius: 20px; box-shadow: 0 30px 70px -30px rgba(11,27,63,.35); overflow: hidden; }
+  .mega > * + * { border-top-left-radius: 0; border-top-right-radius: 0; margin-top: -1px; }
+  .mega > :first-child:not(:last-child) { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+  .group:hover > .mega, .group:focus-within > .mega { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+  .mega-item { display: flex; align-items: flex-start; gap: .85rem; padding: .8rem; border-radius: 14px; transition: background-color .25s; }
+  .mega-item:hover { background: #EEF4FF; }
+
+  /* Over a dark full-bleed hero: transparent, white type, white logo — until scrolled. */
+  :global(body[data-dark-top]) .header-spacer { display: none; }
+  :global(body[data-dark-top]) [data-header]:not(.is-solid) .header-bar { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  :global(body[data-dark-top]) [data-header]:not(.is-solid) [data-topbar] { background: transparent; border-color: rgba(255,255,255,.12); color: rgba(255,255,255,.75); }
+  :global(body[data-dark-top]) [data-header]:not(.is-solid) [data-topbar] :global(svg) { color: inherit; }
+  :global(body[data-dark-top]) [data-header]:not(.is-solid) .nav-link { color: #fff; }
+  :global(body[data-dark-top]) [data-header]:not(.is-solid) .nav-link:hover { background: rgba(255,255,255,.12); }
+  :global(body[data-dark-top]) [data-header]:not(.is-solid) .logo-dark { display: none; }
+  :global(body[data-dark-top]) [data-header]:not(.is-solid) .logo-light { display: block; }
+  :global(body[data-dark-top]) [data-header]:not(.is-solid) .header-call { color: #fff; }
+  :global(body[data-dark-top]) [data-header]:not(.is-solid) .header-call span { background: rgba(255,255,255,.14); color: #fff; }
+  :global(body[data-dark-top]) [data-header]:not(.is-solid) [data-menu-open] { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.2); color: #fff; }
+
+  .mobile-link { display: flex; align-items: center; justify-content: space-between; padding: .95rem .25rem; font-family: 'Sora Variable', system-ui, sans-serif; font-weight: 500; font-size: 1.05rem; color: #0B1B3F; }
+  summary::-webkit-details-marker { display: none; }
+</style>

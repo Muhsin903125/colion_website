@@ -1,0 +1,63 @@
+---
+/**
+ * The home opener: a full-bleed background clip under the headline.
+ *
+ * Desktop plays the landscape `src`; phones (portrait) play `srcMobile`, which
+ * for Colion is the vertical reel shot outside the Deira branch — so each
+ * screen gets footage composed for its shape. The poster is the LCP element
+ * and is preloaded by the page. The header sits transparent over this band
+ * until the page scrolls (see Header.astro, `data-dark-top`).
+ */
+import BgVideo from '../BgVideo.astro';
+import Cta from '../Cta.astro';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'videoHero' }>;
+const s = Astro.props;
+const lines = s.lines.filter(Boolean);
+---
+<section data-hero class="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-brand-deep text-white">
+  <div class="absolute inset-0 -z-20 will-change-transform" data-hero-bg>
+    <BgVideo video={s.video} priority alt={s.video.poster.alt} />
+  </div>
+  <div class="absolute inset-0 -z-10 bg-gradient-to-r from-[#081634]/90 via-[#0d2152]/65 to-[#0d2152]/15" aria-hidden="true"></div>
+  <div class="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-[#081634]/70 to-transparent" aria-hidden="true"></div>
+
+  <div class="container-x w-full pb-24 pt-36 lg:pb-28 lg:pt-44" data-hero-copy>
+    <div class="max-w-3xl">
+      <h1 class="h-display !text-white" data-lines>
+        {lines.map((line, i) => (
+          <span class="line">
+            <span class="line-inner">
+              {line}
+              {i === lines.length - 1 && s.rotating.length > 0 && (
+                <>
+                  {' '}
+                  <span data-rotate class="accent !text-gold">
+                    {s.rotating.map((w, j) => <span data-word class:list={[j === 0 && 'is-on']}>{w}.</span>)}
+                  </span>
+                </>
+              )}
+            </span>
+          </span>
+        ))}
+      </h1>
+      {s.body && <p class="mt-6 max-w-xl text-[1.08rem] leading-relaxed text-white/80 sm:text-lg" data-hero-in="2">{s.body}</p>}
+
+      <div class="mt-9 flex flex-wrap items-center gap-3" data-hero-in="3">
+        <Cta link={s.cta} variant="wa" />
+        <Cta link={s.secondary} variant="ghost-light" />
+      </div>
+    </div>
+  </div>
+
+  <a href="#main-content" class="absolute bottom-8 left-1/2 hidden -translate-x-1/2 md:block" aria-label="Scroll to content">
+    <span class="relative block h-10 w-px overflow-hidden bg-white/25"><span class="cue absolute inset-x-0 top-0 h-4 bg-white"></span></span>
+  </a>
+</section>
+<span id="main-content"></span>
+
+<style>
+  .cue { animation: cue 1.8s ease-in-out infinite; }
+  @keyframes cue { 0% { transform: translateY(-100%); } 100% { transform: translateY(250%); } }
+</style>

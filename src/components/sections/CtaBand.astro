@@ -1,0 +1,25 @@
+---
+import BgVideo from '../BgVideo.astro';
+import Cta from '../Cta.astro';
+import Img from '../Img.astro';
+import SectionHead from '../SectionHead.astro';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'ctaBand' }>;
+const s = Astro.props;
+---
+<section class="px-3 py-6 sm:px-6 sm:py-10">
+  <div class="relative isolate mx-auto max-w-[1400px] overflow-hidden rounded-[32px] bg-brand-deep px-6 py-16 text-white sm:px-12 lg:py-24">
+    <div class="absolute inset-0 -z-10" data-scrub-zoom>
+      {s.video?.src ? <BgVideo video={s.video} /> : <Img image={s.background} class="absolute inset-0 h-full w-full object-cover" />}
+    </div>
+    <div class="absolute inset-0 -z-10 bg-gradient-to-br from-brand-deep/95 via-brand-deep/85 to-brand/60" aria-hidden="true"></div>
+    <div class="mx-auto max-w-3xl text-center">
+      <SectionHead intro={{ ...s.intro, cta: undefined as any }} dark align="center" />
+      <div class="mt-9 flex flex-wrap justify-center gap-3 reveal">
+        <Cta link={s.intro.cta} variant="wa" />
+        <Cta link={s.secondary} variant="ghost-light" />
+      </div>
+    </div>
+  </div>
+</section>

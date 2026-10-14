@@ -1,0 +1,33 @@
+---
+/** Every brand, filterable by category, each linking to its own page. */
+import BrandLogo from '../BrandLogo.astro';
+import SectionHead from '../SectionHead.astro';
+import { load } from '../../data/load';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'logoWall' }>;
+const s = Astro.props;
+const d = await load();
+const brands = [...d.brands].sort((a, b) => (a.tier === b.tier ? a.name.localeCompare(b.name) : a.tier === 'core' ? -1 : 1));
+---
+<section class="section-y" data-filter-root>
+  <div class="container-x">
+    <SectionHead intro={s.intro} class="mb-8" />
+    <div class="no-scrollbar -mx-4 mb-8 flex gap-2 overflow-x-auto px-4 pb-1" role="toolbar" aria-label="Filter brands by category">
+      <button type="button" class="chip" data-filter="all" aria-pressed="true">All brands <span class="opacity-60">({brands.length})</span></button>
+      {d.categories.map((c) => (
+        <button type="button" class="chip whitespace-nowrap" data-filter={c.slug} aria-pressed="false">{c.name}</button>
+      ))}
+    </div>
+    <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      {brands.map((b, i) => (
+        <li data-filter-item data-tags={d.categoriesOf(b).map((c) => c.slug).join(' ')} class:list={['reveal', `d${(i % 4) + 1}`]}>
+          <a href={`/brands/${b.slug}/`} class="card card-hover group flex h-full flex-col items-center gap-3 p-5 text-center">
+            <BrandLogo brand={b} link={false} class="h-14 w-full" />
+            <span class="font-display text-sm font-semibold text-ink group-hover:text-brand">{b.name}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

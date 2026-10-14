@@ -1,0 +1,99 @@
+---
+import DetailLayout from '../../layouts/DetailLayout.astro';
+import CategoryCard from '../../components/CategoryCard.astro';
+import Icon from '../../components/Icon.astro';
+import { load } from '../../data/load';
+import { brandNode, ids } from '../../data/seo';
+import { inline, plain } from '../../lib/inline';
+
+const d = await load();
+const b = d.brand(Astro.params.brand ?? '');
+if (!b) return Astro.rewrite('/404/');
+
+const v = d.verdictFor('brand', b);
+const path = `/brands/${b.slug}/`;
+const title = b.seoTitle || `${b.name} Supplier & Stockist in Dubai, UAE | Colion`;
+const description = b.seoDescription || plain(b.answer).slice(0, 158);
+const categories = d.categoriesOf(b);
+const gallery = d.galleryFor({ brand: b.slug });
+// Related brands share a category; indexable ones first so links point at real pages.
+const related = d.brands
+  .filter((x) => x.slug !== b.slug && x.categories.some((c) => b.categories.includes(c)))
+  .sort((x, y) => Number(d.verdictFor('brand', y).index) - Number(d.verdictFor('brand', x).index))
+  .slice(0, 10);
+/** Honest wording: "authorised" only where the relationship is recorded and proven. */
+const relationship =
+  b.relationship === 'authorized-partner' && b.proof ? `Authorised ${b.name} partner` : `${b.name} stockist & wholesaler`;
+---
+<DetailLayout
+  title={title}
+  description={description}
+  h1={`${b.name}`}
+  h1Accent="supplier in Dubai, UAE"
+  answer={b.answer}
+  trail={[{ name: 'Home', path: '/' }, { name: 'Brands', path: '/brands/' }, { name: b.name, path }]}
+  path={path}
+  logo={b.logo}
+  image={gallery[0]?.image}
+  faqs={b.faqs}
+  gallery={gallery}
+  ctaMessage={`Hello Colion International, I need a quotation for ${b.name} products:`}
+  ctaTitle={`Looking for ${b.name}?`}
+  noindex={!v.index}
+  updated={d.content.sections[`brands.${b.slug}`]}
+  facts={[
+    { icon: 'award', label: 'Relationship', value: relationship },
+    { icon: 'box', label: 'Categories', value: String(categories.length) },
+    { icon: 'shield', label: 'Warranty', value: 'Manufacturer, UAE' },
+  ]}
+  related={[
+    { title: `${b.name} categories`, links: categories.map((c) => ({ name: `${b.name} ${c.name.toLowerCase()}`, href: `/products/${c.slug}/` })) },
+    { title: 'Related brands', links: related.map((x) => ({ name: x.name, href: `/brands/${x.slug}/` })) },
+  ]}
+  schema={[
+    brandNode(b),
+    {
+      '@type': 'OfferCatalog',
+      name: `${b.name} products from Colion International`,
+      seller: { '@id': ids.org },
+      itemListElement: categories.map((c) => ({ '@type': 'OfferCatalog', name: `${b.name} ${c.name}`, url: new URL(`/products/${c.slug}/`, 'https://www.colioninternational.com').toString() })),
+    },
+  ]}
+>
+  <section class="section-y">
+    <div class="container-x grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:gap-20">
+      <div>
+        <div class="prose-x text-[1.05rem]">
+          {b.intro.map((p) => <p class="reveal" set:html={inline(p)} />)}
+        </div>
+        {b.productLines.length > 0 && (
+          <div class="mt-10">
+            <h2 class="font-display text-xl font-semibold">{b.name} product lines we supply</h2>
+            <ul class="mt-4 grid gap-2 sm:grid-cols-2">
+              {b.productLines.map((l) => <li class="flex gap-2 text-[0.95rem] text-ink-soft"><Icon name="check" size={18} class="mt-0.5 shrink-0 text-brand" />{l}</li>)}
+            </ul>
+          </div>
+        )}
+      </div>
+      <aside class="card h-fit p-7 lg:sticky lg:top-32">
+        <h2 class="font-display text-xl font-semibold">Why buy genuine {b.name} from us</h2>
+        <ul class="mt-5 space-y-3">
+          {b.whyGenuine.map((x) => <li class="flex gap-3 text-[0.93rem] text-ink-soft"><Icon name="shield" size={18} class="mt-0.5 shrink-0 text-brand" />{x}</li>)}
+        </ul>
+        {b.warrantyNote && <p class="mt-5 border-t border-line pt-4 text-sm text-slate">{b.warrantyNote}</p>}
+        {b.website && <a href={b.website} target="_blank" rel="noopener nofollow" class="link-arrow mt-5">{b.name} official site <Icon name="arrow-up-right" size={15} /></a>}
+      </aside>
+    </div>
+  </section>
+
+  {categories.length > 0 && (
+    <section class="section-y-sm bg-surface">
+      <div class="container-x">
+        <h2 class="h-section mb-8">{b.name} <span class="accent">by category</span></h2>
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {categories.map((c, i) => <CategoryCard category={c} index={i} />)}
+        </div>
+      </div>
+    </section>
+  )}
+</DetailLayout>

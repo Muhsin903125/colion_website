@@ -1,0 +1,185 @@
+---
+/**
+ * The shared frame of every programmatic page — service, category, brand,
+ * emirate. Breadcrumbs, the query-shaped H1, the 40–60 word `data-answer`
+ * paragraph, hero media; then the page's own body (slot), the real gallery
+ * items tagged to it, related links, FAQs, a prefilled WhatsApp CTA and the
+ * "reviewed by / updated" line.
+ *
+ * `noindex` comes from the quality gate: a page without enough of its own
+ * substance renders for visitors but stays out of the index.
+ */
+import BaseLayout from './BaseLayout.astro';
+import BgVideo from '../components/BgVideo.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Cta from '../components/Cta.astro';
+import FaqList from '../components/FaqList.astro';
+import GalleryTile from '../components/GalleryTile.astro';
+import Icon from '../components/Icon.astro';
+import Img from '../components/Img.astro';
+import { load } from '../data/load';
+import { breadcrumb, faqEntity, person, webPage } from '../data/seo';
+import { resolveImage, type ImageRef } from '../lib/cloudinary';
+import { inline, plain } from '../lib/inline';
+import type { FaqItem, GalleryItem } from '../data/schema';
+
+interface Props {
+  title: string;
+  description: string;
+  h1: string;
+  /** The accent half of the H1, rendered in the serif italic. */
+  h1Accent?: string;
+  answer: string;
+  trail: { name: string; path: string }[];
+  path: string;
+  image?: ImageRef;
+  video?: { src: string; srcMobile?: string; poster?: ImageRef };
+  logo?: ImageRef;
+  faqs: FaqItem[];
+  gallery?: GalleryItem[];
+  related?: { title: string; links: { name: string; href: string; note?: string }[] }[];
+  ctaMessage: string;
+  ctaTitle?: string;
+  noindex?: boolean;
+  schema?: (object | null)[];
+  pageType?: string;
+  reviewedBy?: string;
+  updated?: string | null;
+  facts?: { icon: string; label: string; value: string }[];
+  /** Attribution shown under the hero image (Creative Commons photos). */
+  credit?: string;
+}
+const p = Astro.props;
+const d = await load();
+const crumbs = breadcrumb(p.trail);
+const reviewer = p.reviewedBy ? d.member(p.reviewedBy) : undefined;
+const reviewerNode = reviewer ? person(reviewer) : null;
+const heroSrc = resolveImage(p.image ?? p.video?.poster, { width: 1280 });
+const updated = p.updated ? new Date(p.updated) : null;
+
+const graph = [
+  webPage({
+    path: p.path,
+    name: p.title,
+    description: p.description,
+    type: p.pageType,
+    breadcrumbId: crumbs['@id'],
+    image: heroSrc,
+    mainEntity: p.faqs.length ? faqEntity(p.faqs) : undefined,
+    dateModified: p.updated,
+    reviewedBy: reviewerNode ? { '@id': (reviewerNode as any)['@id'] } : undefined,
+  }),
+  crumbs,
+  reviewerNode,
+  ...(p.schema ?? []),
+];
+---
+<BaseLayout title={p.title} description={p.description} schema={graph} noindex={p.noindex} preloadImage={heroSrc || undefined} image={heroSrc || undefined}>
+  <section data-hero class="relative overflow-hidden bg-gradient-to-b from-sky to-white">
+    <div class="container-x grid items-center gap-10 py-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14 lg:py-16">
+      <div>
+        <Breadcrumbs trail={p.trail} />
+        {p.logo?.publicId && (
+          <div class="mb-6 flex h-16 w-40 items-center rounded-2xl border border-line bg-white px-5 reveal">
+            <Img image={p.logo} alt="" sizes="160px" class="max-h-10 w-auto object-contain" />
+          </div>
+        )}
+        <h1 class="h-display" data-lines>
+          <span class="line"><span class="line-inner">{p.h1}</span></span>
+          {p.h1Accent && <span class="line"><span class="line-inner accent">{p.h1Accent}</span></span>}
+        </h1>
+        <p class="mt-6 max-w-2xl text-[1.08rem] leading-[1.8] text-ink-soft" data-answer data-hero-in="2" set:html={inline(p.answer)} />
+        <div class="mt-8 flex flex-wrap gap-3" data-hero-in="3">
+          <Cta link={{ label: 'Get a quote on WhatsApp', href: `wa:${p.ctaMessage}` }} variant="wa" />
+          <Cta link={{ label: 'Call the sales desk', href: d.telLink }} variant="outline" />
+        </div>
+        {p.facts && p.facts.length > 0 && (
+          <dl class="mt-9 grid gap-x-8 gap-y-4 border-t border-line pt-6 sm:grid-cols-3" data-hero-in="4">
+            {p.facts.map((f) => (
+              <div class="flex items-start gap-3">
+                <Icon name={f.icon} size={20} class="mt-0.5 shrink-0 text-brand" />
+                <div><dt class="text-xs font-semibold uppercase tracking-wider text-slate">{f.label}</dt><dd class="font-display font-semibold text-ink">{f.value}</dd></div>
+              </div>
+            ))}
+          </dl>
+        )}
+      </div>
+      {(p.video?.src || heroSrc) && (
+        <div class="media relative aspect-[4/3] shadow-lift" data-clip>
+          {p.video?.src ? <BgVideo video={p.video as any} priority /> : <Img image={p.image} priority sizes="(min-width:1024px) 42vw, 100vw" class="h-full w-full object-cover" />}
+          {p.credit && <p class="absolute bottom-0 right-0 rounded-tl-lg bg-ink/55 px-2.5 py-1 text-[0.68rem] text-white/85">{p.credit}</p>}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <slot />
+
+  {p.gallery && p.gallery.length > 0 && (
+    <section class="section-y-sm">
+      <div class="container-x">
+        <div class="mb-8 flex items-end justify-between gap-6">
+          <h2 class="h-section">From our <span class="accent">stock room</span></h2>
+          <a href="/gallery/" class="link-arrow shrink-0">Full gallery <Icon name="arrow" size={16} /></a>
+        </div>
+        <div class="grid grid-cols-2 gap-3 md:grid-cols-4" data-lb-root>
+          {p.gallery.slice(0, 8).map((g) => <GalleryTile item={g} aspect="aspect-[4/5]" class="reveal-scale" />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {p.related && p.related.some((r) => r.links.length) && (
+    <section class="section-y-sm border-t border-line">
+      <div class="container-x grid gap-10 md:grid-cols-2 lg:grid-cols-3">
+        {p.related.filter((r) => r.links.length).map((r) => (
+          <div>
+            <h2 class="mb-4 font-display text-lg font-semibold">{r.title}</h2>
+            <ul class="divide-y divide-line border-y border-line">
+              {r.links.map((l) => (
+                <li>
+                  <a href={l.href} class="group flex items-center justify-between gap-4 py-3 text-[0.95rem] text-ink-soft hover:text-brand">
+                    <span>{l.name}{l.note && <span class="ml-2 text-sm text-slate">{l.note}</span>}</span>
+                    <Icon name="arrow" size={16} class="shrink-0 text-line transition group-hover:translate-x-1 group-hover:text-brand" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {p.faqs.length > 0 && (
+    <section class="section-y bg-surface">
+      <div class="container-x grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+        <div>
+          <h2 class="h-section">Frequently asked <span class="accent">questions</span></h2>
+          <p class="lead mt-4">Straight answers from the Colion International sales desk.</p>
+        </div>
+        <FaqList items={p.faqs} />
+      </div>
+    </section>
+  )}
+
+  <section class="px-3 py-6 sm:px-6 sm:py-10">
+    <div class="mx-auto flex max-w-[1400px] flex-col items-start justify-between gap-6 rounded-[32px] bg-brand-deep px-6 py-12 text-white sm:px-12 md:flex-row md:items-center">
+      <div>
+        <h2 class="font-display text-2xl font-semibold !text-white sm:text-3xl">{p.ctaTitle ?? 'Ready to order?'}</h2>
+        <p class="mt-2 text-white/75">Send the model or requirement — we reply with price, stock and delivery date.</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <Cta link={{ label: 'WhatsApp the sales desk', href: `wa:${p.ctaMessage}` }} variant="wa" />
+        <Cta link={{ label: 'Request a quote', href: '/contact/#quote' }} variant="ghost-light" />
+      </div>
+    </div>
+    {(reviewer || updated) && (
+      <p class="mx-auto mt-6 max-w-[1400px] px-2 text-center text-xs text-slate">
+        {reviewer && <>Reviewed by <a href={`/team/#${reviewer.id}`} class="font-medium text-ink-soft hover:text-brand">{reviewer.name}</a>{reviewer.role && `, ${plain(reviewer.role)}`}</>}
+        {reviewer && updated && ' · '}
+        {updated && <>Updated <time datetime={updated.toISOString()}>{updated.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</time></>}
+      </p>
+    )}
+  </section>
+</BaseLayout>

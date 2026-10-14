@@ -1,0 +1,16 @@
+---
+import CmsPage from '../../components/CmsPage.astro';
+import { load } from '../../data/load';
+import { deliveryService, itemList } from '../../data/seo';
+
+const d = await load();
+const faqs = d.faqGroups.filter((g) => g.id === 'delivery').flatMap((g) => g.items);
+---
+<CmsPage
+  page="locations"
+  path="/locations/"
+  name="Delivery areas"
+  type="CollectionPage"
+  faqs={faqs}
+  schema={[itemList('Emirates served by Colion International', d.emirates.map((e) => ({ name: e.name, url: `/locations/${e.slug}/` })), '/locations/'), ...d.emirates.map((e) => deliveryService(d, e))]}
+/>

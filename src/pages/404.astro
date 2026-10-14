@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Cta from '../components/Cta.astro';
+import Icon from '../components/Icon.astro';
+import { load } from '../data/load';
+
+const d = await load();
+// A real 404 status even when reached through Astro.rewrite from a dynamic route.
+Astro.response.status = 404;
+---
+<BaseLayout title="Page not found" noindex>
+  <section class="bg-gradient-to-b from-sky to-white">
+    <div class="container-x py-20 lg:py-28">
+      <p class="font-display text-sm font-semibold text-brand">404</p>
+      <h1 class="h-display mt-3">This page <span class="accent">isn't here.</span></h1>
+      <p class="lead mt-5 max-w-xl">It may have moved when we rebuilt the site. These are the pages most people are looking for:</p>
+      <div class="mt-10 grid gap-10 md:grid-cols-3">
+        <div>
+          <h2 class="font-display text-lg font-semibold">Products</h2>
+          <ul class="mt-3 space-y-2">{d.categories.map((c) => <li><a href={`/products/${c.slug}/`} class="text-ink-soft hover:text-brand">{c.name}</a></li>)}</ul>
+        </div>
+        <div>
+          <h2 class="font-display text-lg font-semibold">Services</h2>
+          <ul class="mt-3 space-y-2">{d.services.map((s) => <li><a href={`/services/${s.slug}/`} class="text-ink-soft hover:text-brand">{s.name}</a></li>)}</ul>
+        </div>
+        <div>
+          <h2 class="font-display text-lg font-semibold">Talk to us</h2>
+          <p class="mt-3 text-ink-soft">Tell us what you were looking for and we'll send it over.</p>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <Cta link={{ label: 'WhatsApp', href: 'wa:Hello Colion International, I was looking for:' }} variant="wa" />
+            <a href="/" class="btn btn-outline"><Icon name="arrow" size={16} class="rotate-180" /> Home</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

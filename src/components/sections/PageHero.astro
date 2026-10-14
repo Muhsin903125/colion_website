@@ -1,0 +1,42 @@
+---
+/**
+ * Interior page opener, light theme: copy on a soft sky ground with a rounded
+ * media frame beside it (video if set, else the photograph). `short` drops the
+ * media for utility pages; breadcrumbs slot in above the heading.
+ */
+import BgVideo from '../BgVideo.astro';
+import Cta from '../Cta.astro';
+import Img from '../Img.astro';
+import SectionHead from '../SectionHead.astro';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'pageHero' }> & { h1?: boolean };
+const s = Astro.props;
+const hasVideo = Boolean(s.video?.src);
+const hasMedia = s.size !== 'short' && (hasVideo || s.background?.publicId);
+---
+<section data-hero class="relative overflow-hidden bg-gradient-to-b from-sky to-white">
+  <div class:list={['container-x relative grid items-center gap-10', hasMedia ? 'py-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:py-16' : 'py-14 lg:py-20']}>
+    <div>
+      <slot name="before" />
+      <SectionHead intro={{ ...s.intro, cta: undefined as any }} as="h1" size="display" />
+      {(s.intro.cta?.href || s.secondary?.href) && (
+        <div class="mt-8 flex flex-wrap gap-3" data-hero-in="3">
+          <Cta link={s.intro.cta} variant="primary" />
+          <Cta link={s.secondary} variant="outline" />
+        </div>
+      )}
+      <slot />
+    </div>
+    {hasMedia && (
+      <div class:list={['media relative shadow-lift', s.size === 'tall' ? 'aspect-[4/3] lg:aspect-[5/5]' : 'aspect-[16/11]']} data-clip>
+        {hasVideo ? (
+          <BgVideo video={s.video} priority alt={s.video.poster.alt || s.background.alt} />
+        ) : (
+          <Img image={s.background} priority sizes="(min-width:1024px) 45vw, 100vw" class="h-full w-full scale-110 object-cover" data-parallax="0.12" style={s.focus ? `object-position:${s.focus}` : undefined} />
+        )}
+        <div class="absolute inset-0 bg-gradient-to-t from-brand-deep/30 to-transparent" aria-hidden="true"></div>
+      </div>
+    )}
+  </div>
+</section>

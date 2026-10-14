@@ -1,0 +1,29 @@
+---
+import Img from '../Img.astro';
+import SectionHead from '../SectionHead.astro';
+import { inline } from '../../lib/inline';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'featureSplit' }>;
+const s = Astro.props;
+const [a, b] = s.images;
+---
+<section class="section-y">
+  <div class:list={['container-x grid items-center gap-12 lg:grid-cols-2 lg:gap-20', s.reverse && 'lg:[&>*:first-child]:order-2']}>
+    <div class="grid grid-cols-2 gap-4">
+      {a && <div class="media aspect-[3/4] shadow-soft" data-clip data-parallax="0.06"><Img image={a} sizes="25vw" class="h-full w-full object-cover" /></div>}
+      {b && <div class="media mt-12 aspect-[3/4] shadow-soft" data-clip data-parallax="0.18"><Img image={b} sizes="25vw" class="h-full w-full object-cover" /></div>}
+    </div>
+    <div>
+      <SectionHead intro={s.intro} />
+      <dl class="mt-8 divide-y divide-line border-y border-line">
+        {s.items.map((it) => (
+          <div class="grid gap-1 py-5 sm:grid-cols-[0.4fr_0.6fr] sm:gap-6 reveal">
+            <dt class="font-display font-semibold text-ink">{it.title}</dt>
+            <dd class="text-[0.95rem] text-slate" set:html={inline(it.body)} />
+          </div>
+        ))}
+      </dl>
+    </div>
+  </div>
+</section>

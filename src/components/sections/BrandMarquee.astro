@@ -1,0 +1,37 @@
+---
+/**
+ * The brand marquee: CSS animation (it runs with no JS), duplicated once so
+ * the loop is seamless, two rows in opposite directions. `motion.ts` skews the
+ * rows with scroll velocity. Pauses on hover.
+ */
+import BrandLogo from '../BrandLogo.astro';
+import SectionHead from '../SectionHead.astro';
+import { load } from '../../data/load';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'brandMarquee' }>;
+const s = Astro.props;
+const d = await load();
+const all = (s.source === 'core' ? [...d.coreBrands, ...d.brands.filter((b) => b.tier !== 'core').slice(0, 12)] : d.brands).filter((b) => b.logo?.publicId);
+const rows = s.rows === 2 ? [all.filter((_, i) => i % 2 === 0), all.filter((_, i) => i % 2 === 1)] : [all];
+const hasHead = s.intro.label || s.intro.lines.length;
+---
+<section class:list={['relative overflow-hidden', hasHead ? 'section-y' : 'border-y border-line bg-white py-8']}>
+  {hasHead && <div class="container-x"><SectionHead intro={s.intro} align="center" class="mb-12" /></div>}
+  {!hasHead && <p class="mb-6 text-center font-display text-xs font-semibold uppercase tracking-[0.18em] text-slate">Genuine stock from 50+ leading brands</p>}
+  <div class="mask-x space-y-6">
+    {rows.map((row, r) => (
+      <div class="marquee-row overflow-hidden">
+        <div class:list={['flex w-max gap-4', r === 1 ? 'animate-marquee-rev' : 'animate-marquee']} data-marquee-track>
+          {[...row, ...row].map((b, i) => (
+            <BrandLogo brand={b} class="h-20 w-40 rounded-2xl border border-line bg-white px-6 py-4 transition-shadow hover:shadow-soft" aria-hidden={i >= row.length ? 'true' : undefined} tabindex={i >= row.length ? -1 : undefined} />
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .marquee-row:hover [data-marquee-track] { animation-play-state: paused; }
+</style>

@@ -1,0 +1,49 @@
+---
+/**
+ * One gallery item as a lightbox trigger. Photos open full size; videos and
+ * reels open with sound and controls. Reels also preview silently in place.
+ */
+import Icon from './Icon.astro';
+import Img from './Img.astro';
+import { resolveImage, videoPoster, videoUrl } from '../lib/cloudinary';
+import type { GalleryItem } from '../data/schema';
+
+interface Props {
+  item: GalleryItem;
+  sizes?: string;
+  class?: string;
+  aspect?: string;
+  [key: string]: any;
+}
+const { item: g, sizes = '(min-width:1024px) 25vw, 50vw', class: className = '', aspect, ...rest } = Astro.props;
+const isVideo = g.kind !== 'image';
+const full = isVideo ? videoUrl(g.video, 720) : resolveImage(g.image, { width: 1600 });
+const poster = resolveImage(g.image, { width: 900 }) || videoPoster(g.video, 900);
+const loop = g.video.startsWith('/videos/reels/') ? g.video.replace(/\.mp4$/, '-loop.mp4') : videoUrl(g.video, 480);
+---
+<a
+  href={full}
+  class:list={['group relative block overflow-hidden rounded-[18px] bg-sky', className]}
+  data-lb
+  data-lb-kind={g.kind}
+  data-lb-src={full}
+  data-lb-poster={poster}
+  data-lb-title={g.title}
+  data-lb-caption={g.caption}
+  data-lb-ig={g.instagramUrl || undefined}
+  data-preview={isVideo ? '' : undefined}
+  aria-label={`${isVideo ? 'Play' : 'View'}: ${g.title || g.caption}`}
+  {...rest}
+>
+  <div class:list={['relative overflow-hidden', aspect]}>
+    <Img image={g.image} sizes={sizes} class="h-full w-full object-cover transition duration-700 group-hover:scale-105" alt={g.caption || g.title} />
+    {isVideo && loop && (
+      <video data-src={loop} muted loop playsinline preload="none" class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500" aria-hidden="true"></video>
+    )}
+  </div>
+  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/75 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" aria-hidden="true"></div>
+  {isVideo && (
+    <span class="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-ink" aria-hidden="true"><Icon name="play" size={13} /></span>
+  )}
+  <span class="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 p-4 text-sm font-medium text-white opacity-0 transition duration-500 group-hover:translate-y-0 group-hover:opacity-100">{g.title}</span>
+</a>

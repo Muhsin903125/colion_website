@@ -1,0 +1,37 @@
+---
+/**
+ * Numbered steps as a real `<ol>` — the list shape a "how to" featured
+ * snippet is built from. With an image, the steps stack and recede on scroll.
+ */
+import Img from '../Img.astro';
+import SectionHead from '../SectionHead.astro';
+import { inline } from '../../lib/inline';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'processSteps' }>;
+const s = Astro.props;
+const hasImage = Boolean(s.image?.publicId);
+---
+<section class="section-y relative overflow-hidden">
+  <div class:list={['container-x grid gap-12', hasImage && 'lg:grid-cols-[0.9fr_1.1fr] lg:gap-20']}>
+    <div class:list={[hasImage && 'lg:sticky lg:top-32 lg:self-start']}>
+      <SectionHead intro={s.intro} />
+      {hasImage && (
+        <div class="media mt-10 hidden aspect-[4/3] shadow-soft lg:block" data-clip>
+          <Img image={s.image} sizes="40vw" class="h-full w-full object-cover" />
+        </div>
+      )}
+    </div>
+    <ol class:list={['grid gap-4', !hasImage && 'md:grid-cols-2 lg:grid-cols-5']} data-stack={hasImage ? '' : undefined}>
+      {s.steps.map((st, i) => (
+        <li class:list={['card relative overflow-hidden p-6 sm:p-7 reveal', hasImage && 'lg:sticky', `d${(i % 4) + 1}`]} style={hasImage ? `top:${120 + i * 14}px` : undefined}>
+          <div class="relative">
+            <span class="font-display text-sm font-semibold text-brand">Step {i + 1}</span>
+            <h3 class="h-card mt-2">{st.title}</h3>
+            <p class="mt-2 text-[0.93rem] leading-relaxed text-slate" set:html={inline(st.body)} />
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

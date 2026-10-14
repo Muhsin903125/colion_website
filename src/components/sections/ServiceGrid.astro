@@ -1,0 +1,20 @@
+---
+import SectionHead from '../SectionHead.astro';
+import ServiceCard from '../ServiceCard.astro';
+import { load } from '../../data/load';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'serviceGrid' }>;
+const s = Astro.props;
+const d = await load();
+const services =
+  s.source === 'featured' ? d.services.filter((x) => x.featured) : s.source === 'slugs' ? s.slugs.map(d.service).filter(Boolean) : d.services;
+---
+<section class="section-y">
+  <div class="container-x">
+    <SectionHead intro={s.intro} aside class="mb-12" />
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {services.map((svc, i) => <ServiceCard service={svc!} index={i} />)}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,19 @@
+---
+/** Visible breadcrumbs. The matching BreadcrumbList goes in the page's @graph. */
+import Icon from './Icon.astro';
+
+interface Props {
+  trail: { name: string; path: string }[];
+}
+const { trail } = Astro.props;
+---
+<nav aria-label="Breadcrumb" class="mb-6 reveal">
+  <ol class="flex flex-wrap items-center gap-1.5 text-[0.82rem] text-slate">
+    {trail.map((t, i) => (
+      <li class="flex items-center gap-1.5">
+        {i > 0 && <Icon name="chevron-right" size={14} class="text-line" />}
+        {i < trail.length - 1 ? <a href={t.path} class="hover:text-brand">{t.name}</a> : <span aria-current="page" class="font-medium text-ink">{t.name}</span>}
+      </li>
+    ))}
+  </ol>
+</nav>

@@ -1,0 +1,35 @@
+---
+/**
+ * One responsive image from a CMS reference.
+ *
+ * Cloudinary ids get a `srcset`; local files are served as they are (already
+ * sized by scripts/optimize-media.mjs). Width and height come from the
+ * reference, so the browser reserves the box and nothing shifts.
+ */
+import { imageAttrs, type ImageRef } from '../lib/cloudinary';
+
+interface Props {
+  image: ImageRef | null | undefined;
+  alt?: string;
+  sizes?: string;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  priority?: boolean;
+  width?: number;
+  crop?: 'auto' | 'fill' | 'pad' | 'limit';
+  [key: string]: any;
+}
+const { image, alt, sizes = '100vw', class: className = '', loading, priority = false, width, crop, ...rest } = Astro.props;
+const attrs = imageAttrs(image, { sizes, width, crop });
+---
+{attrs.src && (
+  <img
+    {...attrs}
+    {...rest}
+    alt={alt ?? image?.alt ?? ''}
+    class={className}
+    loading={priority ? 'eager' : (loading ?? 'lazy')}
+    decoding={priority ? 'sync' : 'async'}
+    fetchpriority={priority ? 'high' : undefined}
+  />
+)}

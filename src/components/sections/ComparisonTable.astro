@@ -1,0 +1,34 @@
+---
+/**
+ * A real `<table>` with a caption and header cells — the structure Google lifts
+ * table snippets from. With no rows on the locations page it is built from the
+ * emirates' delivery data, so the two can never disagree.
+ */
+import SectionHead from '../SectionHead.astro';
+import { load } from '../../data/load';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'comparisonTable' }>;
+const s = Astro.props;
+const d = await load();
+const rows = s.rows.length ? s.rows.map((r) => r.cells) : d.emirates.map((e) => [e.name, e.deliveryTime, e.installation]);
+---
+{rows.length > 0 && (
+  <section class="section-y-sm">
+    <div class="container-x max-w-5xl">
+      <SectionHead intro={s.intro} class="mb-8" />
+      <div class="overflow-x-auto rounded-[22px] border border-line bg-white reveal">
+        <table class="table-x min-w-[560px]">
+          {s.caption && <caption class="px-4 pt-4">{s.caption}</caption>}
+          <thead><tr>{s.columns.map((c) => <th scope="col">{c}</th>)}</tr></thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr>{r.map((cell, i) => (i === 0 ? <th scope="row" class="!bg-transparent !normal-case !tracking-normal !text-ink !text-[0.92rem] border-t border-line px-4 py-3 font-semibold">{cell}</th> : <td>{cell}</td>))}</tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {s.note && <p class="mt-4 text-sm text-slate">{s.note}</p>}
+    </div>
+  </section>
+)}

@@ -1,0 +1,27 @@
+---
+import Icon from '../Icon.astro';
+import SectionHead from '../SectionHead.astro';
+import { inline } from '../../lib/inline';
+import type { Section } from '../../data/schema';
+
+type Props = Extract<Section, { type: 'pillarGrid' }>;
+const s = Astro.props;
+const dark = s.tone === 'dark';
+const cols = { 2: 'md:grid-cols-2', 3: 'md:grid-cols-2 lg:grid-cols-3', 4: 'md:grid-cols-2 lg:grid-cols-4' }[s.columns] ?? 'lg:grid-cols-3';
+---
+<section class:list={['section-y relative overflow-hidden', s.tone === 'sky' && 'bg-sky', dark && 'bg-brand-deep text-white']}>
+  <div class="container-x relative">
+    <SectionHead intro={s.intro} dark={dark} align="center" class="mb-14" />
+    <ul class:list={['grid gap-5', cols]}>
+      {s.items.map((it, i) => (
+        <li class:list={['group rounded-card p-7 reveal', `d${(i % 4) + 1}`, dark ? 'border border-white/10 bg-white/5' : 'card card-hover']}>
+          <div class="mb-5 flex items-center justify-between">
+            <span class:list={['icon-chip', dark && '!text-gold']}><Icon name={it.icon || 'check'} size={24} /></span>
+          </div>
+          <h3 class:list={['h-card', dark && '!text-white']}>{it.title}</h3>
+          <p class:list={['mt-2 text-[0.93rem] leading-relaxed', dark ? 'text-white/70' : 'text-slate']} set:html={inline(it.body)} />
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

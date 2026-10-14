@@ -1,0 +1,81 @@
+---
+/**
+ * The gallery: reels first, then a masonry of photos filterable by tag.
+ *
+ * Everything is server-rendered (crawlable, with ImageObject/VideoObject
+ * schema), but only the first batch is shown; "Load more" reveals the rest
+ * without a round trip. Filtering considers every item.
+ */
+import CmsPage from '../components/CmsPage.astro';
+import GalleryTile from '../components/GalleryTile.astro';
+import Icon from '../components/Icon.astro';
+import { load } from '../data/load';
+import { GALLERY_TAGS } from '../data/schema';
+import { imageObject, videoObject } from '../data/seo';
+import { resolveImage, videoPoster } from '../lib/cloudinary';
+
+const d = await load();
+const reels = d.gallery.filter((g) => g.kind !== 'image');
+const photos = d.gallery.filter((g) => g.kind === 'image');
+const FIRST = 16;
+const usedTags = GALLERY_TAGS.filter((t) => photos.some((p) => p.tags.includes(t)));
+const ig = d.socialLinks.find((s) => s.icon === 'instagram');
+
+const schema = [
+  {
+    '@type': 'ImageGallery',
+    name: 'Colion International gallery',
+    description: 'Photos and reels from the Colion International showroom, stock rooms and deliveries in Dubai.',
+    associatedMedia: [
+      ...photos.map((g) => imageObject(g, resolveImage(g.image, { width: 1600 }))),
+      ...reels.map((g) => videoObject(g, resolveImage(g.image, { width: 900 }) || videoPoster(g.video))),
+    ],
+  },
+];
+---
+<CmsPage page="gallery" path="/gallery/" name="Gallery" type="CollectionPage" schema={schema}>
+  {reels.length > 0 && (
+    <section class="section-y-sm">
+      <div class="container-x">
+        <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+          <h2 class="h-section">Reels from <span class="accent">the floor</span></h2>
+          {ig && <a href={ig.href} target="_blank" rel="noopener" class="btn btn-outline btn-sm"><Icon name="instagram" size={16} /> @{d.site.instagramHandle}</a>}
+        </div>
+        <div class="no-scrollbar rail -mx-4 flex gap-4 overflow-x-auto px-4 pb-2" data-lb-root>
+          {reels.map((g) => <GalleryTile item={g} class="w-[62vw] shrink-0 sm:w-[250px]" aspect="aspect-[9/16]" sizes="250px" />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section-y-sm" data-filter-root data-lb-root>
+    <div class="container-x">
+      <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <h2 class="h-section">Photos</h2>
+        <p class="text-sm text-slate"><span data-filter-count>{photos.length}</span> photos</p>
+      </div>
+      <div class="no-scrollbar -mx-4 mb-8 flex gap-5 overflow-x-auto border-b border-line px-4" role="toolbar" aria-label="Filter photos">
+        <button type="button" class="chip" data-filter="all" aria-pressed="true">All</button>
+        {usedTags.map((t) => <button type="button" class="chip capitalize" data-filter={t} aria-pressed="false">{t}</button>)}
+      </div>
+      <div class="columns-2 gap-3 md:columns-3 lg:columns-4 [&>*]:mb-3">
+        {photos.map((g, i) => (
+          <GalleryTile
+            item={g}
+            class="break-inside-avoid"
+            data-filter-item
+            data-tags={g.tags.join(' ')}
+            data-more={i >= FIRST ? 'pending' : undefined}
+            hidden={i >= FIRST}
+            sizes="(min-width:1024px) 25vw, (min-width:768px) 33vw, 50vw"
+          />
+        ))}
+      </div>
+      {photos.length > FIRST && (
+        <div class="mt-10 text-center">
+          <button type="button" class="btn btn-outline" data-load-more="12">Load more photos</button>
+        </div>
+      )}
+    </div>
+  </section>
+</CmsPage>
