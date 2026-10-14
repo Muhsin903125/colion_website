@@ -137,6 +137,8 @@ export const sectionSchema = z.discriminatedUnion('type', [
     ...sectionBase,
     type: z.literal('featureStrip'),
     intro: introSchema,
+    /** Photo behind the first (large) promise. */
+    image: imageSchema,
   }),
 
   /**

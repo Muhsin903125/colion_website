@@ -144,7 +144,7 @@
   html.js [data-lines] .line-inner { display: block; transform: translateY(105%); transition: transform 1s var(--ease); }
   html.js [data-lines].is-in .line-inner { transform: none; }
 
-  .scroll-progress { position: fixed; inset: 0 0 auto 0; height: 2px; z-index: 80; transform: scaleX(0); transform-origin: 0 50%; background: #1E3A8A; }
+  .scroll-progress { position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 80; transform: scaleX(0); transform-origin: 0 50%; background: #D5A540; }
 }
 
 /* Hero copy starts at first paint — CSS, not JS, so nothing flickers. */

@@ -81,9 +81,13 @@ const shield = await sharp(src('brand/logo.png'))
   .extract({ left: x0, top: y0, width: x1 - x0 + 1, height: y1 - y0 + 1 })
   .toBuffer();
 await sharp(shield).resize({ height: 256 }).png().toFile(out('brand/colion-shield.png'));
-for (const [name, size] of [['favicon-32.png', 32], ['apple-touch-icon.png', 180], ['icon-512.png', 512]]) {
-  const mark = await sharp(shield).resize({ height: Math.round(size * 0.72) }).toBuffer();
-  await sharp({ create: { width: size, height: size, channels: 4, background: { r: 0x14, g: 0x2a, b: 0x63, alpha: 1 } } })
+// The tab icon is the original gold lion shield (source-media/brand/favicon.png)
+// on a transparent square. iOS fills transparency with black, so the
+// home-screen icon gets a white square instead.
+const lion = await sharp(src('brand/favicon.png')).trim().toBuffer();
+for (const [name, size, bg] of [['favicon-32.png', 32, 0], ['icon-512.png', 512, 0], ['apple-touch-icon.png', 180, 1]]) {
+  const mark = await sharp(lion).resize({ height: Math.round(size * (bg ? 0.74 : 0.96)) }).toBuffer();
+  await sharp({ create: { width: size, height: size, channels: 4, background: { r: 255, g: 255, b: 255, alpha: bg } } })
     .composite([{ input: mark, gravity: 'center' }])
     .png()
     .toFile(resolve(root, 'public', name));

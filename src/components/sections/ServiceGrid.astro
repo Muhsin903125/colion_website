@@ -12,9 +12,10 @@ const services =
 ---
 <section class="section-y">
   <div class="container-x">
-    <SectionHead intro={s.intro} aside class="mb-12" />
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {services.map((svc, i) => <ServiceCard service={svc!} index={i} />)}
+    <SectionHead intro={s.intro} aside class="mb-10 sm:mb-12" />
+    <!-- A swipe rail on phones, a grid from `sm` up. -->
+    <div class="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
+      {services.map((svc, i) => <div class="w-[80%] shrink-0 snap-start sm:w-auto"><ServiceCard service={svc!} index={i} /></div>)}
     </div>
   </div>
 </section>

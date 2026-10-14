@@ -103,7 +103,7 @@ These are needed. None of them have been invented.
 2. **Trade licence number, TRN and founding year.** Add them under Admin → SEO and Admin → Site.
 3. **Exact Google Business Profile details.**
    - Branch 1 is linked (CID 7714097723583174697).
-   - Branch 2 and the corporate office need their own profile URLs and pins.
+   - Branch 2 (also the corporate office, Al Dhagaya) needs its own profile URL and pin.
 4. **Founder's social profiles.** Add them under Admin → Team & reviews → Social links.
 5. **Real Google reviews.** Add them under Admin → Team & reviews.
 6. **Brand partner certificates**, if any. Only then set a brand's relationship to "authorized partner".

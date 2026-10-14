@@ -34,7 +34,6 @@ export const pages = {
         trust: ['Genuine products', 'UAE warranty', 'VAT invoice'],
       }),
       section('brandMarquee', { intro: intro(), rows: 1, source: 'core' }),
-      section('featureStrip', { intro: intro(), backdrop: { image: img(''), video: vid('warehouse-team', 'Warehouse team'), wash: 90 } }),
       section('answerSection', {
         label: 'About Colion',
         question: 'Who is Colion International?',
@@ -49,6 +48,10 @@ export const pages = {
         source: 'all',
         slugs: [],
         backdrop: { image: img(''), video: vid('circuit', 'Circuit board'), wash: 93 },
+      }),
+      section('featureStrip', {
+        intro: intro('Why Colion', ['Why businesses', 'buy from us'], 'Stock in Dubai, wholesale prices, and a team that delivers, installs and supports what it sells.'),
+        image: G('photo-30', 'A large order packed and labelled for a Colion International customer'),
       }),
       section('statBand', {
         background: STILL('fibre-network', 'Fibre-optic network cables'),

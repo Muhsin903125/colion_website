@@ -21,7 +21,7 @@ const team = (s.source === 'featured' ? d.team.filter((t) => t.featured) : d.tea
 
 const LABEL: Record<string, string> = { linkedin: 'LinkedIn', instagram: 'Instagram', facebook: 'Facebook', x: 'X', tiktok: 'TikTok', youtube: 'YouTube', whatsapp: 'WhatsApp', website: 'Website' };
 const links = (m: TeamMember) => {
-  const list = m.social.filter((x) => x.href).map((x) => ({ icon: x.network, href: x.network === 'whatsapp' && /^\+?\d[\d\s]+$/.test(x.href) ? `https://wa.me/${x.href.replace(/\D/g, '')}` : x.href, label: `${m.name} on ${LABEL[x.network] ?? x.network}` }));
+  const list: { icon: string; href: string; label: string }[] = m.social.filter((x) => x.href).map((x) => ({ icon: x.network, href: x.network === 'whatsapp' && /^\+?\d[\d\s]+$/.test(x.href) ? `https://wa.me/${x.href.replace(/\D/g, '')}` : x.href, label: `${m.name} on ${LABEL[x.network] ?? x.network}` }));
   if (m.linkedin && !m.social.some((x) => x.network === 'linkedin')) list.unshift({ icon: 'linkedin', href: m.linkedin, label: `${m.name} on LinkedIn` });
   if (m.email) list.push({ icon: 'mail', href: `mailto:${m.email}`, label: `Email ${m.name}` });
   return list;

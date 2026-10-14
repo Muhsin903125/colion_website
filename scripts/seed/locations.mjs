@@ -20,9 +20,9 @@ export const locations = [
     installation: 'On-site installation by our own technicians',
     image: PLACE('dubai', 'Dubai Marina skyline'),
     answer:
-      'Colion International is an IT hardware supplier in Dubai with two branches in Deira and a corporate office at Burj Nahar. We deliver printers, computers, servers, networking and UPS across Dubai the same or next working day, and install them at your office free of charge.',
+      'Colion International is an IT hardware supplier in Dubai with two branches in Deira, including its corporate office in Al Dhagaya. We deliver printers, computers, servers, networking and UPS across Dubai the same or next working day, and install them at your office free of charge.',
     intro: [
-      'Dubai is home. Our two walk-in branches in Al Sabkha and Al Dhagaya, Deira, sit in one of the city\'s oldest trading districts, a few minutes from the Creek, and our corporate office is at the Burj Nahar Complex. Customers from across the city collect from the branches, and our delivery vehicles cover every district from Deira and Bur Dubai to Dubai Marina, Jebel Ali and Dubai Silicon Oasis.',
+      'Dubai is home. Our two walk-in branches in Al Sabkha and Al Dhagaya, Deira, sit in one of the city\'s oldest trading districts, a few minutes from the Creek, and our corporate office sits with the Al Dhagaya branch. Customers from across the city collect from the branches, and our delivery vehicles cover every district from Deira and Bur Dubai to Dubai Marina, Jebel Ali and Dubai Silicon Oasis.',
       'For stock items, orders confirmed in the morning are usually delivered the same day within central Dubai, and next working day elsewhere in the emirate. Free zone companies in JAFZA, DMCC, Dubai Internet City and Dubai Silicon Oasis order from us regularly; we prepare the paperwork their gate and warehouse teams require.',
       'Because our technicians are based in Dubai, installation is on-site and quick: [printers on the network](/services/printing-solutions/), [servers in the rack](/services/server-storage/), and [Wi-Fi across the floor](/services/network-infrastructure/). Visit the [contact page](/contact/) for directions to the branches.',
     ],
@@ -31,7 +31,7 @@ export const locations = [
     sectors: ['Trading and wholesale', 'Hospitality', 'Healthcare', 'Education', 'Logistics', 'Real estate and facilities'],
     popularCategories: ['printers', 'desktops', 'routers-switches', 'ups'],
     faqs: [
-      faq('Where is Colion International located in Dubai?', 'Colion International has two branches in Deira — Shop 1, Al Jaziri Building, Al Sabkha, and Shop 4, Khalifya Building, Al Dhagaya — and a corporate office at Burj Nahar Complex, Dubai. The branches are open Monday to Saturday, 9 AM to 7 PM.', true),
+      faq('Where is Colion International located in Dubai?', 'Colion International has two branches in Deira — Shop 1, Al Jaziri Building, Al Sabkha, and Shop 4, Khalifya Building, Al Dhagaya, which is also the corporate office. The branches are open Monday to Saturday, 9 AM to 7 PM.', true),
       faq('Do you deliver IT hardware the same day in Dubai?', 'Yes, for stock items. Colion International usually delivers same day within central Dubai for orders confirmed in the morning, and next working day elsewhere in the emirate.', true),
       faq('Do you deliver to free zones like JAFZA and DMCC?', 'Yes. Colion International delivers to Dubai free zones including JAFZA, DMCC, Dubai Internet City, Dubai Silicon Oasis and DAFZA, with the documentation free zone warehouses require.'),
     ],

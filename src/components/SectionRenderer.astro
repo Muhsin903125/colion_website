@@ -80,7 +80,7 @@ const hasBackdrop = Boolean(bd?.video?.src || bd?.image?.publicId);
 ---
 {!section.hidden && Component && (
   hasBackdrop ? (
-    <div id={section.anchor || undefined} data-section={section.type} class="has-backdrop relative isolate overflow-hidden">
+    <div id={section.anchor || undefined} data-section={section.type} class="has-backdrop relative isolate overflow-clip">
       <div class="absolute inset-0 -z-20 overflow-hidden" aria-hidden="true">
         <div class="absolute inset-[-12%_0]" data-parallax="0.12">
           {bd.video?.src ? <BgVideo video={bd.video} /> : <Img image={bd.image} alt="" class="absolute inset-0 h-full w-full object-cover" />}

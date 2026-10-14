@@ -23,21 +23,21 @@ const embed = (l: (typeof site.locations)[number]) =>
     <SectionHead intro={s.intro} class="mb-10" />
 
     <div class="mb-6 grid gap-4 sm:grid-cols-3">
-      <a href={d.waLink('Hello Colion International,')} target="_blank" rel="noopener" class="card card-hover flex items-center gap-4 p-5" data-track="click_whatsapp">
+      <a href={d.waLink('Hello Colion International,')} target="_blank" rel="noopener" class="card card-hover flex min-w-0 items-center gap-4 p-5" data-track="click_whatsapp">
         <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-whatsapp/15 text-[#128C4A]"><Icon name="whatsapp" /></span>
         <span><span class="block text-xs font-semibold uppercase tracking-wider text-slate">WhatsApp</span><span class="font-display font-semibold">{site.phone}</span></span>
       </a>
-      <a href={d.telLink} class="card card-hover flex items-center gap-4 p-5" data-track="click_call">
+      <a href={d.telLink} class="card card-hover flex min-w-0 items-center gap-4 p-5" data-track="click_call">
         <span class="icon-chip"><Icon name="phone" /></span>
         <span><span class="block text-xs font-semibold uppercase tracking-wider text-slate">Call</span><span class="font-display font-semibold">{site.phone}</span></span>
       </a>
-      <a href={`mailto:${site.email}`} class="card card-hover flex items-center gap-4 p-5" data-track="click_email">
+      <a href={`mailto:${site.email}`} class="card card-hover flex min-w-0 items-center gap-4 p-5" data-track="click_email">
         <span class="icon-chip"><Icon name="mail" /></span>
         <span class="min-w-0"><span class="block text-xs font-semibold uppercase tracking-wider text-slate">Email</span><span class="block truncate font-display font-semibold">{site.email}</span></span>
       </a>
     </div>
 
-    <ul class="grid gap-6 lg:grid-cols-3">
+    <ul class:list={["grid gap-6", site.locations.length === 2 ? "md:grid-cols-2" : "md:grid-cols-2 lg:grid-cols-3"]}>
       {site.locations.map((l, i) => (
         <li class:list={['card overflow-hidden reveal', `d${i + 1}`]}>
           {s.showMap && embed(l) ? (

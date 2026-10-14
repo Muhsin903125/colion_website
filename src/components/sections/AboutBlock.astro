@@ -30,7 +30,7 @@ const s = Astro.props;
         <ul class="mt-8 grid gap-3 sm:grid-cols-2">
           {s.highlights.map((h, i) => (
             <li class:list={['flex items-center gap-3 border-b border-line py-3 text-[0.95rem] font-medium reveal', `d${(i % 4) + 1}`]}>
-              <Icon name="check" size={18} class="shrink-0 text-brand" /> {h}
+              <Icon name="check" size={18} class="shrink-0 text-gold-deep" /> {h}
             </li>
           ))}
         </ul>

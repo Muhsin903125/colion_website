@@ -35,14 +35,14 @@ const reviewUrl = d.showroom?.gbp.placeId ? `https://search.google.com/local/wri
         </div>
       </>
     ) : (
-      <div class="grid items-center gap-8 rounded-[28px] border border-line bg-white p-8 sm:p-12 lg:grid-cols-[1.2fr_0.8fr]">
+      <div class="relative grid items-center gap-8 overflow-hidden rounded-[28px] bg-gold p-8 text-ink sm:p-12 lg:grid-cols-[1.2fr_0.8fr]">
         <div>
-          <h2 class="h-section">Bought from us? <span class="accent">Tell others how it went.</span></h2>
-          <p class="lead mt-4">Your review on Google helps other businesses in the UAE find a supplier they can trust — and tells us what to keep doing.</p>
+          <h2 class="h-section">Bought from us? <span class="text-brand-deep">Tell others how it went.</span></h2>
+          <p class="mt-4 text-[1.05rem] leading-relaxed text-ink/80">Your review on Google helps other businesses in the UAE find a supplier they can trust — and tells us what to keep doing.</p>
         </div>
         <div class="flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-stretch">
           {reviewUrl && <a href={reviewUrl} target="_blank" rel="noopener" class="btn btn-primary"><Icon name="star" size={17} /> Write a Google review</a>}
-          {gbp && <a href={gbp} target="_blank" rel="noopener" class="btn btn-outline">Read our reviews <Icon name="arrow-up-right" size={16} /></a>}
+          {gbp && <a href={gbp} target="_blank" rel="noopener" class="btn border border-ink/20 bg-white/50 text-ink hover:bg-white">Read our reviews <Icon name="arrow-up-right" size={16} /></a>}
         </div>
       </div>
     )}

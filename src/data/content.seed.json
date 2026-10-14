@@ -51,37 +51,6 @@
     ],
     "locations": [
       {
-        "id": "corporate",
-        "label": "Corporate Office",
-        "kind": "office",
-        "name": "Colion International — Corporate Office",
-        "streetAddress": "Office A10, M2 Floor, Burj Nahar Complex",
-        "area": "Burj Nahar, Deira",
-        "locality": "Dubai",
-        "region": "Dubai",
-        "postalCode": "",
-        "country": "AE",
-        "geo": {
-          "lat": 25.2711,
-          "lng": 55.3212
-        },
-        "mapUrl": "https://www.google.com/maps/search/?api=1&query=Burj+Nahar+Complex+Deira+Dubai",
-        "hours": "Mon–Sat 9:00–19:00",
-        "phone": "+971 50 766 8536",
-        "image": {
-          "publicId": "/images/places/dubai.webp",
-          "alt": "Dubai skyline — Colion International is headquartered in Deira, Dubai",
-          "version": null,
-          "width": 1600,
-          "height": 1067
-        },
-        "gbp": {
-          "cid": "",
-          "placeId": "",
-          "url": ""
-        }
-      },
-      {
         "id": "showroom",
         "label": "Branch 1 — Al Sabkha",
         "kind": "store",
@@ -113,10 +82,10 @@
         }
       },
       {
-        "id": "branch-2",
-        "label": "Branch 2 — Al Dhagaya",
+        "id": "corporate",
+        "label": "Corporate Office & Branch 2 — Al Dhagaya",
         "kind": "store",
-        "name": "Colion International Trading LLC — Al Dhagaya Branch",
+        "name": "Colion International Trading LLC — Corporate Office & Al Dhagaya Branch",
         "streetAddress": "Shop 4, Khalifya Building",
         "area": "Al Dhagaya, Deira",
         "locality": "Dubai",
@@ -132,7 +101,7 @@
         "phone": "+971 50 766 8536",
         "image": {
           "publicId": "/images/places/deira.webp",
-          "alt": "Deira, Dubai — home of the Colion International Al Dhagaya branch",
+          "alt": "Deira, Dubai — home of the Colion International corporate office and Al Dhagaya branch",
           "version": null,
           "width": 1600,
           "height": 1200
@@ -5397,9 +5366,9 @@
         "width": 1600,
         "height": 1067
       },
-      "answer": "Colion International is an IT hardware supplier in Dubai with two branches in Deira and a corporate office at Burj Nahar. We deliver printers, computers, servers, networking and UPS across Dubai the same or next working day, and install them at your office free of charge.",
+      "answer": "Colion International is an IT hardware supplier in Dubai with two branches in Deira, including its corporate office in Al Dhagaya. We deliver printers, computers, servers, networking and UPS across Dubai the same or next working day, and install them at your office free of charge.",
       "intro": [
-        "Dubai is home. Our two walk-in branches in Al Sabkha and Al Dhagaya, Deira, sit in one of the city's oldest trading districts, a few minutes from the Creek, and our corporate office is at the Burj Nahar Complex. Customers from across the city collect from the branches, and our delivery vehicles cover every district from Deira and Bur Dubai to Dubai Marina, Jebel Ali and Dubai Silicon Oasis.",
+        "Dubai is home. Our two walk-in branches in Al Sabkha and Al Dhagaya, Deira, sit in one of the city's oldest trading districts, a few minutes from the Creek, and our corporate office sits with the Al Dhagaya branch. Customers from across the city collect from the branches, and our delivery vehicles cover every district from Deira and Bur Dubai to Dubai Marina, Jebel Ali and Dubai Silicon Oasis.",
         "For stock items, orders confirmed in the morning are usually delivered the same day within central Dubai, and next working day elsewhere in the emirate. Free zone companies in JAFZA, DMCC, Dubai Internet City and Dubai Silicon Oasis order from us regularly; we prepare the paperwork their gate and warehouse teams require.",
         "Because our technicians are based in Dubai, installation is on-site and quick: [printers on the network](/services/printing-solutions/), [servers in the rack](/services/server-storage/), and [Wi-Fi across the floor](/services/network-infrastructure/). Visit the [contact page](/contact/) for directions to the branches."
       ],
@@ -5440,7 +5409,7 @@
       "faqs": [
         {
           "q": "Where is Colion International located in Dubai?",
-          "a": "Colion International has two branches in Deira — Shop 1, Al Jaziri Building, Al Sabkha, and Shop 4, Khalifya Building, Al Dhagaya — and a corporate office at Burj Nahar Complex, Dubai. The branches are open Monday to Saturday, 9 AM to 7 PM.",
+          "a": "Colion International has two branches in Deira — Shop 1, Al Jaziri Building, Al Sabkha, and Shop 4, Khalifya Building, Al Dhagaya, which is also the corporate office. The branches are open Monday to Saturday, 9 AM to 7 PM.",
           "top": true
         },
         {
@@ -7131,43 +7100,7 @@
           "source": "core"
         },
         {
-          "id": "featureStrip-3",
-          "anchor": "",
-          "hidden": false,
-          "type": "featureStrip",
-          "intro": {
-            "label": "",
-            "lines": [],
-            "body": "",
-            "cta": {
-              "label": "",
-              "href": ""
-            }
-          },
-          "backdrop": {
-            "image": {
-              "publicId": "",
-              "alt": "",
-              "version": null,
-              "width": null,
-              "height": null
-            },
-            "video": {
-              "src": "/videos/warehouse-team.mp4",
-              "srcMobile": "/videos/warehouse-team-m.mp4",
-              "poster": {
-                "publicId": "/images/stills/warehouse-team.webp",
-                "alt": "Warehouse team",
-                "version": null,
-                "width": 1280,
-                "height": 720
-              }
-            },
-            "wash": 90
-          }
-        },
-        {
-          "id": "answerSection-4",
+          "id": "answerSection-3",
           "anchor": "",
           "hidden": false,
           "type": "answerSection",
@@ -7193,7 +7126,7 @@
           }
         },
         {
-          "id": "serviceGrid-5",
+          "id": "serviceGrid-4",
           "anchor": "",
           "hidden": false,
           "type": "serviceGrid",
@@ -7231,6 +7164,31 @@
               }
             },
             "wash": 93
+          }
+        },
+        {
+          "id": "featureStrip-5",
+          "anchor": "",
+          "hidden": false,
+          "type": "featureStrip",
+          "intro": {
+            "label": "Why Colion",
+            "lines": [
+              "Why businesses",
+              "buy from us"
+            ],
+            "body": "Stock in Dubai, wholesale prices, and a team that delivers, installs and supports what it sells.",
+            "cta": {
+              "label": "",
+              "href": ""
+            }
+          },
+          "image": {
+            "publicId": "/images/gallery/photo-30.webp",
+            "alt": "A large order packed and labelled for a Colion International customer",
+            "version": null,
+            "width": 960,
+            "height": 1125
           }
         },
         {

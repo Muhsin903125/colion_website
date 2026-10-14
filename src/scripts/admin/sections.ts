@@ -91,9 +91,9 @@ export const SECTION_TYPES: Record<string, SectionType> = {
   },
   featureStrip: {
     name: 'Feature strip',
-    hint: 'The five promises (delivery, wholesale, installation, support, AMC) from Highlights.',
-    defaults: () => ({ intro: intro() }),
-    fields: (p) => introFields([...p, 'intro']),
+    hint: 'The five promises (delivery, wholesale, installation, support, AMC) from Highlights. The first one is shown large over the photo.',
+    defaults: () => ({ intro: intro(), image: image() }),
+    fields: (p) => [...introFields([...p, 'intro']), mediaField('Photo (large tile)', [...p, 'image'], { size: SIZE.frame })],
   },
   answerSection: {
     name: 'Question & answer',

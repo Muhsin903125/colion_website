@@ -181,6 +181,20 @@ function initStack() {
   });
 }
 
+/** A timeline's line fills as its steps scroll past. */
+function initTimeline() {
+  if (reduce) return;
+  gsap.utils.toArray<HTMLElement>('[data-timeline]').forEach((list) => {
+    const fill = list.querySelector<HTMLElement>('[data-timeline-fill]');
+    if (!fill) return;
+    gsap.fromTo(fill, { scaleY: 0 }, {
+      scaleY: 1,
+      ease: 'none',
+      scrollTrigger: { trigger: list, start: 'top 70%', end: 'bottom 60%', scrub: true },
+    });
+  });
+}
+
 /** Cards tilt slightly toward the pointer. */
 function initTilt() {
   if (reduce || isCoarse()) return;
@@ -223,6 +237,7 @@ export function setupMotion() {
   initMarqueeSkew();
   initMagnetic();
   initStack();
+  initTimeline();
   initTilt();
   ScrollTrigger.refresh();
 }

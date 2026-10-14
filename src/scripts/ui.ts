@@ -71,8 +71,8 @@ function initMenu() {
 
 /**
  * The quotation form. It composes the request into a WhatsApp message and
- * opens wa.me — the channel UAE buyers already use for quotations — with an
- * email fallback for anyone who prefers it. No back end, nothing stored.
+ * opens wa.me — the channel UAE buyers already use for quotations. No back
+ * end, nothing stored.
  */
 function initEnquiryForm() {
   document.querySelectorAll<HTMLFormElement>('[data-enquiry]').forEach((form) => {
@@ -99,20 +99,10 @@ function initEnquiryForm() {
       if (!form.reportValidity()) return;
       const number = (form.dataset.whatsapp || '').replace(/\D/g, '');
       const url = `https://wa.me/${number}?text=${encodeURIComponent(brief())}`;
-      const win = window.open(url, '_blank');
-      if (win) win.opener = null;
-      else window.location.href = url;
       track('generate_lead', { method: 'whatsapp', interest: String(new FormData(form).get('interest') ?? '') });
-      say('WhatsApp is opening with your request filled in — just press send.');
-    });
-
-    form.querySelector<HTMLButtonElement>('[data-enquiry-email]')?.addEventListener('click', () => {
-      if (!form.reportValidity()) return;
-      const to = form.dataset.email || '';
-      const subject = `Quotation request — ${String(new FormData(form).get('interest') ?? 'IT hardware')}`;
-      window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(brief())}`;
-      track('generate_lead', { method: 'email' });
-      say('Your email app is opening with the request filled in.');
+      say('Opening WhatsApp with your request filled in — just press send.');
+      // A short beat so the lead event leaves before the page navigates.
+      setTimeout(() => (window.location.href = url), 250);
     });
   });
 }
