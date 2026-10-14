@@ -229,6 +229,25 @@ function initScatter() {
   });
 }
 
+/** Layers inside `[data-depth-root]` drift with the pointer by their `data-depth`. */
+function initDepth() {
+  if (reduce || isCoarse()) return;
+  gsap.utils.toArray<HTMLElement>('[data-depth-root]').forEach((root) => {
+    const layers = [...root.querySelectorAll<HTMLElement>('[data-depth]')].map((el) => ({
+      x: gsap.quickTo(el, 'x', { duration: 1.1, ease: 'power3.out' }),
+      y: gsap.quickTo(el, 'y', { duration: 1.1, ease: 'power3.out' }),
+      depth: parseFloat(el.dataset.depth || '0.5'),
+    }));
+    const move = (e: MouseEvent) => {
+      const px = e.clientX / window.innerWidth - 0.5;
+      const py = e.clientY / window.innerHeight - 0.5;
+      layers.forEach((l) => { l.x(px * 28 * l.depth); l.y(py * 22 * l.depth); });
+    };
+    window.addEventListener('mousemove', move);
+    tickers.push(() => window.removeEventListener('mousemove', move));
+  });
+}
+
 /** `data-scroll-x="-25"` slides a row sideways by that % of its width while it crosses the viewport. */
 function initScrollX() {
   if (reduce) return;
@@ -314,6 +333,7 @@ export function setupMotion() {
   initStack();
   initTimeline();
   initScatter();
+  initDepth();
   initScrollX();
   initRise();
   initGlow();

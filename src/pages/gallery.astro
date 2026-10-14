@@ -18,7 +18,8 @@ import { resolveImage, videoPoster } from '../lib/cloudinary';
 const d = await load();
 const reels = d.gallery.filter((g) => g.kind !== 'image');
 const photos = d.gallery.filter((g) => g.kind === 'image');
-const FIRST = 16;
+const FIRST = 12;
+const STEP = 8;
 const usedTags = GALLERY_TAGS.filter((t) => photos.some((p) => p.tags.includes(t)));
 const ig = d.socialLinks.find((s) => s.icon === 'instagram');
 
@@ -62,11 +63,11 @@ const schema = [
         <button type="button" class="chip" data-filter="all" aria-pressed="true">All</button>
         {usedTags.map((t) => <button type="button" class="chip capitalize" data-filter={t} aria-pressed="false">{t}</button>)}
       </div>
-      <div class="columns-2 gap-3 md:columns-3 lg:columns-4 [&>*]:mb-3">
+      <div class="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
         {photos.map((g, i) => (
           <GalleryTile
             item={g}
-            class="break-inside-avoid"
+            aspect="aspect-[4/5]"
             data-filter-item
             data-tags={g.tags.join(' ')}
             data-more={i >= FIRST ? 'pending' : undefined}
@@ -76,8 +77,9 @@ const schema = [
         ))}
       </div>
       {photos.length > FIRST && (
-        <div class="mt-10 text-center">
-          <button type="button" class="btn btn-outline" data-load-more="12">Load more photos</button>
+        <div class="mt-10 flex flex-col items-center gap-3">
+          <p class="text-sm text-slate" data-load-status>Showing <span data-load-shown>{FIRST}</span> of {photos.length}</p>
+          <button type="button" class="btn btn-outline" data-load-more={STEP}>Load more photos <span class="text-slate">(+<span data-load-next>{Math.min(STEP, photos.length - FIRST)}</span>)</span></button>
         </div>
       )}
     </div>

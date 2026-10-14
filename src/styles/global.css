@@ -194,6 +194,6 @@
 /* ---- rotating hero word ---- */
 [data-rotate] { position: relative; display: inline-grid; vertical-align: baseline; overflow: hidden; padding: 0 .04em .14em 0; margin-bottom: -.14em; }
 [data-rotate] [data-word] { grid-area: 1 / 1; transform: translateY(105%); opacity: 0; transition: transform .7s var(--ease), opacity .5s; white-space: nowrap; }
-[data-rotate] [data-word].is-on { transform: none; opacity: 1; }
-[data-rotate] [data-word].is-out { transform: translateY(-140%); opacity: 0; transition: transform .7s var(--ease), opacity .25s; }
+[data-rotate] [data-word].is-on { transform: none; opacity: 1; transition-delay: .16s; }
+[data-rotate] [data-word].is-out { transform: translateY(-110%); opacity: 0; transition: transform .45s var(--ease), opacity .2s; }
 html:not(.js) [data-rotate] [data-word]:first-child { transform: none; opacity: 1; }

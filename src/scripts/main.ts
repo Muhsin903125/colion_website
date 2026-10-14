@@ -116,7 +116,7 @@ function initSlides() {
   document.querySelectorAll<HTMLElement>('[data-slides]').forEach((root) => {
     const slides = [...root.querySelectorAll<HTMLElement>('[data-slide]')];
     const bars = [...root.querySelectorAll<HTMLElement>('[data-slide-go]')];
-    if (!slides.length || getComputedStyle(root).display === 'none') return;
+    if (!slides.length || root.getClientRects().length === 0) return;
     const MS = 5000;
     root.style.setProperty('--slide-ms', `${MS}ms`);
     let i = 0;
@@ -170,7 +170,9 @@ function initVideos() {
   const clips = Array.from(document.querySelectorAll<HTMLVideoElement>('video[data-bg-video]'));
   if (!clips.length || reduce) return;
   const conn = (navigator as any).connection;
-  if (conn?.saveData || /(^|-)2g|3g/.test(conn?.effectiveType ?? '')) return;
+  // Only Save-Data and genuinely slow links skip video; Chrome reports "3g"
+  // for many ordinary connections, so that is not treated as slow.
+  if (conn?.saveData || /(^|-)2g$/.test(conn?.effectiveType ?? '')) return;
   const small = window.matchMedia('(max-width: 767px)').matches;
 
   const io = new IntersectionObserver((entries) => {

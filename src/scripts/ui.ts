@@ -148,8 +148,11 @@ function initFilter() {
       items.forEach((item) => {
         const inCat = value === 'all' || (item.dataset.tags ?? '').split(' ').includes(value);
         const show = inCat && (!q || (item.dataset.name ?? item.textContent ?? '').toLowerCase().includes(q));
-        item.hidden = !show;
-        if (show) {
+        // Under "all", tiles still waiting behind a load-more button stay hidden.
+        const waiting = value === 'all' && !q && item.dataset.more === 'pending';
+        const visible = show && !waiting;
+        item.hidden = !visible;
+        if (visible) {
           // Shown items pop in, staggered, so the change reads as movement.
           item.classList.add('is-in');
           if (!reduce) item.animate([{ opacity: 0, transform: 'translateY(14px) scale(.96)' }, { opacity: 1, transform: 'none' }], { duration: 420, delay: Math.min(shown, 20) * 22, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'backwards' });

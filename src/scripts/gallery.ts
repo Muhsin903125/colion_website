@@ -160,35 +160,40 @@ function initPreviews() {
   }
 }
 
-/** Reveal the next batch of server-rendered tiles. */
+/**
+ * Reveal the next batch of server-rendered tiles: a few at a time, each batch
+ * fading in below the last, with a "showing X of Y" line kept current.
+ */
 function initLoadMore() {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.querySelectorAll<HTMLButtonElement>('[data-load-more]').forEach((btn) => {
     const root = btn.closest<HTMLElement>('[data-lb-root]');
     if (!root) return;
-    const step = Number(btn.dataset.loadMore || 12);
+    const step = Number(btn.dataset.loadMore || 8);
+    const status = root.querySelector<HTMLElement>('[data-load-status]');
+    const shownOut = root.querySelector<HTMLElement>('[data-load-shown]');
+    const nextOut = root.querySelector<HTMLElement>('[data-load-next]');
     const update = () => {
-      const pending = [...root.querySelectorAll<HTMLElement>('[data-more]')].filter((el) => !el.hidden || el.dataset.more === 'pending');
-      btn.hidden = !root.querySelector('[data-more="pending"]');
-      return pending;
+      const pending = root.querySelectorAll('[data-more="pending"]').length;
+      const visible = [...root.querySelectorAll<HTMLElement>('[data-filter-item]')].filter((el) => !el.hidden).length;
+      if (shownOut) shownOut.textContent = String(visible);
+      if (nextOut) nextOut.textContent = String(Math.min(step, pending));
+      btn.hidden = pending === 0;
+      if (status) status.hidden = pending === 0;
     };
     btn.addEventListener('click', () => {
-      const pending = [...root.querySelectorAll<HTMLElement>('[data-more="pending"]')];
-      const active = root.dataset.filterActive || 'all';
-      let shown = 0;
-      for (const el of pending) {
-        if (shown >= step) break;
+      const batch = [...root.querySelectorAll<HTMLElement>('[data-more="pending"]')].slice(0, step);
+      batch.forEach((el, i) => {
         el.dataset.more = 'shown';
-        const match = active === 'all' || (el.dataset.tags ?? '').split(' ').includes(active);
-        el.hidden = !match;
-        if (match) shown++;
-      }
+        el.hidden = false;
+        if (!reduce) el.animate([{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'none' }], { duration: 500, delay: i * 50, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'backwards' });
+      });
       update();
     });
     root.addEventListener('filter:change', (e: any) => {
-      root.dataset.filterActive = e.detail.value;
-      // Filtering considers every item, loaded or not, so nothing is "missing".
-      root.querySelectorAll<HTMLElement>('[data-more="pending"]').forEach((el) => (el.dataset.more = 'shown'));
-      btn.hidden = true;
+      // A filter considers every photo, loaded or not, so nothing is "missing".
+      if (e.detail.value !== 'all') root.querySelectorAll<HTMLElement>('[data-more="pending"]').forEach((el) => (el.dataset.more = 'shown'));
+      update();
     });
     update();
   });
