@@ -271,7 +271,7 @@ export const person = (m: TeamMember) =>
         ...(m.expertise.length ? { knowsAbout: m.expertise } : {}),
         ...(m.languages.length ? { knowsLanguage: m.languages } : {}),
         ...(() => {
-          const sameAs = [m.linkedin, ...m.social.map((s) => s.href)].filter((h) => /^https?:\/\//.test(h));
+          const sameAs = [...new Set([m.linkedin, ...m.social.map((s) => s.href)].filter((h) => /^https?:\/\//.test(h)))];
           return sameAs.length ? { sameAs } : {};
         })(),
       };

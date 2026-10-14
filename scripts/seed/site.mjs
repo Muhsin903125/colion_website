@@ -149,10 +149,12 @@ export const team = [
     expertise: ['IT hardware wholesale', 'Brand and distributor relationships', 'Export to the Middle East and Africa'],
     yearsExperience: 0,
     languages: [],
-    linkedin: '',
-    email: 'info@colioninternational.com',
-    // Add his profiles here or in the admin (Team & reviews → Social links).
-    social: [],
+    linkedin: 'https://www.linkedin.com/in/muhammed-anas-35331313a/',
+    email: 'anas@colioninternational.com',
+    social: [
+      { network: 'linkedin', href: 'https://www.linkedin.com/in/muhammed-anas-35331313a/' },
+      { network: 'instagram', href: 'https://www.instagram.com/__nw10_/' },
+    ],
     featured: true,
     placeholder: false,
   },
