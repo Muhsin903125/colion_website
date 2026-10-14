@@ -23,7 +23,7 @@ export default {
         display: ['"Sora Variable"', 'Sora', 'system-ui', 'sans-serif'],
         sans: ['"Manrope Variable"', 'Manrope', 'system-ui', 'sans-serif'],
       },
-      maxWidth: { container: '1280px' },
+      maxWidth: { container: '1440px' },
       borderRadius: { card: '14px', media: '28px' },
       boxShadow: {
         soft: '0 20px 50px -24px rgba(30,58,138,.25)',

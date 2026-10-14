@@ -44,6 +44,12 @@ const spotlight = team.length === 1;
                     <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand to-brand-deep text-gold"><Icon name="users" size={56} /></div>
                   )}
                 </div>
+                {m.yearsExperience > 0 && (
+                  <div class="absolute -right-3 top-6 rounded-2xl bg-[#0b1a3f] px-4 py-3 text-center text-white shadow-lift sm:-right-5 reveal">
+                    <p class="font-display text-3xl font-semibold leading-none text-gold">{m.yearsExperience}+</p>
+                    <p class="mt-1 text-[0.7rem] uppercase tracking-[0.14em] text-white/70">Years in<br />IT trade</p>
+                  </div>
+                )}
                 <div class="absolute -bottom-5 left-6 right-6 rounded-2xl bg-white px-6 py-4 shadow-soft ring-1 ring-line reveal">
                   <p class="font-display text-lg font-semibold text-ink">{m.name}</p>
                   <p class="text-sm text-gold-deep">{m.role}, {d.site.name}</p>

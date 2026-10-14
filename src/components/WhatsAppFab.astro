@@ -10,13 +10,13 @@
 import Icon from './Icon.astro';
 import { load } from '../data/load';
 const d = await load();
-const round = 'flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-soft ring-1 ring-line transition sm:h-12 sm:w-12';
+const round = 'flex h-10 w-10 items-center justify-center rounded-full shadow-lift ring-2 ring-white/25 transition sm:h-12 sm:w-12';
 ---
 <div data-dock class="dock fixed bottom-4 right-3 z-40 flex flex-col items-end gap-2 sm:bottom-7 sm:right-7" aria-label="Quick contact">
-  <button type="button" data-top aria-label="Back to top" class:list={[round, 'text-ink hover:bg-ink hover:text-white']}>
+  <button type="button" data-top aria-label="Back to top" class:list={[round, 'bg-brand text-white hover:bg-brand-deep']}>
     <Icon name="arrow" size={17} class="-rotate-90" />
   </button>
-  <a href={d.telLink} data-track="click_call" aria-label={`Call ${d.site.phone}`} class:list={[round, 'text-brand hover:bg-brand hover:text-white']}>
+  <a href={d.telLink} data-track="click_call" aria-label={`Call ${d.site.phone}`} class:list={[round, 'bg-gold text-ink hover:brightness-105']}>
     <Icon name="phone" size={17} />
   </a>
   <a
@@ -25,7 +25,7 @@ const round = 'flex h-10 w-10 items-center justify-center rounded-full bg-white 
     rel="noopener"
     data-track="click_whatsapp"
     aria-label="WhatsApp"
-    class="dock-wa flex h-10 items-center rounded-full bg-whatsapp text-white shadow-lift sm:h-12"
+    class="dock-wa flex h-10 items-center rounded-full bg-whatsapp text-white shadow-lift ring-2 ring-white/25 sm:h-12"
   >
     <span class="dock-wa-label font-display text-[0.88rem] font-semibold">WhatsApp</span>
     <span class="flex h-10 w-10 shrink-0 items-center justify-center sm:h-12 sm:w-12"><Icon name="whatsapp" size={22} /></span>

@@ -34,14 +34,15 @@ const side = slides.filter((x) => !x.video)[1] ?? slides[1];
 const [chipA, chipB] = s.chips;
 const ring = 'GENUINE STOCK • UAE WARRANTY • VAT INVOICE • ';
 ---
-<section data-hero class="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-brand-deep text-white">
+<!-- Fills the screen, but never taller than 900px or shorter than 680px on desktop. -->
+<section data-hero class="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-brand-deep text-white lg:h-[100svh] lg:max-h-[900px] lg:min-h-[680px]">
   <div class="absolute inset-0 -z-20 will-change-transform" data-hero-bg>
     <BgVideo video={s.video} priority alt={s.video.poster.alt} />
   </div>
   <div class="absolute inset-0 -z-10 bg-gradient-to-r from-[#081634]/90 via-[#0d2152]/65 to-[#0d2152]/15" aria-hidden="true"></div>
   <div class="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-[#081634]/70 to-transparent" aria-hidden="true"></div>
 
-  <div class:list={['container-x w-full pb-24 pt-36 lg:pb-28 lg:pt-44', slides.length > 0 && 'lg:grid lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:gap-12']}>
+  <div class:list={['container-x w-full pb-24 pt-36 lg:pb-12 lg:pt-32', slides.length > 0 && 'lg:grid lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:gap-12']}>
     <div class="max-w-3xl" data-hero-copy>
       <h1 class="h-display !text-white" data-lines>
         {lines.map((line, i) => (
@@ -69,7 +70,7 @@ const ring = 'GENUINE STOCK • UAE WARRANTY • VAT INVOICE • ';
     </div>
 
     {slides.length > 0 && (
-      <div class="hero-stage relative mx-auto hidden h-[600px] w-full max-w-[520px] lg:block" data-hero-in="3" data-depth-root>
+      <div class="hero-stage relative mx-auto hidden h-[560px] w-full max-w-[520px] lg:block" data-hero-in="3" data-depth-root>
         <!-- Glow -->
         <div class="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/25 blur-[110px]" aria-hidden="true"></div>
 
