@@ -18,7 +18,7 @@ const url = (path: string) => new URL(path, SITE_URL).toString();
 
 export const GET: APIRoute = async () => {
   const d = await load();
-  const { site, seo } = d;
+  const { site, seo, registration: reg } = d;
 
   const body = `# ${site.name}
 
@@ -26,8 +26,11 @@ export const GET: APIRoute = async () => {
 
 ## At a glance
 
-- **Legal name:** ${site.legalName}${seo.tradeLicense ? ` (trade licence ${seo.tradeLicense})` : ''}${seo.vatId ? `, TRN ${seo.vatId}` : ''}.
-- **What it is:** ${site.positioning}
+- **Legal name:** ${site.legalName}${reg.legalNameArabic ? ` (${reg.legalNameArabic})` : ''}${reg.legalForm ? `, a ${reg.legalForm} on the Dubai mainland` : ''}.
+${reg.licence.number ? `- **Dubai commercial licence:** ${reg.licence.number}${reg.licence.authority ? `, issued by the ${reg.licence.authority}` : ''}${reg.licence.issued ? ` on ${reg.licence.issued}` : ''}${reg.commercialRegister ? `; commercial register ${reg.commercialRegister}` : ''}${reg.chamber.number ? `; ${reg.chamber.name || 'Dubai Chamber'} membership ${reg.chamber.number}` : ''}.
+` : ''}${reg.vat.trn ? `- **UAE VAT:** registered with the ${reg.vat.authority || 'Federal Tax Authority'}, TRN ${reg.vat.trn}${reg.vat.effective ? `, since ${reg.vat.effective}` : ''}.
+` : ''}${reg.activities.length ? `- **Licensed activities:** ${reg.activities.join('; ')}.
+` : ''}- **What it is:** ${site.positioning}
 ${site.founded ? `- **In business since:** ${site.founded}, in the Dubai market.\n` : ''}${d.realTeam.length ? `- **Leadership:** ${d.realTeam.map((m) => `${m.name} (${m.role}${m.yearsExperience ? `, ${m.yearsExperience}+ years in the IT hardware trade` : ''})`).join(', ')}.\n` : ''}${seo.languages.length ? `- **Languages spoken:** ${seo.languages.join(', ')}.\n` : ''}- **Locations:**
 ${site.locations.map((l) => `  - ${l.label}: ${l.streetAddress}, ${l.area}, ${l.locality}, UAE${l.mapUrl ? ` — ${l.mapUrl}` : ''}`).join('\n')}
 - **Hours:** ${site.hours}.

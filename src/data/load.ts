@@ -34,6 +34,7 @@ export interface SiteData {
   features: Content['features'];
   stats: Content['stats'];
   credentials: Content['credentials'];
+  registration: Content['registration'];
 
   logo: { src: string; width: number; height: number };
   /** Where the business is. `showroom` is the store customers walk into. */
@@ -137,6 +138,7 @@ export function build(content: Content): SiteData {
     features: content.features,
     stats: content.stats,
     credentials: content.credentials,
+    registration: content.registration,
 
     logo,
     corporate: site.locations.find((l) => l.id === 'corporate') ?? site.locations[0],

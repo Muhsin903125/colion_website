@@ -2,7 +2,8 @@
 /**
  * A page composed entirely from CMS sections, with its WebPage node,
  * breadcrumb and any extra schema the caller adds. Breadcrumbs render inside
- * the first section when it is a page hero.
+ * the first section when it is a page hero. Children render at the end, or
+ * above a closing CTA band when passed as `slot="before-cta"`.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from './Breadcrumbs.astro';
@@ -28,6 +29,9 @@ const { page: key, path, name, type, schema = [], faqs = [], noindex = false, ma
 const d = await load();
 const page = d.content.pages[key];
 const [first, ...rest] = page.sections;
+// A closing call-to-action band stays last: `before-cta` content goes above it.
+const closing = rest.at(-1)?.type === 'ctaBand' ? rest.at(-1) : undefined;
+const body = closing ? rest.slice(0, -1) : rest;
 const trail = [{ name: 'Home', path: '/' }, { name, path }];
 const crumbs = breadcrumb(trail);
 const heroImage = first?.type === 'pageHero' ? resolveImage(first.video?.poster?.publicId ? first.video.poster : first.background, { width: 1280 }) : '';
@@ -59,6 +63,8 @@ const graph = [
   ) : (
     first && <SectionRenderer section={first} />
   )}
-  {rest.map((section) => <SectionRenderer section={section} />)}
+  {body.map((section) => <SectionRenderer section={section} />)}
+  <slot name="before-cta" />
+  {closing && <SectionRenderer section={closing} />}
   <slot />
 </BaseLayout>

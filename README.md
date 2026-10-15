@@ -100,7 +100,7 @@ Vertical videos become reels automatically. New items appear on `/gallery/`, the
 These are needed. None of them have been invented.
 
 1. **Cloudinary API secret.** Saving in the admin fails with "api_secret mismatch". Copy the secret from Cloudinary → Settings → API Keys and paste it into `.env` and Vercel.
-2. **Trade licence number, TRN and founding year.** Add them under Admin → SEO and Admin → Site.
+2. ~~Trade licence number, TRN and founding year.~~ Done — copied from the licence and VAT certificate into `registration` (Admin → SEO → Registration). The licence expires 05/12/2026: after renewal, update the expiry date there.
 3. **Exact Google Business Profile details.**
    - The Al Sabkha branch is linked (CID 7714097723583174697).
    - The corporate office & store in Al Dhagaya needs its own profile URL and pin.

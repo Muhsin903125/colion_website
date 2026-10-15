@@ -18,7 +18,7 @@ import { gallery } from './gallery.mjs';
 import { locations } from './locations.mjs';
 import { pages } from './pages.mjs';
 import { services } from './services.mjs';
-import { credentials, features, nav, seo, site, stats, team, testimonials } from './site.mjs';
+import { credentials, features, nav, registration, seo, site, stats, team, testimonials } from './site.mjs';
 
 const root = resolve(import.meta.dirname, '../..');
 
@@ -29,6 +29,7 @@ const content = {
   features,
   stats,
   credentials,
+  registration,
   services,
   productCategories: categories,
   brands,

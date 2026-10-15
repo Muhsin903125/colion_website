@@ -2,7 +2,7 @@
 /**
  * Interior page opener, light theme: copy on a soft sky ground with a rounded
  * media frame beside it (video if set, else the photograph). `short` drops the
- * media for utility pages; breadcrumbs slot in above the heading.
+ * the media frame for utility pages, keeping the photo as a faded backdrop; breadcrumbs slot in above the heading.
  */
 import BgVideo from '../BgVideo.astro';
 import Cta from '../Cta.astro';
@@ -14,8 +14,17 @@ type Props = Extract<Section, { type: 'pageHero' }> & { h1?: boolean };
 const s = Astro.props;
 const hasVideo = Boolean(s.video?.src);
 const hasMedia = s.size !== 'short' && (hasVideo || s.background?.publicId);
+// A short hero keeps its photograph as a faded backdrop behind the copy.
+const backdrop = s.size === 'short' && s.background?.publicId;
 ---
-<section data-hero class="relative overflow-hidden bg-gradient-to-b from-sky to-white">
+<section data-hero class="relative isolate overflow-hidden bg-gradient-to-b from-sky to-white">
+  {backdrop && (
+    <div class="absolute inset-0 -z-10" aria-hidden="true">
+      <Img image={s.background} priority sizes="100vw" class="h-full w-full object-cover" style={s.focus ? `object-position:${s.focus}` : undefined} />
+      <div class="absolute inset-0 bg-gradient-to-r from-white via-white/75 to-white/10"></div>
+      <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent"></div>
+    </div>
+  )}
   <div class:list={['container-x relative grid items-center gap-10', hasMedia ? 'py-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:py-16' : 'py-14 lg:py-20']}>
     <div>
       <slot name="before" />

@@ -21,14 +21,14 @@ const faqs = (list: { q: string; a: string }[]) => list.map((f) => `**${plain(f.
 
 export const GET: APIRoute = async () => {
   const d = await load();
-  const { site, seo } = d;
+  const { site, seo, registration: reg } = d;
 
   const out: string[] = [];
   out.push(`# ${site.name} — full reference
 
 > ${plain(site.description)}
 
-Legal name: ${site.legalName}. ${site.founded ? `In the Dubai market since ${site.founded}. ` : ''}Phone and WhatsApp: ${site.phone}. Email: ${site.email}. Hours: ${site.hours}. Website: ${url('/')}.
+Legal name: ${site.legalName}${reg.legalNameArabic ? ` (${reg.legalNameArabic})` : ''}. ${reg.licence.number ? `Dubai commercial licence ${reg.licence.number}${reg.licence.authority ? `, issued by the ${reg.licence.authority}` : ''}. ` : ''}${reg.commercialRegister ? `Commercial register ${reg.commercialRegister}. ` : ''}${reg.chamber.number ? `${reg.chamber.name || 'Dubai Chamber'} membership ${reg.chamber.number}. ` : ''}${reg.vat.trn ? `UAE VAT TRN ${reg.vat.trn}. ` : ''}${reg.activities.length ? `Licensed activities: ${reg.activities.join('; ')}. ` : ''}${site.founded ? `In the Dubai market since ${site.founded}. ` : ''}Phone and WhatsApp: ${site.phone}. Email: ${site.email}. Hours: ${site.hours}. Website: ${url('/')}.
 
 Locations:
 ${site.locations.map((l) => `- ${l.label}: ${l.streetAddress}, ${l.area}, ${l.locality}, United Arab Emirates${l.geo.lat ? ` (${l.geo.lat}, ${l.geo.lng})` : ''}${l.mapUrl ? ` — ${l.mapUrl}` : ''}`).join('\n')}

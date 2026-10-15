@@ -82,19 +82,74 @@ const hours = (d: SiteData) =>
       ]
     : undefined;
 
+/**
+ * The licence expiry, or '' once it has passed. A stale "valid until" date
+ * reads as a lapsed licence, so it drops out until an editor enters the renewal.
+ */
+export const licenceExpiry = (r: SiteData['registration']) =>
+  r.licence.expires && new Date(`${r.licence.expires}T23:59:59+04:00`).getTime() > Date.now() ? r.licence.expires : '';
+
+/** Government identifiers, each named so a machine knows which register to check. */
+const registrationIds = (r: SiteData['registration']) =>
+  [
+    r.licence.number && { propertyID: 'Dubai commercial licence number', value: r.licence.number, description: r.licence.authority },
+    r.commercialRegister && { propertyID: 'Dubai commercial register number', value: r.commercialRegister },
+    r.chamber.number && { propertyID: 'Dubai Chamber membership number', value: r.chamber.number },
+    r.vat.trn && { propertyID: 'UAE VAT Tax Registration Number (TRN)', value: r.vat.trn, description: r.vat.authority },
+  ]
+    .filter(Boolean)
+    .map((p) => ({ '@type': 'PropertyValue', ...(p as object) }));
+
+/** The licence and the VAT registration as credentials, issuer named and linked. */
+const registrationCredentials = (r: SiteData['registration']) => {
+  const issuer = (name: string, url: string) => ({ '@type': 'GovernmentOrganization', name, ...(url ? { url } : {}) });
+  const expires = licenceExpiry(r);
+  return [
+    r.licence.number && {
+      '@type': 'EducationalOccupationalCredential',
+      name: `Dubai commercial licence ${r.licence.number}`,
+      credentialCategory: 'license',
+      ...(r.activities.length ? { description: `Licensed activities: ${r.activities.join('; ')}.` } : {}),
+      ...(r.licence.authority ? { recognizedBy: issuer(r.licence.authority, r.licence.authorityUrl) } : {}),
+      validIn: { '@type': 'AdministrativeArea', name: 'Dubai', sameAs: EMIRATE_WIKI.dubai },
+      ...(r.licence.issued ? { dateCreated: r.licence.issued } : {}),
+      ...(expires ? { expires } : {}),
+    },
+    r.vat.trn && {
+      '@type': 'EducationalOccupationalCredential',
+      name: `UAE VAT registration, TRN ${r.vat.trn}`,
+      credentialCategory: 'registration',
+      ...(r.vat.authority ? { recognizedBy: issuer(r.vat.authority, r.vat.authorityUrl) } : {}),
+      validIn: { '@type': 'Country', name: 'United Arab Emirates' },
+      ...(r.vat.effective ? { dateCreated: r.vat.effective } : {}),
+    },
+  ].filter(Boolean);
+};
+
 /** The root entity. */
 export function buildOrganization(d: SiteData) {
-  const { site, seo } = d;
+  const { site, seo, registration: reg } = d;
   const corporate = d.corporate;
   const profiles = d.site.locations.map((l) => l.gbp.url).filter(Boolean);
   const sameAs = [...d.socialLinks.map((s) => s.href), ...profiles];
+  const identifiers = registrationIds(reg);
+  const credentials = [
+    ...registrationCredentials(reg),
+    ...d.credentials.map((c) => ({
+      '@type': 'EducationalOccupationalCredential',
+      name: c.title,
+      credentialCategory: c.kind,
+      ...(c.issuer ? { recognizedBy: { '@type': 'Organization', name: c.issuer } } : {}),
+    })),
+  ];
+  const founders = d.realTeam.filter((m) => /founder/i.test(m.role)).map((m) => ({ '@id': personId(m.id) }));
 
   return {
     '@type': 'Organization',
     '@id': ids.org,
     name: site.name,
     legalName: site.legalName,
-    alternateName: seo.alternateName,
+    alternateName: [...new Set([...seo.alternateName, reg.legalNameArabic].filter(Boolean))],
     url: `${SITE_URL}/`,
     logo: {
       '@type': 'ImageObject',
@@ -107,12 +162,23 @@ export function buildOrganization(d: SiteData) {
     image: abs(resolveImage(seo.defaultShare) || '/images/stills/hero-datacenter.webp'),
     slogan: site.tagline,
     description: plain(site.description),
-    ...(site.founded ? { foundingDate: String(site.founded) } : {}),
+    ...(reg.licence.issued || site.founded ? { foundingDate: reg.licence.issued || String(site.founded) } : {}),
+    ...(founders.length ? { founder: founders } : {}),
     email: site.email,
     telephone: site.phone,
     ...(corporate ? { address: postal(corporate) } : {}),
-    ...(seo.vatId ? { vatID: seo.vatId } : {}),
-    ...(seo.tradeLicense ? { identifier: { '@type': 'PropertyValue', propertyID: 'Dubai Trade Licence', value: seo.tradeLicense } } : {}),
+    ...(reg.vat.trn ? { vatID: reg.vat.trn, taxID: reg.vat.trn } : {}),
+    ...(identifiers.length ? { identifier: identifiers } : {}),
+    ...(reg.chamber.name
+      ? {
+          memberOf: {
+            '@type': 'ProgramMembership',
+            programName: `${reg.chamber.name} membership`,
+            ...(reg.chamber.number ? { membershipNumber: reg.chamber.number } : {}),
+            hostingOrganization: { '@type': 'Organization', name: reg.chamber.name, ...(reg.chamber.url ? { url: reg.chamber.url } : {}) },
+          },
+        }
+      : {}),
     /**
      * Where Colion sells, which is not the same claim as where it is. Each
      * emirate is named with its Wikipedia entity so "IT supplier in Sharjah"
@@ -147,16 +213,7 @@ export function buildOrganization(d: SiteData) {
         url: abs(`/products/${c.slug}/`),
       })),
     },
-    ...(d.credentials.length
-      ? {
-          hasCredential: d.credentials.map((c) => ({
-            '@type': 'EducationalOccupationalCredential',
-            name: c.title,
-            credentialCategory: c.kind,
-            ...(c.issuer ? { recognizedBy: { '@type': 'Organization', name: c.issuer } } : {}),
-          })),
-        }
-      : {}),
+    ...(credentials.length ? { hasCredential: credentials } : {}),
     ...(d.stores.length ? { department: d.stores.map((l) => ({ '@id': storeId(l.id) })) } : {}),
     ...(sameAs.length ? { sameAs } : {}),
   };
@@ -256,13 +313,15 @@ export const faqEntity = (items: FaqItem[]) =>
     .filter((f) => f.q && f.a)
     .map((f) => ({ '@type': 'Question', name: plain(f.q), acceptedAnswer: { '@type': 'Answer', text: plain(f.a) } }));
 
+export const personId = (id: string) => `${SITE_URL}/team/#${id}`;
+
 /** A real person, for real profiles only. */
 export const person = (m: TeamMember) =>
   m.placeholder
     ? null
     : {
         '@type': 'Person',
-        '@id': `${SITE_URL}/team/#${m.id}`,
+        '@id': personId(m.id),
         name: m.name,
         jobTitle: m.role,
         description: m.bio,
