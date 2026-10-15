@@ -37,26 +37,26 @@ const embed = (l: (typeof site.locations)[number]) =>
       </a>
     </div>
 
-    <ul class:list={["grid gap-6", site.locations.length === 2 ? "md:grid-cols-2" : "md:grid-cols-2 lg:grid-cols-3"]}>
+    <ul class:list={["grid gap-4", site.locations.length === 2 ? "md:grid-cols-2" : "md:grid-cols-2 lg:grid-cols-3"]}>
       {site.locations.map((l, i) => (
-        <li class:list={['card overflow-hidden reveal', `d${i + 1}`]}>
+        <li class:list={['card flex overflow-hidden reveal', `d${i + 1}`]}>
           {s.showMap && embed(l) ? (
-            <div class="relative aspect-[16/10] bg-sky" data-map={embed(l)}>
-              <Img image={l.image} sizes="(min-width:1024px) 30vw, 100vw" class="h-full w-full object-cover" />
-              <button type="button" class="absolute inset-0 flex items-center justify-center bg-brand-deep/35 font-display text-sm font-semibold text-white transition hover:bg-brand-deep/50" data-map-load>
-                <span class="flex items-center gap-2 rounded-full bg-white px-4 py-2 text-brand shadow-soft"><Icon name="pin" size={17} /> Show on map</span>
+            <div class="relative w-28 shrink-0 bg-sky sm:w-40" data-map={embed(l)}>
+              <Img image={l.image} sizes="160px" class="absolute inset-0 h-full w-full object-cover" />
+              <button type="button" class="absolute inset-0 flex items-end justify-center bg-brand-deep/30 pb-3 transition hover:bg-brand-deep/50" data-map-load aria-label={`Show ${l.label} on map`}>
+                <span class="flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-brand shadow-soft"><Icon name="pin" size={13} /> Map</span>
               </button>
             </div>
           ) : null}
-          <div class="p-6">
-            <h3 class="h-card">{l.label}</h3>
-            <address class="mt-3 not-italic text-[0.95rem] leading-relaxed text-ink-soft">
-              {l.streetAddress}<br />{l.area}<br />{l.locality}, United Arab Emirates
+          <div class="min-w-0 flex-1 p-4 sm:p-5">
+            <h3 class="font-display text-[0.98rem] font-semibold leading-snug text-ink">{l.label}</h3>
+            <address class="mt-1.5 not-italic text-sm leading-relaxed text-ink-soft">
+              {l.streetAddress}, {l.area}, {l.locality}
             </address>
-            <p class="mt-3 flex items-center gap-2 text-sm text-slate"><Icon name="clock" size={16} class="text-brand" /> {l.hours || site.hours}</p>
-            <div class="mt-5 flex flex-wrap gap-2">
-              {l.mapUrl && <a href={l.mapUrl} target="_blank" rel="noopener" class="btn btn-outline btn-sm" data-track="click_directions"><Icon name="pin" size={15} /> Directions</a>}
-              {l.gbp.url && <a href={l.gbp.url} target="_blank" rel="noopener" class="btn btn-outline btn-sm"><Icon name="star" size={15} /> Google reviews</a>}
+            <p class="mt-1.5 flex items-center gap-1.5 text-xs text-slate"><Icon name="clock" size={14} class="text-brand" /> {l.hours || site.hours}</p>
+            <div class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm font-semibold">
+              {l.mapUrl && <a href={l.mapUrl} target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-brand hover:underline" data-track="click_directions"><Icon name="pin" size={14} /> Directions</a>}
+              {l.gbp.url && <a href={l.gbp.url} target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-brand hover:underline"><Icon name="star" size={14} /> Reviews</a>}
             </div>
           </div>
         </li>
@@ -77,6 +77,8 @@ const embed = (l: (typeof site.locations)[number]) =>
         frame.loading = 'lazy';
         frame.referrerPolicy = 'no-referrer-when-downgrade';
         frame.className = 'absolute inset-0 h-full w-full border-0';
+        box.classList.remove('w-28', 'sm:w-40');
+        box.classList.add('w-40', 'sm:w-72');
         box.replaceChildren(frame);
       });
     });

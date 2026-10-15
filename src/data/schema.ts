@@ -8,7 +8,7 @@
  *
  * The document has three kinds of content:
  *
- *   - Facts (`site`, `seo`, `features`, `stats`, `credentials`) — read by every
+ *   - Facts (`site`, `seo`, `features`, `stats`, `credentials`, `registration`) — read by every
  *     page and by the structured-data factory in `seo.ts`.
  *   - Collections (`services`, `productCategories`, `brands`, `locations`,
  *     `team`, `testimonials`, `gallery`, `faqGroups`) — each item is either a
@@ -646,8 +646,6 @@ export const contentSchema = z.object({
       knowsAbout: strs(),
       openingHours: z.object({ days: strs(), opens: str(), closes: str() }).prefault({}),
       priceRange: str(),
-      vatId: str(),
-      tradeLicense: str(),
       languages: strs(),
       defaultShare: imageSchema,
       trademarkNote: str(),
@@ -668,6 +666,35 @@ export const contentSchema = z.object({
       }),
     )
     .default([]),
+
+  /**
+   * The company's registration, copied from the Dubai commercial licence and
+   * the FTA VAT certificate. Shown on the About and Contact pages, in the
+   * footer, in llms.txt and in the Organization schema, so a buyer or a search
+   * engine can check Colion against the government record.
+   *
+   * A top-level key on purpose: a store saved before this existed lacks it, so
+   * the seed's values apply until an editor saves the Registration tab.
+   *
+   * Dates are ISO (YYYY-MM-DD). `licence.expires` is shown only while it is in
+   * the future — an expired date would undermine the trust it is there to build.
+   */
+  registration: z
+    .object({
+      legalNameArabic: str(),
+      legalForm: str(),
+      licence: z
+        .object({ number: str(), authority: str(), authorityUrl: str(), issued: str(), expires: str() })
+        .prefault({}),
+      commercialRegister: str(),
+      chamber: z.object({ name: str(), number: str(), url: str() }).prefault({}),
+      vat: z.object({ trn: str(), authority: str(), authorityUrl: str(), effective: str() }).prefault({}),
+      /** The manager named on the licence. */
+      manager: str(),
+      /** The licensed activities, as worded on the licence. */
+      activities: strs(),
+    })
+    .prefault({}),
 
   services: z.array(serviceSchema).default([]),
   productCategories: z.array(categorySchema).default([]),

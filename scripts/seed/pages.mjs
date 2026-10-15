@@ -394,7 +394,7 @@ export const pages = {
     description: 'Contact Colion International, Deira, Dubai: +971 50 766 8536 or info@colioninternational.com. Branches in Al Sabkha and Al Dhagaya, Mon–Sat 10am–10pm.',
     sections: [
       section('pageHero', {
-        background: G('photo-04', 'The Colion International branch in Deira'),
+        background: STILL('dubai-skyline', 'The Dubai skyline, home of Colion International'),
         video: noVideo(),
         intro: intro('Contact', ['Talk to', 'our sales desk'], 'WhatsApp, call, email or visit — we reply with price, stock and delivery date.'),
         secondary: link(),

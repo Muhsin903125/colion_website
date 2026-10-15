@@ -1,0 +1,62 @@
+---
+/**
+ * The company's registration, as the licence and the VAT certificate state it.
+ *
+ * Proof a buyer can check: every number here can be looked up with the
+ * authority that issued it, and the same facts are in the Organization schema
+ * and llms.txt. Rendered on About and Contact under `#registration`, which the
+ * footer links to. Renders nothing until a licence number or TRN is set.
+ */
+import SectionHead from './SectionHead.astro';
+import { load } from '../data/load';
+
+const d = await load();
+const { site, registration: r } = d;
+
+// Kept to the legal minimum on the page. The Arabic name, dates and the
+// register and chamber numbers are still in the schema and llms.txt.
+const facts = [
+  { term: 'Legal name', value: site.legalName },
+  { term: 'Legal form', value: r.legalForm },
+  { term: 'Commercial licence', value: r.licence.number, mono: true },
+  { term: 'VAT TRN', value: r.vat.trn, mono: true },
+].filter((f) => f.value);
+
+const show = Boolean(r.licence.number || r.vat.trn);
+---
+{show && (
+  <section id="registration" class="section-y-sm scroll-mt-28">
+    <div class="container-x">
+      <SectionHead
+        class="mb-8"
+        intro={{
+          label: 'Company registration',
+          lines: ['Licensed in Dubai,', 'registered for VAT.'],
+        }}
+      />
+
+      <dl class="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4 reveal">
+        {facts.map((f) => (
+          <div class="bg-white p-5 sm:p-6">
+            <dt class="text-xs font-semibold uppercase tracking-wider text-slate">{f.term}</dt>
+            <dd class:list={['mt-1.5 font-display font-semibold text-ink', f.mono && 'tabular-nums tracking-wide']}>{f.value}</dd>
+          </div>
+        ))}
+      </dl>
+
+      {r.activities.length > 0 && (
+        <p class="mt-5 text-sm leading-relaxed text-slate">
+          <span class="font-semibold text-ink-soft">Licensed activities:</span>{' '}{r.activities.join(' · ')}.
+        </p>
+      )}
+      {(r.licence.authorityUrl || r.vat.authorityUrl) && (
+        <p class="mt-2 text-sm leading-relaxed text-slate">
+          Verify with the
+          {r.licence.authorityUrl && <a href={r.licence.authorityUrl} target="_blank" rel="noopener" class="font-medium text-brand underline underline-offset-4">{r.licence.authority || 'licensing authority'}</a>}
+          {r.licence.authorityUrl && r.vat.authorityUrl && ' and the '}
+          {r.vat.authorityUrl && <a href={r.vat.authorityUrl} target="_blank" rel="noopener" class="font-medium text-brand underline underline-offset-4">{r.vat.authority || 'tax authority'}</a>}.
+        </p>
+      )}
+    </div>
+  </section>
+)}

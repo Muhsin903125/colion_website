@@ -1,5 +1,6 @@
 ---
 import CmsPage from '../components/CmsPage.astro';
+import Registration from '../components/Registration.astro';
 import { load } from '../data/load';
 import { ids, person } from '../data/seo';
 
@@ -7,4 +8,6 @@ const d = await load();
 // Only real people reach the graph; placeholder team functions do not.
 const people = d.realTeam.map(person).filter(Boolean);
 ---
-<CmsPage page="about" path="/about/" name="About" type="AboutPage" mainEntity={{ '@id': ids.org }} schema={people} />
+<CmsPage page="about" path="/about/" name="About" type="AboutPage" mainEntity={{ '@id': ids.org }} schema={people}>
+  <Registration slot="before-cta" />
+</CmsPage>

@@ -2,13 +2,14 @@ import { img, PLACE, STILL } from './helpers.mjs';
 
 /**
  * Facts carried over from the previous site and the Google Business Profile
- * draft (docs/gbp.md). Anything not known for certain — founding year, trade
- * licence, TRN, exact coordinates, partner certificates — is left empty and
- * listed in README "Client inputs", rather than invented.
+ * draft (docs/gbp.md). Anything not known for certain — exact coordinates,
+ * partner certificates — is left empty and listed in README "Client inputs",
+ * rather than invented. The legal name and `registration` are copied from the
+ * Dubai commercial licence and the FTA VAT certificate.
  */
 export const site = {
   name: 'Colion International',
-  legalName: 'Colion International Trading LLC',
+  legalName: 'Colion International Trading L.L.C',
   logo: { onLight: img(''), onDark: img('') },
   tagline: 'IT hardware stockist, wholesaler and exporter in Dubai',
   positioning:
@@ -109,8 +110,6 @@ export const seo = {
   ],
   openingHours: { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '10:00', closes: '22:00' },
   priceRange: 'AED',
-  vatId: '',
-  tradeLicense: '',
   languages: ['English', 'Arabic', 'Hindi', 'Urdu', 'Malayalam'],
   defaultShare: img('/images/stills/hero-datacenter.webp', 'Colion International — IT hardware supplier in Dubai'),
   trademarkNote:
@@ -133,6 +132,41 @@ export const stats = [
 ];
 
 export const credentials = [];
+
+/**
+ * From Dubai commercial licence 1125352 (DET e-document printed 28/12/2025)
+ * and FTA VAT registration certificate 2023/VAT/0000158062/002 (issued
+ * 11/03/2024). Deliberately left out: the personal email, the person number
+ * and the VAT certificate's registered address, which predates the Deira
+ * branches the site lists.
+ */
+export const registration = {
+  legalNameArabic: 'كوليون انترناشيونال للتجارة ذ.م.م',
+  legalForm: 'Limited Liability Company (LLC)',
+  licence: {
+    number: '1125352',
+    authority: 'Dubai Department of Economy and Tourism (DET)',
+    authorityUrl: 'https://www.dubaidet.gov.ae/',
+    issued: '2022-12-06',
+    expires: '2026-12-05',
+  },
+  commercialRegister: '2171278',
+  chamber: { name: 'Dubai Chamber of Commerce and Industry', number: '432700', url: 'https://www.dubaichamber.com/' },
+  vat: {
+    trn: '104071212500003',
+    authority: 'UAE Federal Tax Authority (FTA)',
+    authorityUrl: 'https://tax.gov.ae/',
+    effective: '2023-06-01',
+  },
+  manager: 'Muhammed Anas Abdul Assis',
+  activities: [
+    'Computers & Peripheral Equipment Trading',
+    'Computer Electric Accessories Trading',
+    'Computer Systems & Communication Equipment Software Trading',
+    'Electrical & Electronic Appliances Spare Parts Trading',
+    'Mobile Phones & Accessories Trading',
+  ],
+};
 
 /**
  * Team functions, not invented people. Each is flagged `placeholder`: it

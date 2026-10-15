@@ -1,7 +1,7 @@
 {
   "site": {
     "name": "Colion International",
-    "legalName": "Colion International Trading LLC",
+    "legalName": "Colion International Trading L.L.C",
     "logo": {
       "onLight": {
         "publicId": "",
@@ -189,8 +189,6 @@
       "closes": "22:00"
     },
     "priceRange": "AED",
-    "vatId": "",
-    "tradeLicense": "",
     "languages": [
       "English",
       "Arabic",
@@ -257,6 +255,37 @@
     }
   ],
   "credentials": [],
+  "registration": {
+    "legalNameArabic": "كوليون انترناشيونال للتجارة ذ.م.م",
+    "legalForm": "Limited Liability Company (LLC)",
+    "licence": {
+      "number": "1125352",
+      "authority": "Dubai Department of Economy and Tourism (DET)",
+      "authorityUrl": "https://www.dubaidet.gov.ae/",
+      "issued": "2022-12-06",
+      "expires": "2026-12-05"
+    },
+    "commercialRegister": "2171278",
+    "chamber": {
+      "name": "Dubai Chamber of Commerce and Industry",
+      "number": "432700",
+      "url": "https://www.dubaichamber.com/"
+    },
+    "vat": {
+      "trn": "104071212500003",
+      "authority": "UAE Federal Tax Authority (FTA)",
+      "authorityUrl": "https://tax.gov.ae/",
+      "effective": "2023-06-01"
+    },
+    "manager": "Muhammed Anas Abdul Assis",
+    "activities": [
+      "Computers & Peripheral Equipment Trading",
+      "Computer Electric Accessories Trading",
+      "Computer Systems & Communication Equipment Software Trading",
+      "Electrical & Electronic Appliances Spare Parts Trading",
+      "Mobile Phones & Accessories Trading"
+    ]
+  },
   "services": [
     {
       "extraSections": [],
@@ -8893,11 +8922,11 @@
           "hidden": false,
           "type": "pageHero",
           "background": {
-            "publicId": "/images/gallery/photo-04.webp",
-            "alt": "The Colion International branch in Deira",
+            "publicId": "/images/stills/dubai-skyline.webp",
+            "alt": "The Dubai skyline, home of Colion International",
             "version": null,
             "width": 1280,
-            "height": 960
+            "height": 720
           },
           "video": {
             "src": "",
@@ -9106,6 +9135,6 @@
   "media": {
     "folder": "colion"
   },
-  "updatedAt": "2026-10-14T13:22:29.333Z",
+  "updatedAt": "2026-10-15T06:33:40.629Z",
   "sections": {}
 }
